@@ -121,11 +121,11 @@ screen -dmS injek python3 /tmp/xderm.py*;sleep 1;rm -rf /tmp/xderm.py*
   if [ $mode -eq 0 ]; then
   host=$(grep host= config.txt|awk -F "=" '{print $2}')
   else
-   port=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d|awk -F '"port' '{print $2}'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
+   port=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|awk -F '"port' '{print $2}'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
     if [ -f $port ]; then
    echo "Akun vmess belom disetting!" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
     fi
-   host=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d|awk -F '"add' '{print $2}'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
+   host=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|awk -F '"add' '{print $2}'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
   fi
 ifaces=$(ip r|grep default|awk '{print $3}')
  if [ ! -f $(echo $ifaces|awk -F "." '{print $2}') ]; then
@@ -156,7 +156,7 @@ if [ -f $(base64 --help 2>/dev/null|awk "NR==2"|awk '{print $1}') ]; then
  echo "Paket base64 belom terinstall. install dulu!" >> screenlog.0
  cp screenlog.0 log/log.txt 2>/dev/null;exit
 fi
-host=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d|awk -F '"add' '{print $2}'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g');route del $host 2>/dev/null
+host=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|awk -F '"add' '{print $2}'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g');route del $host 2>/dev/null
 }
  update () {
  url="https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main"
@@ -200,16 +200,16 @@ if [ $mode -eq 1 ]; then
  cp screenlog.0 log/log.txt 2>/dev/null;exit
  fi
  flush;ssa=8;echo -e "{$(date +%M:%S)} Mode yang dipilih: $mode" >> screenlog.0
- port=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d|awk -F '"port' '{print $2}'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
+ port=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|awk -F '"port' '{print $2}'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
     if [ -f $port ]; then
  echo "Akun vmess belom disetting!" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
     fi
 mkdir -p /usr/local/etc/v2ray/
-uuid=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d|awk -F '"id' '{print $2}'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
-host=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d|awk -F '"add' '{print $2}'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
-aid=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d|awk -F '"aid' '{print $2}'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
-net=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d|awk -F '"net' '{print $2}'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
-path=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d|awk -F '"path' '{print $2}'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
+uuid=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|awk -F '"id' '{print $2}'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
+host=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|awk -F '"add' '{print $2}'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
+aid=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|awk -F '"aid' '{print $2}'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
+net=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|awk -F '"net' '{print $2}'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
+path=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|awk -F '"path' '{print $2}'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
  echo "##############################################" >> screenlog.0
 echo "  Host: $host" >> screenlog.0
 echo "  Port: $port" >> screenlog.0
