@@ -80,9 +80,9 @@ body {
 <input type="submit" name="button3" class="btn third" id="logg"
         value="Log"/>
 <input type="submit" name="button2" class="btn third" id="config"
-        value="<?php echo exec('cat log/config') ?>"/>
+        value="Config"/>
 <input type="submit" name="button4" class="btn third" id"update"
-        value="<?php echo exec('cat log/update') ?>"/>
+        value="Update"/>
 </div></td></tr></center>
 </table>
 </form>
