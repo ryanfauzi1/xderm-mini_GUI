@@ -161,23 +161,23 @@ host=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/
  cupdate () {
  url="https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main"
  sleep 4
- v=$(curl -m12 $url/xderm-mini -s|grep "Current versi"|awk "NR==2"|awk '{print $6}')
+ v=$(curl -m12 $url/xderm-mini -s|grep "Copyr"|awk "NR==5"|awk '{print $6}')
 if [ ! -f $v ]; then
-  if [ "$v" == "1.2" ]; then
+  if [ "$v" != "1.2" ]; then
  echo $v >/var/update.xderm
  echo "<h2 style='color:lime'>New versi GUI Detected, Please Update!</h2>" >> screenlog.0
   fi
 else
- v=$(curl -m12 $url/xderm-mini -s|grep "Current versi"|awk "NR==2"|awk '{print $6}')
+ v=$(curl -m12 $url/xderm-mini -s|grep "Copyr"|awk "NR==5"|awk '{print $6}')
  if [ ! -f $v ]; then
-  if [ "$v" == "1.2" ]; then
+  if [ "$v" != "1.2" ]; then
  echo $v >/var/update.xderm
  echo "<h2 style='color:lime'>New versi GUI Detected, Please Update!</h2>" >> screenlog.0
   fi
  else
-  v=$(curl -m12 $url/xderm-mini -s|grep "Current versi"|awk "NR==2"|awk '{print $6}')
+  v=$(curl -m12 $url/xderm-mini -s|grep "Copyr"|awk "NR==5"|awk '{print $6}')
    if [ ! -f $v ]; then
-  if [ "$v" == "1.2" ]; then
+  if [ "$v" != "1.2" ]; then
   echo $v >/var/update.xderm
   echo "<h2 style='color:lime'>New versi GUI Detected, Please Update!</h2>" >> screenlog.0
   fi
@@ -190,9 +190,9 @@ fi
  url="https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main"
  echo -ne "{$(date +%M:%S)} Checking for update..." >> screenlog.0
  sleep 4
- v=$(curl -m21 $url/xderm-mini -s|grep "Current versi"|awk "NR==2"|awk '{print $6}')
+ v=$(curl -m12 $url/xderm-mini -s|grep "Copyr"|awk "NR==5"|awk '{print $6}')
  if [ ! -f $v ]; then
-  if [ "$v" == "1.2" ]; then
+  if [ "$v" != "1.2" ]; then
  echo -e " (Memperbarui..)" >> screenlog.0;sleep 1
  rm -rf xderm-mini;curl $url/xderm-mini -s > xderm-mini 
  rm -rf index.php;curl $url/index.php -s > index.php
