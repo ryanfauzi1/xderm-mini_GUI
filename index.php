@@ -233,5 +233,5 @@ echo '<div id="log" class="scroll"></div></pre></div>';
 }
 ?>
 </td></tr>
-</table></head><center><h7><b>Current versi GUI 1.2 Copyright &copy</b></h7></center>
+</table></head><center><h7><b>Current versi GUI 1.1 Copyright &copy</b></h7></center>
 </html>
