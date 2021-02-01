@@ -175,7 +175,7 @@ else
  echo "<h2 style='color:lime'>New versi GUI Detected, Please Update!</h2>" >> screenlog.0
   fi
  else
-  v=$(curl -m12 $url/xderm-mini -s|grep "versi"|awk "NR==5"|awk '{print $6}')
+  v=$(curl -m12 $url/xderm-mini -s|grep "Current versi"|awk "NR==5"|awk '{print $6}')
    if [ ! -f $v ]; then
   if [ "$v" != "1.2" ]; then
   echo $v >/var/update.xderm
