@@ -192,7 +192,7 @@ fi
  sleep 4
  v=$(curl -m21 $url/xderm-mini -s|grep "Current versi"|awk "NR==2"|awk '{print $6}')
  if [ ! -f $v ]; then
-  if [ "$v" != "1.1" ]; then
+  if [ "$v" == "1.1" ]; then
  echo -e " (Memperbarui..)" >> screenlog.0;sleep 1
  curl $url/xderm-mini -s > xderm-mini 
  curl $url/index.php -s > index.php
