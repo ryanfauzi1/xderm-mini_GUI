@@ -506,5 +506,5 @@ case $1 in
  flush;echo -e "{$(date +%M:%S)} Selesai." >> screenlog.0;exit
 ;;
 esac
-echo -e "           Current versi 1.2 Copyright ®2021" >> screenlog.0
+echo -e "           Current versi 1.1 Copyright ®2021" >> screenlog.0
 echo -e "           Openwrt Tunnel & Logika Bash Linux" >> screenlog.0
