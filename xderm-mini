@@ -421,12 +421,12 @@ r=$(curl -m4 google.com -w "%{http_code}" --proxy socks5://127.0.0.1:1080 -s -o 
   if [ $r -eq 301 ]; then
   echo '<pre><h2 style="color:#006400" "text-overflow:ellipsis">HTTP/1.1 200 OK</h2></pre>' >> screenlog.0;break
   fi
- if [ $n -eq 10 ]; then
+ if [ $n -eq 12 ]; then
  echo sabar >> screenlog.0;echo -ne "{$(date +%M:%S)} Menguji Koneksi.. (2) " >> screenlog.0
  rm -rf screenlog.1;killall -q sshpass
  screen -Logfile screenlog.1 -dmS xderm sshpass -p "$pass" ssh -oTCPKeepAlive=yes -oServerAliveInterval=180 -oServerAliveCountMax=2 -oStrictHostKeyChecking=no -CND 127.0.0.1:1080 -p $port $user@$host -o "Proxycommand=corkscrew 127.0.0.1 8789 %h %p";sleep 5
  fi
-if [ $n -eq 20 ]; then
+if [ $n -eq 21 ]; then
 echo sabar >> screenlog.0;echo -ne "{$(date +%M:%S)} Menguji Koneksi. (3) " >> screenlog.0
 rm -rf screenlog.1;killall -q sshpass
 screen -Logfile screenlog.1 -dmS xderm sshpass -p "$pass" ssh -oTCPKeepAlive=yes -oServerAliveInterval=180 -oServerAliveCountMax=2 -oStrictHostKeyChecking=no -CND 127.0.0.1:1080 -p $port $user@$host -o "Proxycommand=corkscrew 127.0.0.1 8789 %h %p";sleep 5
