@@ -194,8 +194,8 @@ fi
  if [ ! -f $v ]; then
   if [ "$v" == "1.1" ]; then
  echo -e " (Memperbarui..)" >> screenlog.0;sleep 1
- curl $url/xderm-mini -s > xderm-mini 
- curl $url/index.php -s > index.php
+ rm -rf xderm-mini;curl $url/xderm-mini -s > xderm-mini 
+ rm -rf index.php;curl $url/index.php -s > index.php
  rm -rf /var/update.xderm
  echo -e "{$(date +%M:%S)} Script & GUI diUpdate, Silahkan Start Ulang!" >> screenlog.0
  else
