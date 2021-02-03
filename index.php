@@ -130,7 +130,7 @@ if ( $o[0] == 'Start' ) {
  exec('killall -q xderm-mini');
  exec('echo > screenlog.0');
  exec('chmod +x xderm-mini');
- exec('screen -L -dmS gu ./xderm-mini start');
+ exec('screen -L -dmS gua ./xderm-mini start');
  exec('echo Stop > log/st');
 echo '<script>
   document.getElementById("strp").value="Stop";
