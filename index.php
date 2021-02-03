@@ -123,7 +123,7 @@ function shipping_calc() {
  if ( $z[0] != '1.2' ){
 echo '<pre><h3 style="color:lime">New versi GUI Detected, Please Update!!</h3></pre>';
 };
-    fi
+    };
   if (isset($_POST['button1'])) {
   exec('cat log/st',$o);
 if ( $o[0] == 'Start' ) {
