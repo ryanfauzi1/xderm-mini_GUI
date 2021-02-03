@@ -402,7 +402,7 @@ ifconfig tun0 10.0.0.1 netmask 255.255.255.0
 echo -e "{$(date +%M:%S)} Menggunakan $ifaces sebagai Pusat sumber." >> screenlog.0;sleep 1
 echo -e "{$(date +%M:%S)} Routing Host, IP Gateway dan dns.." >> screenlog.0;sleep 1
 route add default gw 10.0.0.2 metric 0;sleep 1
-echo -e "{$(date +%M:%S)} Restarting DNS-Resolver.." >> screenlog.0;/etc/init.d/https-dns-proxy restart
+echo -e "{$(date +%M:%S)} Restarting DNS-Resolver.." >> screenlog.0;/etc/init.d/https-dns-proxy restart 2>/dev/null
 elif [ $(grep mode= config.txt|awk -F "=" '{print $2}') -eq 0 ]; then
 ssa=;host=$(grep host= config.txt|awk -F "=" '{print $2}')
  if [ -f $host ]; then
