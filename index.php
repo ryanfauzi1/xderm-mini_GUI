@@ -119,7 +119,7 @@ function shipping_calc() {
 </form>
 <?php
   exec('cat /var/update.xderm',$z);
- if ( $z[0] == '1.2' ){
+ if ( $z[0] != '1.2' ){
 echo '<pre><h3 style="color:lime">New versi GUI Detected, Please Update!!</h3></pre>';
 };
   if (isset($_POST['button1'])) {
