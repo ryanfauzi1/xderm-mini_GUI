@@ -139,7 +139,7 @@ echo '<script>
  exec('killall -q xderm-mini');
  exec('echo > screenlog.0');
  exec('chmod +x xderm-mini');
- exec('screen -L -dmS gui ./xderm-mini stop');
+ exec('screen -L -dmS gu ./xderm-mini stop');
  exec('echo Start > log/st');
 echo '<script>
   document.getElementById("strp").value="Start";
