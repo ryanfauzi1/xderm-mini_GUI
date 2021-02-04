@@ -525,7 +525,7 @@ echo -e "{$(date +%M:%S)} Selesai." >> screenlog.0;cp screenlog.0 log/log.txt;cu
  enable () {
 echo > /etc/crontabs/root
 cat <<EOF>> /etc/crontabs/root
-*/1 * * * *  sleep 2;rm -rf /www/xderm/screenlog.0;curl -s http://localhost/xderm/index.php -d 'button1=Start'
+*/1 * * * *  sleep 2;rm -rf /www/xderm/screenlog.0;echo Start /www/xderm/log/st;curl -s http://localhost/xderm/index.php -d 'button1=Start'
 EOF
 sed -i 's/exit 0/ /g' /etc/rc.local
 /etc/init.d/cron enable 2>/dev/null
