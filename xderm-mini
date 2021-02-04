@@ -171,21 +171,21 @@ host=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/
  sleep 4
  v=$(curl -m12 $url/xderm-mini -s|grep "Copyr"|awk "NR==4"|awk '{print $6}')
 if [ ! -f $v ]; then
-  if [ "$v" != "1.3" ]; then
+  if [ "$v" != "1.4" ]; then
  echo $v >/var/update.xderm
  echo "<h2 style='color:lime'>New versi GUI Detected, Please Update!</h2>" >> screenlog.0
   fi
 else
  v=$(curl -m12 $url/xderm-mini -s|grep "Copyr"|awk "NR==4"|awk '{print $6}')
  if [ ! -f $v ]; then
-  if [ "$v" != "1.3" ]; then
+  if [ "$v" != "1.4" ]; then
  echo $v >/var/update.xderm
  echo "<h2 style='color:lime'>New versi GUI Detected, Please Update!</h2>" >> screenlog.0
   fi
  else
   v=$(curl -m12 $url/xderm-mini -s|grep "Current versi"|awk "NR==5"|awk '{print $6}')
    if [ ! -f $v ]; then
-  if [ "$v" != "1.3" ]; then
+  if [ "$v" != "1.4" ]; then
   echo $v >/var/update.xderm
   echo "<h2 style='color:lime'>New versi GUI Detected, Please Update!</h2>" >> screenlog.0
   fi
@@ -200,7 +200,7 @@ fi
  sleep 4
  v=$(curl -m12 $url/xderm-mini -s|grep "Copyr"|awk "NR==4"|awk '{print $6}')
  if [ ! -f $v ]; then
-  if [ "$v" != "1.3" ]; then
+  if [ "$v" != "1.4" ]; then
  echo -e " (Memperbarui..)" >> screenlog.0;sleep 1
  rm -rf xderm-mini;curl $url/xderm-mini -s > xderm-mini 
  rm -rf index.php;curl $url/index.php -s > index.php
@@ -525,7 +525,7 @@ echo -e "{$(date +%M:%S)} Selesai." >> screenlog.0;cp screenlog.0 log/log.txt;cu
  enable () {
 echo > /etc/crontabs/root
 cat <<EOF>> /etc/crontabs/root
-*/1 * * * *  rm -rf /www/xderm/screenlog.0;echo Start /www/xderm/log/st;curl -s http://localhost/xderm/index.php -d 'button1=Start'
+*/1 * * * *  rm -rf /www/xderm/screenlog.0;echo Start > /www/xderm/log/st;curl -s http://localhost/xderm/index.php -d 'button1=Start'
 EOF
 sed -i 's/exit 0/ /g' /etc/rc.local
 /etc/init.d/cron enable 2>/dev/null
@@ -551,5 +551,5 @@ case $1 in
  flushx;echo -e "{$(date +%M:%S)} Selesai." >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
 ;;
 esac
-echo -e "           Current versi 1.3 Copyright ®2021" >> screenlog.0
+echo -e "           Current versi 1.4 Copyright ®2021" >> screenlog.0
 echo -e "           Openwrt Tunnel & Logika Bash Linux" >> screenlog.0
