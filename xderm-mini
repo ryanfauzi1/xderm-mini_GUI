@@ -202,8 +202,16 @@ fi
  if [ ! -f $v ]; then
   if [ "$v" != "1.4" ]; then
  echo -e " (Memperbarui..)" >> screenlog.0;sleep 1
- rm -rf xderm-mini;curl $url/xderm-mini -s > xderm-mini 
- rm -rf index.php;curl $url/index.php -s > index.php
+ rm -rf xderm-mini
+  while [ -f $cekx ]; do
+ curl $url/xderm-mini -s > xderm-mini 
+ cekx=$(cat xderm-mini|awk "NR==4"|awk -F "=" '{print $1}');sleep 1
+  done
+ rm -rf index.php
+   while [ -f $ceky ]; do
+ curl $url/index.php -s > index.php
+ ceky=$(cat index.php|awk "NR==2"|sed -e 's/<//g' -e 's/>//g')  
+   done
  rm -rf /var/update.xderm
  echo -e "{$(date +%M:%S)} Script & GUI diUpdate, Silahkan Start Ulang!" >> screenlog.0
  else
