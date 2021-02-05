@@ -464,7 +464,7 @@ echo -e "{$(date +%M:%S)} Menjalankan SSH (di latarbelakang)...." >> screenlog.0
 rm -rf /www/xderm/log/screenlog.0;cd /www/xderm/log 2>/dev/null
 screen -L -dmS xderm sshpass -p "$pass" ssh -oTCPKeepAlive=yes -oServerAliveInterval=180 -oServerAliveCountMax=2 -oStrictHostKeyChecking=no -CND 127.0.0.1:1080 -p $port $user@$host -o "Proxycommand=corkscrew 127.0.0.1 8789 %h %p"
 sleep 2;n=0;xxx="lanjut";echo -ne "{$(date +%M:%S)} Menguji Koneksi... " >> ../screenlog.0
-while [ $n != 4 ]; do
+while [ $n != 6 ]; do
  if [ ! -f $(grep Permission screenlog.0 2>/dev/null|awk "NR==1"|awk '{print $4}') ]; then
      cd /www/xderm;echo "Not Connect!" >> screenlog.0
      echo -e '<pre><h2 style="color:#006400" "text-overflow:ellipsis">Username/Password Salah/Kadaluarsa.</h2></pre>' >> screenlog.0
@@ -484,7 +484,8 @@ kill $(screen -ls|grep 8789|awk -F '.' '{print $1}'|awk '{print $1}') 2>/dev/nul
 killall -q sshpass
 screen -L -dmS xderm sshpass -p "$pass" ssh -oTCPKeepAlive=yes -oServerAliveInterval=180 -oServerAliveCountMax=2 -oStrictHostKeyChecking=no -CND 127.0.0.1:1080 -p $port $user@$host -o "Proxycommand=corkscrew 127.0.0.1 8788 %h %p"
 sleep 2;n=0
-while [ $n != 4 ]; do
+while true; do
+if [ $n != 6 ]; then
  if [ ! -f $(grep Permission screenlog.0 2>/dev/null|awk "NR==1"|awk '{print $4}') ]; then
      cd /www/xderm;echo "Not Connect!" >> screenlog.0
      echo -e '<pre><h2 style="color:#006400" "text-overflow:ellipsis">Username/Password Salah/Kadaluarsa.</h2></pre>' >> screenlog.0
@@ -496,7 +497,12 @@ r=$(curl -m4 88.198.46.60 -w "%{http_code}" --proxy socks5://127.0.0.1:1080 -s -
   echo '<pre><h2 style="color:#006400" "text-overflow:ellipsis">HTTP/1.1 200 OK</h2></pre>' >> ../screenlog.0;break
   fi
 ((n++));sleep 1
- done
+else
+cd /www/xderm;echo "Not Connect!" >> screenlog.0
+flushx;echo -e "{$(date +%M:%S)} Berhenti." >> screenlog.0
+cp screenlog.0 log/log.txt 2>/dev/null;rm -rf log/screenlog.0;exit
+fi
+done
  fi
 cd /www/xderm 2>/dev/null
 ############################################################
