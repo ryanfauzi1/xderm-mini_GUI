@@ -466,10 +466,10 @@ screen -L -dmS xderm sshpass -p "$pass" ssh -oTCPKeepAlive=yes -oServerAliveInte
 sleep 2;n=0;xxx="lanjut";echo -ne "{$(date +%M:%S)} Menguji Koneksi... " >> ../screenlog.0
 while [ $n != 4 ]; do
  if [ ! -f $(grep Permission screenlog.0 2>/dev/null|awk "NR==1"|awk '{print $4}') ]; then
-     echo "Not Connect!" >> ../screenlog.0
-     echo -e '<pre><h2 style="color:#006400" "text-overflow:ellipsis">Username/Password Salah/Kadaluarsa.</h2></pre>' >> ../screenlog.0
-     flushx;echo -e "{$(date +%M:%S)} Berhenti." >> ../screenlog.0
-     cp ../screenlog.0 log.txt 2>/dev/null;rm -rf screenlog.0;exit
+     cd /www/xderm;echo "Not Connect!" >> screenlog.0
+     echo -e '<pre><h2 style="color:#006400" "text-overflow:ellipsis">Username/Password Salah/Kadaluarsa.</h2></pre>' >> screenlog.0
+     flushx;echo -e "{$(date +%M:%S)} Berhenti." >> screenlog.0
+     cp screenlog.0 log/log.txt 2>/dev/null;rm -rf log/screenlog.0;exit
  fi
 r=$(curl -m4 88.198.46.60 -w "%{http_code}" --proxy socks5://127.0.0.1:1080 -s -o /dev/null|head -c2)
   if [ $r -eq 30 ]; then
@@ -486,10 +486,10 @@ screen -L -dmS xderm sshpass -p "$pass" ssh -oTCPKeepAlive=yes -oServerAliveInte
 sleep 2;n=0
 while [ $n != 4 ]; do
  if [ ! -f $(grep Permission screenlog.0 2>/dev/null|awk "NR==1"|awk '{print $4}') ]; then
-     echo "Not Connect!" >> ../screenlog.0
-     echo -e '<pre><h2 style="color:#006400" "text-overflow:ellipsis">Username/Password Salah/Kadaluarsa.</h2></pre>' >> ../screenlog.0
-     flushx;echo -e "{$(date +%M:%S)} Berhenti." >> ../screenlog.0
-     cp ../screenlog.0 log.txt 2>/dev/null;rm -rf screenlog.0;exit
+     cd /www/xderm;echo "Not Connect!" >> screenlog.0
+     echo -e '<pre><h2 style="color:#006400" "text-overflow:ellipsis">Username/Password Salah/Kadaluarsa.</h2></pre>' >> screenlog.0
+     flushx;echo -e "{$(date +%M:%S)} Berhenti." >> screenlog.0
+     cp screenlog.0 log/log.txt 2>/dev/null;rm -rf log/screenlog.0;exit
  fi
 r=$(curl -m4 88.198.46.60 -w "%{http_code}" --proxy socks5://127.0.0.1:1080 -s -o /dev/null|head -c2)
   if [ $r -eq 30 ]; then
