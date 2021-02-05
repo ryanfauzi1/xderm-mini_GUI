@@ -452,7 +452,7 @@ echo "Closed!" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
  fi
 host=$(grep host= config.txt|awk -F "=" '{print $2}')
 echo -e "{$(date +%M:%S)} Menjalankan Inject..." >> screenlog.0
-killall -q openssl timeou;rm -rf /tmp/timeou;tlsv="1";lpinjek="8789";injek;tlsv="1_2";lpinjek="8788";injek
+killall -q openssl timeou;rm -rf /tmp/timeou;tlsv="1";lpinjek="8789";injek;tlsv="1_2";lpinjek="8788";injek;sleep 1
 echo "##############################################" >> screenlog.0
 echo "  Host: $host" >> screenlog.0
 echo "  Port: $port" >> screenlog.0
@@ -465,7 +465,7 @@ rm -rf /www/xderm/log/screenlog.0;cd /www/xderm/log 2>/dev/null
 screen -L -dmS xderm sshpass -p "$pass" ssh -oTCPKeepAlive=yes -oServerAliveInterval=180 -oServerAliveCountMax=2 -oStrictHostKeyChecking=no -CND 127.0.0.1:1080 -p $port $user@$host -o "Proxycommand=corkscrew 127.0.0.1 8789 %h %p"
 screen -L -dmS xderm sshpass -p "$pass" ssh -oTCPKeepAlive=yes -oServerAliveInterval=180 -oServerAliveCountMax=2 -oStrictHostKeyChecking=no -CND 127.0.0.1:1080 -p $port $user@$host -o "Proxycommand=corkscrew 127.0.0.1 8788 %h %p"
 sleep 3;cd /www/xderm 2>/dev/null;n=0
-while [ $n != 3 ]; do
+while [ $n != 2 ]; do
  if [ ! -f $(grep Permission log/screenlog.0 2>/dev/null|awk "NR==1"|awk '{print $4}') ]; then
      echo -ne "{$(date +%M:%S)} Menguji akun... " >> screenlog.0
      echo "Not Connect!" >> screenlog.0
