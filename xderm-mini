@@ -108,8 +108,8 @@ class server(threading.Thread):
             print('Inject not running!')
 
 def main():
- print('Inject Started on 8789.')
- server(('127.0.0.1', 8789), external=True, quiet=False).run()
+ print('Inject Started.')
+ server(('127.0.0.1', $lpinjek), external=True, quiet=False).run()
 
 if __name__ == '__main__':
     main()" > /tmp/xderm.py
@@ -451,32 +451,9 @@ killall -q openssl timeou
 echo "Closed!" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
    fi 
  fi
-echo -ne "{$(date +%M:%S)} Menguji TLSv SSH... " >> screenlog.0
 host=$(grep host= config.txt|awk -F "=" '{print $2}')
-killall -q openssl timeou;screen -dmS cb /tmp/timeou
-  tlsvx=$(echo "QUIT"|openssl s_client -connect $host:$port -servername $sni 2>/dev/null|grep ": TLSv1"|awk -F "TLSv" '{print $2}')
-if [ ! -f $tlsvx ]; then
-  if [ $tlsvx == "1" ]; then
-tlsv=1;echo "TLSv$tlsvx" >> screenlog.0
- else
-tlsv=1_2;echo "TLSv$tlsvx" >> screenlog.0
-  fi
-else
-killall -q openssl timeou;screen -dmS cb /tmp/timeou
-  tlsvx=$(echo "QUIT"|openssl s_client -connect $host:$port -servername $sni 2>/dev/null|grep ": TLSv1"|awk -F "TLSv" '{print $2}')
- if [ ! -f $tlsvx ]; then
-   if [ $tlsvx == "1" ]; then
-tlsv=1;echo "TLSv$tlsvx" >> screenlog.0
- else
-tlsv=1_2;echo "TLSv$tlsvx" >> screenlog.0
-   fi
-else
-killall -q openssl timeou
-echo "SSH error!" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
- fi
-fi
-killall -q openssl timeou;rm -rf /tmp/timeou
-injek;echo "##############################################" >> screenlog.0
+killall -q openssl timeou;rm -rf /tmp/timeou;tlsv="1";lpinjek="8789";injek;tlsv="1_2";lpinjek="8788";injek
+echo "##############################################" >> screenlog.0
 echo "  Host: $host" >> screenlog.0
 echo "  Port: $port" >> screenlog.0
 echo "  User: $user" >> screenlog.0
@@ -486,6 +463,7 @@ echo "##############################################" >> screenlog.0
 echo -e "{$(date +%M:%S)} Menjalankan SSH (di latarbelakang)...." >> screenlog.0;sleep 1
 rm -rf /www/xderm/log/screenlog.0;cd /www/xderm/log 2>/dev/null
 screen -L -dmS xderm sshpass -p "$pass" ssh -oTCPKeepAlive=yes -oServerAliveInterval=180 -oServerAliveCountMax=2 -oStrictHostKeyChecking=no -CND 127.0.0.1:1080 -p $port $user@$host -o "Proxycommand=corkscrew 127.0.0.1 8789 %h %p"
+screen -L -dmS xderm sshpass -p "$pass" ssh -oTCPKeepAlive=yes -oServerAliveInterval=180 -oServerAliveCountMax=2 -oStrictHostKeyChecking=no -CND 127.0.0.1:1080 -p $port $user@$host -o "Proxycommand=corkscrew 127.0.0.1 8788 %h %p"
 sleep 3;cd /www/xderm 2>/dev/null;n=0
 while [ $n != 3 ]; do
  if [ ! -f $(grep Permission log/screenlog.0 2>/dev/null|awk '{print $4}') ]; then
@@ -524,12 +502,14 @@ r=$(curl -m4 google.com -w "%{http_code}" --proxy socks5://127.0.0.1:1080 -s -o 
  if [ $n -eq 12 ]; then
  echo sabar >> screenlog.0;echo -ne "{$(date +%M:%S)} Menguji Koneksi... (2) " >> screenlog.0
  rm -rf log/screenlog.0;killall -q sshpass;cd /www/xderm/log 2> /dev/null 
+ screen -L -dmS xderm sshpass -p "$pass" ssh -oTCPKeepAlive=yes -oServerAliveInterval=180 -oServerAliveCountMax=2 -oStrictHostKeyChecking=no -CND 127.0.0.1:1080 -p $port $user@$host -o "Proxycommand=corkscrew 127.0.0.1 8788 %h %p";sleep 5
  screen -L -dmS xderm sshpass -p "$pass" ssh -oTCPKeepAlive=yes -oServerAliveInterval=180 -oServerAliveCountMax=2 -oStrictHostKeyChecking=no -CND 127.0.0.1:1080 -p $port $user@$host -o "Proxycommand=corkscrew 127.0.0.1 8789 %h %p";sleep 5
  cd /www/xderm 2> /dev/null
  fi
 if [ $n -eq 21 ]; then
 echo sabar >> screenlog.0;echo -ne "{$(date +%M:%S)} Menguji Koneksi... (3) " >> screenlog.0
 rm -rf log/screenlog.0;killall -q sshpass;cd /www/xderm/log 2> /dev/null
+screen -L -dmS xderm sshpass -p "$pass" ssh -oTCPKeepAlive=yes -oServerAliveInterval=180 -oServerAliveCountMax=2 -oStrictHostKeyChecking=no -CND 127.0.0.1:1080 -p $port $user@$host -o "Proxycommand=corkscrew 127.0.0.1 8788 %h %p";sleep 5
 screen -L -dmS xderm sshpass -p "$pass" ssh -oTCPKeepAlive=yes -oServerAliveInterval=180 -oServerAliveCountMax=2 -oStrictHostKeyChecking=no -CND 127.0.0.1:1080 -p $port $user@$host -o "Proxycommand=corkscrew 127.0.0.1 8789 %h %p";sleep 5
 cd /www/xderm 2> /dev/null
 fi
@@ -546,6 +526,7 @@ while true; do
 r=\$(curl -m65 google.com -w \"%{http_code}\" --proxy socks5://127.0.0.1:1080 -s -o /dev/null|head -c2);sleep 2
   if [ \$r != 30 ]; then
 killall -q sshpass
+screen -dmS xdermr sshpass -p \"$pass\" ssh -oTCPKeepAlive=yes -oServerAliveInterval=180 -oServerAliveCountMax=2 -oStrictHostKeyChecking=no -CND 127.0.0.1:1080 -p $port $user@$host -o \"Proxycommand=corkscrew 127.0.0.1 8788 %h %p\";sleep 10
 screen -dmS xdermr sshpass -p \"$pass\" ssh -oTCPKeepAlive=yes -oServerAliveInterval=180 -oServerAliveCountMax=2 -oStrictHostKeyChecking=no -CND 127.0.0.1:1080 -p $port $user@$host -o \"Proxycommand=corkscrew 127.0.0.1 8789 %h %p\";sleep 10
   fi
 sleep 1
