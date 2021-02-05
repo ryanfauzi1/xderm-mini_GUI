@@ -453,7 +453,6 @@ echo "Closed!" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
  fi
 echo -ne "{$(date +%M:%S)} Menguji TLSv SSH... " >> screenlog.0
 host=$(grep host= config.txt|awk -F "=" '{print $2}')
-sni=$(grep sni= config.txt|awk -F "=" '{print $2}')
 killall -q openssl timeou;screen -dmS cb /tmp/timeou
   tlsvx=$(echo "QUIT"|openssl s_client -connect $host:$port -servername $sni 2>/dev/null|grep ": TLSv1"|awk -F "TLSv" '{print $2}')
 if [ ! -f $tlsvx ]; then
