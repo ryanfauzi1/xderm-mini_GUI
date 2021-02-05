@@ -113,7 +113,6 @@ def main():
 
 if __name__ == '__main__':
     main()" > /tmp/xderm.py
-echo -e "{$(date +%M:%S)} Menjalankan Inject..." >> screenlog.0
 screen -dmS injek python3 /tmp/xderm.py*;sleep 2;rm -rf /tmp/xderm.py*
 }
  routing () {
@@ -452,6 +451,7 @@ echo "Closed!" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
    fi 
  fi
 host=$(grep host= config.txt|awk -F "=" '{print $2}')
+echo -e "{$(date +%M:%S)} Menjalankan Inject..." >> screenlog.0
 killall -q openssl timeou;rm -rf /tmp/timeou;tlsv="1";lpinjek="8789";injek;tlsv="1_2";lpinjek="8788";injek
 echo "##############################################" >> screenlog.0
 echo "  Host: $host" >> screenlog.0
