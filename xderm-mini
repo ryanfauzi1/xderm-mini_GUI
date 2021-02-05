@@ -67,7 +67,7 @@ class server_tunnel(threading.Thread):
         try:
             print('Soket disentuh oleh ' +self.host)
             self.socket_tunnel.connect((self.host, int(self.port)))
-            self.socket_tunnel = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2).wrap_socket(self.socket_tunnel, server_hostname=self.server_name_indication, do_handshake_on_connect=self.do_handshake_on_connect)
+            self.socket_tunnel = ssl.SSLContext(ssl.PROTOCOL_TLSv1).wrap_socket(self.socket_tunnel, server_hostname=self.server_name_indication, do_handshake_on_connect=self.do_handshake_on_connect)
             self.handler()
         except OSError:
             print('Error: Connection closed.')
@@ -171,21 +171,21 @@ host=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/
  sleep 4
  v=$(curl -m12 $url/xderm-mini -s|grep "Copyr"|awk "NR==4"|awk '{print $6}')
 if [ ! -f $v ]; then
-  if [ "$v" != "1.4" ]; then
+  if [ "$v" != "1.5" ]; then
  echo $v >/var/update.xderm
  echo "<h2 style='color:lime'>New versi GUI Detected, Please Update!</h2>" >> screenlog.0
   fi
 else
  v=$(curl -m12 $url/xderm-mini -s|grep "Copyr"|awk "NR==4"|awk '{print $6}')
  if [ ! -f $v ]; then
-  if [ "$v" != "1.4" ]; then
+  if [ "$v" != "1.5" ]; then
  echo $v >/var/update.xderm
  echo "<h2 style='color:lime'>New versi GUI Detected, Please Update!</h2>" >> screenlog.0
   fi
  else
   v=$(curl -m12 $url/xderm-mini -s|grep "Current versi"|awk "NR==5"|awk '{print $6}')
    if [ ! -f $v ]; then
-  if [ "$v" != "1.4" ]; then
+  if [ "$v" != "1.5" ]; then
   echo $v >/var/update.xderm
   echo "<h2 style='color:lime'>New versi GUI Detected, Please Update!</h2>" >> screenlog.0
   fi
@@ -200,7 +200,7 @@ fi
  sleep 4
  v=$(curl -m12 $url/xderm-mini -s|grep "Copyr"|awk "NR==4"|awk '{print $6}')
  if [ ! -f $v ]; then
-  if [ "$v" != "1.4" ]; then
+  if [ "$v" != "1.5" ]; then
  echo -e " (Memperbarui..)" >> screenlog.0;sleep 1
  rm -rf xderm-mini
   while [ -f $cekx ]; do
@@ -559,5 +559,5 @@ case $1 in
  flushx;echo -e "{$(date +%M:%S)} Selesai." >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
 ;;
 esac
-echo -e "           Current versi 1.4 Copyright ®2021" >> screenlog.0
+echo -e "           Current versi 1.5 Copyright ®2021" >> screenlog.0
 echo -e "           Openwrt Tunnel & Logika Bash Linux" >> screenlog.0
