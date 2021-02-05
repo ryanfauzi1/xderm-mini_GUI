@@ -466,7 +466,7 @@ screen -L -dmS xderm sshpass -p "$pass" ssh -oTCPKeepAlive=yes -oServerAliveInte
 screen -L -dmS xderm sshpass -p "$pass" ssh -oTCPKeepAlive=yes -oServerAliveInterval=180 -oServerAliveCountMax=2 -oStrictHostKeyChecking=no -CND 127.0.0.1:1080 -p $port $user@$host -o "Proxycommand=corkscrew 127.0.0.1 8788 %h %p"
 sleep 3;cd /www/xderm 2>/dev/null;n=0
 while [ $n != 3 ]; do
- if [ ! -f $(grep Permission log/screenlog.0 2>/dev/null|awk '{print $4}') ]; then
+ if [ ! -f $(grep Permission log/screenlog.0 2>/dev/null|awk "NR==1"|awk '{print $4}') ]; then
      echo -ne "{$(date +%M:%S)} Menguji akun... " >> screenlog.0
      echo "Not Connect!" >> screenlog.0
      echo -e '<pre><h2 style="color:#006400" "text-overflow:ellipsis">Username/Password Salah/Kadaluarsa.</h2></pre>' >> screenlog.0
