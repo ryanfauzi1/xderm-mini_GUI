@@ -474,8 +474,8 @@ while [ $n != 3 ]; do
 done
 ############################################################
 echo -e "{$(date +%M:%S)} Menjalankan Badvpn-tun2socks...." >> screenlog.0;sleep 1
-  if [ -f $(iptables -t nat  -L|grep MASQ|grep tcp|awk '{print $1}') ]; then
-iptables -A POSTROUTING --proto tcp -t nat -o tun0 -j MASQUERADE
+  if [ -f $(iptables -t nat -L 2>/dev/null|grep MASQ|grep tcp|awk '{print $1}') ]; then
+iptables -A POSTROUTING --proto tcp -t nat -o tun0 -j MASQUERADE 2>/dev/null
   fi
 pudp=$(grep pudp config.txt|awk -F "=" '{print $2}')
 screen -dmS gerbang badvpn-tun2socks --tundev tun0 --netif-ipaddr 10.0.0.2 --netif-netmask 255.255.255.0 --socks-server-addr 127.0.0.1:1080$ssa --udpgw-remote-server-addr 127.0.0.1:$pudp --udpgw-transparent-dns --loglevel 0;sleep 4
