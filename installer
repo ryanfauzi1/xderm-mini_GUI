@@ -7,11 +7,15 @@ url="https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main"
 wget -O /www/xderm/index.php $url/index.php -q
 wget -O /www/xderm/index.html $url/index.html -q
 wget -O /www/xderm/xderm-mini $url/xderm-mini -q
+wget -O /www/xderm/login.php $url/login.php -q
+wget -O /www/xderm/header.php $url/header.php -q
 wget -O /www/xderm/config.txt $url/config.txt -q
 wget -O /www/xderm/js/jquery-2.1.3.min.js $url/jquery-2.1.3.min.js -q
 wget -O /www/xderm/img/image.png $url/image.png -q
 wget -O /www/xderm/img/fav.ico $url/fav.ico -q
 echo Start > /www/xderm/log/st
+echo -e "user=admin\npasswd=xderm" > /root/auth.txt
 echo -e "xderm-mini GUI terinstall.\n\nSilahkan Akses 'http://192.168.1.1/xderm'"
+echo -e "Username: admin\nPassword: xderm"
 echo "Jangan lupa setting config dulu di webui nya."
 echo "Terima kasih -salam ryan fauzi."
