@@ -1,0 +1,8 @@
+#!/bin/bash
+url="https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main"
+wget -O /www/xderm/login.php $url/login.php -q
+wget -O /www/xderm/header.php $url/header.php -q
+echo -e "user=admin\npasswd=xderm" > /root/auth.txt
+echo -e "Default Authentication\nUsername: admin\nPassword: xderm\n"
+echo -e "Untuk mengganti U/P silahkan edit /root/auth.txt"
+echo -e "terima kasih.\n"
