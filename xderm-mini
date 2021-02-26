@@ -375,7 +375,7 @@ echo "  Pass: ********" >> screenlog.0
 echo "  Port UDPgw: $pudp" >> screenlog.0
 echo "##############################################" >> screenlog.0
 echo -e "{$(date +%M:%S)} Menjalankan SSH (di latarbelakang)...." >> screenlog.0
-rm -rf /www/xderm/log/screenlog.0;cd /www/xderm/log 2>/dev/null
+rm -rf /root/.ssh/known_hosts* /www/xderm/log/screenlog.0;cd /www/xderm/log 2>/dev/null
 screen -dmS login sshpass -p "$pass" ssh -oTCPKeepAlive=yes -oServerAliveInterval=180 -oServerAliveCountMax=2 -oStrictHostKeyChecking=no -CND 127.0.0.1:1080 -p 8780 $user@localhost
 sleep 1;n=0;echo -ne "{$(date +%M:%S)} Menguji Koneksi... " >> ../screenlog.0
 while [ $n != 7 ]; do
@@ -426,7 +426,7 @@ echo "#!/bin/bash
 while true; do
 r=\$(curl -m75 google.com -w \"%{http_code}\" --proxy socks5://127.0.0.1:1080 -s -o /dev/null|head -c2);sleep 2
   if [ \$r != 30 ]; then
-killall -q sshpass
+killall -q sshpass;rm -rf /root/.ssh/known_hosts*
 screen -dmS xdermr sshpass -p \"$pass\" ssh -oTCPKeepAlive=yes -oServerAliveInterval=180 -oServerAliveCountMax=2 -oStrictHostKeyChecking=no -CND 127.0.0.1:1080 -p 8780 $user@localhost;sleep 10
   fi
 sleep 1
