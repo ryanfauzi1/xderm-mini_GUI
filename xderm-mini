@@ -142,6 +142,7 @@ mode=$(grep mode= config.txt|awk -F "=" '{print $2}')
    echo "Ketik: opkg update && opkg install stunnel" >> screenlog.0
    cp screenlog.0 log/log.txt 2>/dev/null;exit
   fi
+touch /etc/crontabs/root
  if [ ! -f $(cat /etc/crontabs/root|grep xderm|awk '{print $2}') ]; then
 echo > /etc/crontabs/root
  fi
@@ -446,13 +447,15 @@ else
 echo -e "#!/bin/bash\necho Start > /www/xderm/log/st;curl -s http://localhost/xderm/index.php -d 'button1=Start'\nexit 0" > /etc/rc.local
  fi
 sed -i ':a;N;$!ba;s/\n\n/\n/g' /etc/rc.local
- if [ ! -f $(cat /etc/crontabs/root|grep xderm|awk '{print $2}') ]; then
+touch /etc/crontabs/root
+if [ ! -f $(cat /etc/crontabs/root|grep xderm|awk '{print $2}') ]; then
 echo > /etc/crontabs/root
  fi
 }
  disable () {
 sed -i "s|echo Start > /www/xderm/log/st;curl -s http://localhost/xderm/index.php -d 'button1=Start'||g" /etc/rc.local
 sed -i ':a;N;$!ba;s/\n\n/\n/g' /etc/rc.local
+touch /etc/crontabs/root
  if [ ! -f $(cat /etc/crontabs/root|grep xderm|awk '{print $2}') ]; then
 echo > /etc/crontabs/root
  fi
