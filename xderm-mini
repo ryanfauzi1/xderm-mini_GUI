@@ -136,7 +136,7 @@ mode=$(grep mode= config.txt|awk -F "=" '{print $2}')
    echo "Ketik: opkg update && opkg install https-dns-proxy" >> screenlog.0
    cp screenlog.0 log/log.txt 2>/dev/null;exit
   fi
-  if [ -f $(stunnel -version 2>/dev/null|awk '{print $1}'|awk "NR==1") ]; then
+  if [ -f $(ls /usr/bin/stunnel 2>/dev/null|awk -F '/' '{print $4}'|awk "NR==1") ]; then
    echo "Paket stunnel belom terinstall. install dulu!" >> screenlog.0
    echo "Gunakan Koneksi normal dan" >> screenlog.0
    echo "Ketik: opkg update && opkg install stunnel" >> screenlog.0
