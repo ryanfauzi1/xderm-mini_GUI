@@ -219,7 +219,7 @@ fi
  rm -rf index.php
    while [ -f $ceky ]; do
  curl $url/index.php -s > index.php
- ceky=$(cat index.php|awk "NR==2"|sed -e 's/<//g' -e 's/>//g')  
+ ceky=$(cat index.php|awk "NR==4"|sed -e 's/<//g' -e 's/>//g'|awk '{print $1}')  
    done
  rm -rf /var/update.xderm
  echo -e "{$(date +%M:%S)} Script & GUI diUpdate, Silahkan Start Ulang!" >> screenlog.0
