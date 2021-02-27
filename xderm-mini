@@ -64,21 +64,21 @@ host=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/
  url="https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main"
  v=$(curl -m12 $url/xderm-mini -s|grep "Copyr"|awk "NR==4"|awk '{print $6}')
 if [ ! -f $v ]; then
-  if [ "$v" != "1.9" ]; then
+  if [ "$v" != "2.0" ]; then
  echo $v >/var/update.xderm
  echo "<h2 style='color:lime'>New versi GUI Detected, Please Update!</h2>" >> screenlog.0
   fi
 else
  v=$(curl -m12 $url/xderm-mini -s|grep "Copyr"|awk "NR==4"|awk '{print $6}')
  if [ ! -f $v ]; then
-  if [ "$v" != "1.9" ]; then
+  if [ "$v" != "2.0" ]; then
  echo $v >/var/update.xderm
  echo "<h2 style='color:lime'>New versi GUI Detected, Please Update!</h2>" >> screenlog.0
   fi
  else
   v=$(curl -m12 $url/xderm-mini -s|grep "Current versi"|awk "NR==5"|awk '{print $6}')
    if [ ! -f $v ]; then
-  if [ "$v" != "1.9" ]; then
+  if [ "$v" != "2.0" ]; then
   echo $v >/var/update.xderm
   echo "<h2 style='color:lime'>New versi GUI Detected, Please Update!</h2>" >> screenlog.0
   fi
@@ -93,7 +93,7 @@ fi
  sleep 1
  v=$(curl -m12 $url/xderm-mini -s|grep "Copyr"|awk "NR==4"|awk '{print $6}')
  if [ ! -f $v ]; then
-  if [ "$v" != "1.9" ]; then
+  if [ "$v" != "2.0" ]; then
  echo -e " (Memperbarui..)" >> screenlog.0;sleep 1
  rm -rf xderm-mini
   while [ -f $cekx ]; do
@@ -143,9 +143,10 @@ mode=$(grep mode= config.txt|awk -F "=" '{print $2}')
    cp screenlog.0 log/log.txt 2>/dev/null;exit
   fi
 touch /etc/crontabs/root
- if [ ! -f $(cat /etc/crontabs/root|grep xderm|awk '{print $2}') ]; then
+if [ ! -f $(cat /etc/crontabs/root 2>/dev/null|grep xderm|awk '{print $2}'|awk "NR==1") ]; then
 echo > /etc/crontabs/root
  fi
+/etc/init.d/cron stop 2>/dev/null
 if [ $mode -eq 1 ]; then
  if [ -f $(v2ray -version 2>/dev/null|awk '{print $1}'|awk "NR==1") ]; then
  echo "Paket V2Ray belom terinstall. install dulu!" >> screenlog.0
@@ -448,7 +449,7 @@ echo -e "#!/bin/bash\necho Start > /www/xderm/log/st;curl -s http://localhost/xd
  fi
 sed -i ':a;N;$!ba;s/\n\n/\n/g' /etc/rc.local
 touch /etc/crontabs/root
-if [ ! -f $(cat /etc/crontabs/root|grep xderm|awk '{print $2}') ]; then
+if [ ! -f $(cat /etc/crontabs/root|grep xderm|awk '{print $2}'|awk "NR==1") ]; then
 echo > /etc/crontabs/root
  fi
 }
@@ -456,7 +457,7 @@ echo > /etc/crontabs/root
 sed -i "s|echo Start > /www/xderm/log/st;curl -s http://localhost/xderm/index.php -d 'button1=Start'||g" /etc/rc.local
 sed -i ':a;N;$!ba;s/\n\n/\n/g' /etc/rc.local
 touch /etc/crontabs/root
- if [ ! -f $(cat /etc/crontabs/root|grep xderm|awk '{print $2}') ]; then
+ if [ ! -f $(cat /etc/crontabs/root|grep xderm|awk '{print $2}'|awk "NR==1") ]; then
 echo > /etc/crontabs/root
  fi
 }
@@ -477,4 +478,4 @@ case $1 in
  flushx;echo -e "{$(date +%M:%S)} Selesai." >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
 ;;
 esac
-echo -e "           Current versi 1.9 Copyright ®2021" >> screenlog.0
+echo -e "           Current versi 2.0 Copyright ®2021" >> screenlog.0
