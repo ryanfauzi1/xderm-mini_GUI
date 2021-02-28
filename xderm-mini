@@ -187,7 +187,7 @@ kill $(ps w|grep badvpn|grep tun|awk "NR==1"|awk '{print $1}') 2>/dev/null
   host=$(grep trojan:// config.txt|awk -F "://" '{print $2}'|awk -F "@" '{print $2}'|awk -F ":" '{print $1}'|awk "NR==1")
   fi
 route del $host 2>/dev/null;route del 8.8.8.8 2>/dev/null
-ip link delete tun0 2>/dev/null;ip link delete tun1 2>/dev/null
+screen -d -m ip link delete tun0 2>/dev/null;screen -d -m ip link delete tun1 2>/dev/null
 /etc/init.d/https-dns-proxy stop 2>/dev/null
 host=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|sed ':a;N;$!ba;s/\n  //g'|awk -F '"add' '{print $2}'|grep :|sed ':a;N;$!ba;s/\n/ /g'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g');route del $host 2>/dev/null
 }
@@ -439,7 +439,7 @@ echo "{
 screen -dmS pimes v2ray -config /usr/local/etc/v2ray/config.json;routing
 echo -e "{$(date +%M:%S)} Menjalankan VMESS (di latarbelakang)...." >> screenlog.0
 echo -e "{$(date +%M:%S)} Menjalankan Badvpn-tun2socks...." >> screenlog.0
-ip tuntap add dev tun0 mode tun
+screen -d -m ip tuntap add dev tun0 mode tun 2>/dev/null
 pudp=$(grep pudp config.txt|awk -F "=" '{print $2}')
 screen -dmS gerbang badvpn-tun2socks --tundev tun0 --netif-ipaddr 10.0.0.2 --netif-netmask 255.255.255.0 --socks-server-addr 127.0.0.1:1080$ssa --udpgw-remote-server-addr 127.0.0.1:$pudp --udpgw-transparent-dns --loglevel 0;sleep 3
 echo -e "{$(date +%M:%S)} Menggunakan $ifaces sebagai Pusat." >> screenlog.0
@@ -529,7 +529,7 @@ echo "#############################################" >> screenlog.0
 echo -e "{$(date +%M:%S)} Menjalankan trojan VPN (di latarbelakang).." >> screenlog.0
 screen -dmS troj trojan -c /tmp/trojan.conf;sleep 2
 echo -e "{$(date +%M:%S)} Menjalankan Badvpn-tun2socks...." >> screenlog.0
-ip tuntap add dev tun0 mode tun
+screen -d -m ip tuntap add dev tun0 mode tun 2>/dev/null
 pudp=$(grep pudp config.txt|awk -F "=" '{print $2}')
 screen -dmS gerbang badvpn-tun2socks --tundev tun0 --netif-ipaddr 10.0.0.2 --netif-netmask 255.255.255.0 --socks-server-addr 127.0.0.1:1080 --udpgw-remote-server-addr 127.0.0.1:$pudp --udpgw-transparent-dns --loglevel 0;sleep 2
 echo -e "{$(date +%M:%S)} Menggunakan $ifaces sebagai Pusat." >> screenlog.0
