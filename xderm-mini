@@ -443,7 +443,7 @@ screen -dmS pimes v2ray -config /usr/local/etc/v2ray/config.json;routing
 echo -e "{$(date +%M:%S)} Menjalankan VMESS (di latarbelakang)...." >> screenlog.0
 echo -e "{$(date +%M:%S)} Menjalankan Badvpn-tun2socks...." >> screenlog.0
 screen -d -m ip tuntap add dev tun0 mode tun 2>/dev/null
-pudp=$(grep pudp config.txt|awk -F "=" '{print $2}')
+pudp=$(grep pudp= config.txt|awk -F "=" '{print $2}')
 screen -dmS gerbang badvpn-tun2socks --tundev tun0 --netif-ipaddr 10.0.0.2 --netif-netmask 255.255.255.0 --socks-server-addr 127.0.0.1:1080$ssa --udpgw-remote-server-addr 127.0.0.1:$pudp --udpgw-transparent-dns --loglevel 0;sleep 3
 echo -e "{$(date +%M:%S)} Menggunakan $ifaces sebagai Pusat." >> screenlog.0
 echo -e "{$(date +%M:%S)} Routing Host, IP Gateway dan dns.." >> screenlog.0
