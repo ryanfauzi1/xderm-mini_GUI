@@ -506,7 +506,7 @@ echo "{
     \"password\": [
         \"$pass\"
     ],
-    \"log_level\": 1,
+    \"log_level\": 3,
     \"ssl\": {
         \"verify\": false,
         \"verify_hostname\": true,
