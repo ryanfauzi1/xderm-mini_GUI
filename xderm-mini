@@ -692,7 +692,7 @@ done
 cd /www/xderm 2>/dev/null
 ############################################################
 echo -e "{$(date +%M:%S)} Menjalankan Badvpn-tun2socks...." >> screenlog.0
-ip tuntap add dev tun0 mode tun
+ip tuntap add dev tun0 mode tun 2>/dev/null
 pudp=$(grep pudp config.txt|awk -F "=" '{print $2}')
 screen -dmS gerbang badvpn-tun2socks --tundev tun0 --netif-ipaddr 10.0.0.2 --netif-netmask 255.255.255.0 --socks-server-addr 127.0.0.1:1080$ssa --udpgw-remote-server-addr 127.0.0.1:$pudp --udpgw-transparent-dns --loglevel 0;sleep 2
 ifconfig tun0 10.0.0.1 netmask 255.255.255.0 2>/dev/null
