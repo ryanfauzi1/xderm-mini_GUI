@@ -447,8 +447,8 @@ pudp=$(grep pudp config.txt|awk -F "=" '{print $2}')
 screen -dmS gerbang badvpn-tun2socks --tundev tun0 --netif-ipaddr 10.0.0.2 --netif-netmask 255.255.255.0 --socks-server-addr 127.0.0.1:1080$ssa --udpgw-remote-server-addr 127.0.0.1:$pudp --udpgw-transparent-dns --loglevel 0;sleep 3
 echo -e "{$(date +%M:%S)} Menggunakan $ifaces sebagai Pusat." >> screenlog.0
 echo -e "{$(date +%M:%S)} Routing Host, IP Gateway dan dns.." >> screenlog.0
-ifconfig tun0 10.0.0.1 netmask 255.255.255.0
-route add default gw 10.0.0.2 metric 0
+ifconfig tun0 10.0.0.1 netmask 255.255.255.0 2>/dev/null
+route add default gw 10.0.0.2 metric 0 2>/dev/null
 if [ ! -f $(cat config/dns 2>/dev/null|awk -F '=' '{print $2}') ]; then
   if [ $(cat config/dns 2>/dev/null|awk -F '=' '{print $2}') == "yes" ]; then
 echo -e "{$(date +%M:%S)} Restarting DNS-Resolver.." >> screenlog.0
@@ -537,8 +537,8 @@ pudp=$(grep pudp config.txt|awk -F "=" '{print $2}')
 screen -dmS gerbang badvpn-tun2socks --tundev tun0 --netif-ipaddr 10.0.0.2 --netif-netmask 255.255.255.0 --socks-server-addr 127.0.0.1:1080 --udpgw-remote-server-addr 127.0.0.1:$pudp --udpgw-transparent-dns --loglevel 0;sleep 2
 echo -e "{$(date +%M:%S)} Menggunakan $ifaces sebagai Pusat." >> screenlog.0
 echo -e "{$(date +%M:%S)} Routing Host, IP Gateway dan dns.." >> screenlog.0
-ifconfig tun0 10.0.0.1 netmask 255.255.255.0
-route add default gw 10.0.0.2 metric 0
+ifconfig tun0 10.0.0.1 netmask 255.255.255.0 2>/dev/null
+route add default gw 10.0.0.2 metric 0 2>/dev/null
 if [ ! -f $(cat config/dns 2>/dev/null|awk -F '=' '{print $2}') ]; then
   if [ $(cat config/dns 2>/dev/null|awk -F '=' '{print $2}') == "yes" ]; then
 echo -e "{$(date +%M:%S)} Restarting DNS-Resolver.." >> screenlog.0
@@ -695,10 +695,10 @@ echo -e "{$(date +%M:%S)} Menjalankan Badvpn-tun2socks...." >> screenlog.0
 ip tuntap add dev tun0 mode tun
 pudp=$(grep pudp config.txt|awk -F "=" '{print $2}')
 screen -dmS gerbang badvpn-tun2socks --tundev tun0 --netif-ipaddr 10.0.0.2 --netif-netmask 255.255.255.0 --socks-server-addr 127.0.0.1:1080$ssa --udpgw-remote-server-addr 127.0.0.1:$pudp --udpgw-transparent-dns --loglevel 0;sleep 2
-ifconfig tun0 10.0.0.1 netmask 255.255.255.0
+ifconfig tun0 10.0.0.1 netmask 255.255.255.0 2>/dev/null
 echo -e "{$(date +%M:%S)} Menggunakan $ifaces sebagai Pusat sumber." >> screenlog.0
 echo -e "{$(date +%M:%S)} Routing Host, IP Gateway dan dns.." >> screenlog.0
-route add default gw 10.0.0.2 metric 0
+route add default gw 10.0.0.2 metric 0 2>/dev/null
 if [ ! -f $(cat config/dns 2>/dev/null|awk -F '=' '{print $2}') ]; then
   if [ $(cat config/dns 2>/dev/null|awk -F '=' '{print $2}') == "yes" ]; then
 echo -e "{$(date +%M:%S)} Restarting DNS-Resolver.." >> screenlog.0
