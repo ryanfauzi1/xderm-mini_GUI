@@ -124,7 +124,7 @@ if ( window.history.replaceState ) {
 <?php
   exec('cat /var/update.xderm',$z);
     if ($z[0]) {
- if ( $z[0] != '2.3' ){
+ if ( $z[0] != '2.4' ){
 echo '<pre><h3 style="color:lime">New versi GUI Detected, Please Update!!</h3></pre>';
 };
     };
@@ -266,5 +266,5 @@ echo '<div id="log" class="scroll"></div></pre></div>';
 }
 ?>
 </td></tr>
-</table></head><center><h7><b>Current versi GUI 2.3 Copyright &copy</b></h7></center>
+</table></head><center><h7><b>Current versi GUI 2.4 Copyright &copy</b></h7></center>
 </html>
