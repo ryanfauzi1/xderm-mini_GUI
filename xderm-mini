@@ -248,7 +248,7 @@ fi
   }
  start () {
 #########################
-echo -e "{$(date +%M:%S)} v.binari saat ini 2.3" >> screenlog.0
+echo -e "{$(date +%M:%S)} v.binari saat ini 2.4" >> screenlog.0
   if [ -f $(grep mode= config.txt|awk -F "=" '{print $2}') ]; then
 echo "mode=0" >> config.txt
   fi
