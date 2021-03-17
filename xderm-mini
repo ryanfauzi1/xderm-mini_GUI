@@ -447,7 +447,10 @@ echo "{
 screen -dmS pimes v2ray -config /usr/local/etc/v2ray/config.json;routing
 echo -e "{$(date +%M:%S)} Menjalankan VMESS (di latarbelakang)...." >> screenlog.0
 echo -e "{$(date +%M:%S)} Menjalankan Badvpn-tun2socks...." >> screenlog.0
-pudp=$(grep pudp= config.txt|awk -F "=" '{print $2}')
+  if [ -f $(iptables -t nat -L|grep MASQ|grep tcp|awk '{print $1}'|awk "NR==1") ]; then
+iptables -A POSTROUTING --proto tcp -t nat -o tun0 -j MASQUERADE 2>/dev/null
+  fi
+pudp=$(grep pudp= config.txt|awk -F "=" '{print $2}');sleep 1
 screen -dmS gerbang badvpn-tun2socks --tundev tun0 --netif-ipaddr 10.0.0.2 --netif-netmask 255.255.255.0 --socks-server-addr 127.0.0.1:10808 --udpgw-remote-server-addr 127.0.0.1:$pudp --udpgw-transparent-dns --loglevel 0;sleep 3
 echo -e "{$(date +%M:%S)} Menggunakan $ifaces sebagai Pusat." >> screenlog.0
 echo -e "{$(date +%M:%S)} Routing Host, IP Gateway dan dns.." >> screenlog.0
@@ -536,7 +539,10 @@ echo "#############################################" >> screenlog.0
 echo -e "{$(date +%M:%S)} Menjalankan trojan VPN (di latarbelakang).." >> screenlog.0
 screen -dmS troj trojan -c /tmp/trojan.conf;sleep 2
 echo -e "{$(date +%M:%S)} Menjalankan Badvpn-tun2socks...." >> screenlog.0
-pudp=$(grep pudp config.txt|awk -F "=" '{print $2}')
+  if [ -f $(iptables -t nat -L|grep MASQ|grep tcp|awk '{print $1}'|awk "NR==1") ]; then
+iptables -A POSTROUTING --proto tcp -t nat -o tun0 -j MASQUERADE 2>/dev/null
+  fi
+pudp=$(grep pudp config.txt|awk -F "=" '{print $2}');sleep 1
 screen -dmS gerbang badvpn-tun2socks --tundev tun0 --netif-ipaddr 10.0.0.2 --netif-netmask 255.255.255.0 --socks-server-addr 127.0.0.1:1080 --udpgw-remote-server-addr 127.0.0.1:$pudp --udpgw-transparent-dns --loglevel 0;sleep 2
 echo -e "{$(date +%M:%S)} Menggunakan $ifaces sebagai Pusat." >> screenlog.0
 echo -e "{$(date +%M:%S)} Routing Host, IP Gateway dan dns.." >> screenlog.0
@@ -575,18 +581,24 @@ elif [ $(grep mode= config.txt|awk -F "=" '{print $2}') -eq 0 ]; then
 echo "Paket corkscrew belom terinstall. install dulu!" >> screenlog.0
 echo "Gunakan Koneksi normal dan" >> screenlog.0
 echo "Khusus Pengguna STB B860h dan HG680p" >> screenlog.0
-echo "Ketik:" >> screenlog.0
-echo "# wget https://github.com/ryanfauzi1/xderm-mini_GUI/raw/main/corkscrew_2.0-Rureka.com_aarch64_cortex-a53.ipk di terminal" >> screenlog.0
-echo "# opkg install corkscrew_2.0-Rureka.com_aarch64_cortex-a53.ipk" >> screenlog.0
+echo "Ketik: bash /root/icork" >> screenlog.0
+echo -e "wget https://github.com/ryanfauzi1/xderm-mini_GUI/raw/main/corkscrew_2.0-Rureka.com_aarch64_cortex-a53.ipk\nopkg install corkscrew_2.0-Rureka.com_aarch64_cortex-a53.ipk" > /root/icork
+chmod +x /root/icork
    cp screenlog.0 log/log.txt 2>/dev/null;exit
+  fi
+  if [ -f $(find /usr -iname "openssh-cl*" -type f|awk "NR==1" 2>/dev/null) ]; then
+echo "Paket openssh-client belom terinstall. install dulu!" >> screenlog.0
+echo "Gunakan Koneksi normal dan ketik:" >> screenlog.0
+echo "opkg update && opkg install openssh-client" >> screenlog.0
+  cp screenlog.0 log/log.txt 2>/dev/null;exit
   fi
   if [ -f $(ls /usr/bin/sshpass 2>/dev/null|awk -F '/' '{print $4}'|awk "NR==1") ]; then
 echo "Paket sshpass belom terinstall. install dulu!" >> screenlog.0
 echo "Gunakan Koneksi normal dan" >> screenlog.0
 echo "Khusus Pengguna STB B860h dan HG680p" >> screenlog.0
-echo "Ketik:" >> screenlog.0
-echo "# wget https://rureka.com/files/sshpass/sshpass_1.06-Rureka.com_aarch64_cortex-a53.ipk" >> screenlog.0
-echo "# opkg install sshpass_1.06-Rureka.com_aarch64_cortex-a53.ipk" >> screenlog.0
+echo "Ketik: bash /root/isshp" >> screenlog.0
+echo -e "opkg remove sshpass\nwget https://rureka.com/files/sshpass/sshpass_1.06-Rureka.com_aarch64_cortex-a53.ipk\nopkg install sshpass_1.06-Rureka.com_aarch64_cortex-a53.ipk" > /root/isshp
+chmod +x /root/isshp
    cp screenlog.0 log/log.txt 2>/dev/null;exit
   fi
 host=$(grep host= config.txt|awk -F "=" '{print $2}')
@@ -713,7 +725,10 @@ done
 cd /www/xderm 2>/dev/null
 ############################################################
 echo -e "{$(date +%M:%S)} Menjalankan Badvpn-tun2socks...." >> screenlog.0
-pudp=$(grep pudp config.txt|awk -F "=" '{print $2}')
+  if [ -f $(iptables -t nat -L|grep MASQ|grep tcp|awk '{print $1}'|awk "NR==1") ]; then
+iptables -A POSTROUTING --proto tcp -t nat -o tun0 -j MASQUERADE 2>/dev/null
+  fi
+pudp=$(grep pudp config.txt|awk -F "=" '{print $2}');sleep 1
 screen -dmS gerbang badvpn-tun2socks --tundev tun0 --netif-ipaddr 10.0.0.2 --netif-netmask 255.255.255.0 --socks-server-addr 127.0.0.1:1080 --udpgw-remote-server-addr 127.0.0.1:$pudp --udpgw-transparent-dns --loglevel 0;sleep 2
 ifconfig tun0 10.0.0.1 netmask 255.255.255.0 2>/dev/null
 echo -e "{$(date +%M:%S)} Menggunakan $ifaces sebagai Pusat sumber." >> screenlog.0
