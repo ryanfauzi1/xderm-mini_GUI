@@ -589,7 +589,7 @@ echo -e "wget https://github.com/ryanfauzi1/xderm-mini_GUI/raw/main/corkscrew_2.
 chmod +x /root/icork
    cp screenlog.0 log/log.txt 2>/dev/null;exit
   fi
-  if [ -f $(find /usr -iname "openssh-cl*" -type f|awk "NR==1" 2>/dev/null) ]; then
+  if [ -f $(find /usr -iname "openssh-cl*" -type f|awk "NR==1"|awk -F '/' '{print $2}' 2>/dev/null) ]; then
 echo "Paket openssh-client belom terinstall. install dulu!" >> screenlog.0
 echo "Gunakan Koneksi normal dan ketik:" >> screenlog.0
 echo "opkg update && opkg install openssh-client" >> screenlog.0
