@@ -194,21 +194,21 @@ host=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/
  url="https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main"
  v=$(curl -m12 $url/xderm-mini -s|grep "Copyr"|awk "NR==4"|awk '{print $6}')
 if [ ! -f $v ]; then
-  if [ "$v" != "2.3" ]; then
+  if [ "$v" != "2.4" ]; then
  echo $v >/var/update.xderm
  echo "<h2 style='color:lime'>New versi GUI Detected, Please Update!</h2>" >> screenlog.0
   fi
 else
  v=$(curl -m12 $url/xderm-mini -s|grep "Copyr"|awk "NR==4"|awk '{print $6}')
  if [ ! -f $v ]; then
-  if [ "$v" != "2.3" ]; then
+  if [ "$v" != "2.4" ]; then
  echo $v >/var/update.xderm
  echo "<h2 style='color:lime'>New versi GUI Detected, Please Update!</h2>" >> screenlog.0
   fi
  else
   v=$(curl -m12 $url/xderm-mini -s|grep "Current versi"|awk "NR==5"|awk '{print $6}')
    if [ ! -f $v ]; then
-  if [ "$v" != "2.3" ]; then
+  if [ "$v" != "2.4" ]; then
   echo $v >/var/update.xderm
   echo "<h2 style='color:lime'>New versi GUI Detected, Please Update!</h2>" >> screenlog.0
   fi
@@ -223,7 +223,7 @@ fi
  sleep 1
  v=$(curl -m12 $url/xderm-mini -s|grep "Copyr"|awk "NR==4"|awk '{print $6}')
  if [ ! -f $v ]; then
-  if [ "$v" != "2.3" ]; then
+  if [ "$v" != "2.4" ]; then
  echo -e " (Memperbarui..)" >> screenlog.0;sleep 1
  rm -rf xderm-mini
   while [ -f $cekx ]; do
@@ -252,13 +252,16 @@ echo -e "{$(date +%M:%S)} v.binari saat ini 2.3" >> screenlog.0
   if [ -f $(grep mode= config.txt|awk -F "=" '{print $2}') ]; then
 echo "mode=0" >> config.txt
   fi
+  if [ -f $(grep sni= config.txt|awk -F "=" '{print $2}') ]; then
+echo "Masukkan bug sni terlebih dahulu!" >> screenlog.0;exit
+  fi
 pudp=$(grep pudp= config.txt 2>/dev/null|awk -F "=" '{print $2}')
 sni=$(grep sni= config.txt 2>/dev/null|awk -F "=" '{print $2}')
 mode=$(grep mode= config.txt|awk -F "=" '{print $2}')
    if [ -f $(badvpn-tun2socks -version 2>/dev/null|awk '{print $1}'|awk "NR==1") ]; then
     echo "Paket badvpn-tun2socks belom terinstall. install dulu!" >> screenlog.0
     echo "Gunakan Koneksi normal dan" >> screenlog.0
-    echo "Installer: https://github.com/vitoharhari/xderm-mini" >> screenlog.0
+    echo "Installer script ain: https://github.com/vitoharhari/xderm-mini" >> screenlog.0
     cp screenlog.0 log/log.txt 2>/dev/null;exit
    fi   
   if [ -f $(https-dns-proxy -version 2>/dev/null|awk '{print $1}'|awk "NR==1") ]; then
@@ -809,4 +812,4 @@ case $1 in
  flushx;echo -e "{$(date +%M:%S)} Selesai." >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
 ;;
 esac
-echo -e "           Current versi 2.3 Copyright ®2021" >> screenlog.0
+echo -e "           Current versi 2.4 Copyright ®2021" >> screenlog.0
