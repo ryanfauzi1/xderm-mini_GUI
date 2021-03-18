@@ -194,21 +194,21 @@ host=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/
  url="https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main"
  v=$(curl -m12 $url/xderm-mini -s|grep "Copyr"|awk "NR==4"|awk '{print $6}')
 if [ ! -f $v ]; then
-  if [ "$v" != "2.4" ]; then
+  if [ "$v" != "2.5" ]; then
  echo $v >/var/update.xderm
  echo "<h2 style='color:lime'>New versi GUI Detected, Please Update!</h2>" >> screenlog.0
   fi
 else
  v=$(curl -m12 $url/xderm-mini -s|grep "Copyr"|awk "NR==4"|awk '{print $6}')
  if [ ! -f $v ]; then
-  if [ "$v" != "2.4" ]; then
+  if [ "$v" != "2.5" ]; then
  echo $v >/var/update.xderm
  echo "<h2 style='color:lime'>New versi GUI Detected, Please Update!</h2>" >> screenlog.0
   fi
  else
   v=$(curl -m12 $url/xderm-mini -s|grep "Current versi"|awk "NR==5"|awk '{print $6}')
    if [ ! -f $v ]; then
-  if [ "$v" != "2.4" ]; then
+  if [ "$v" != "2.5" ]; then
   echo $v >/var/update.xderm
   echo "<h2 style='color:lime'>New versi GUI Detected, Please Update!</h2>" >> screenlog.0
   fi
@@ -223,7 +223,7 @@ fi
  sleep 1
  v=$(curl -m12 $url/xderm-mini -s|grep "Copyr"|awk "NR==4"|awk '{print $6}')
  if [ ! -f $v ]; then
-  if [ "$v" != "2.4" ]; then
+  if [ "$v" != "2.5" ]; then
  echo -e " (Memperbarui..)" >> screenlog.0;sleep 1
  rm -rf xderm-mini
   while [ -f $cekx ]; do
@@ -248,7 +248,7 @@ fi
   }
  start () {
 #########################
-echo -e "{$(date +%M:%S)} v.binari saat ini 2.4" >> screenlog.0
+echo -e "{$(date +%M:%S)} v.binari saat ini 2.5" >> screenlog.0
   if [ -f $(grep mode= config.txt|awk -F "=" '{print $2}') ]; then
 echo "mode=0" >> config.txt
   fi
@@ -450,8 +450,9 @@ echo "{
 screen -dmS pimes v2ray -config /usr/local/etc/v2ray/config.json;routing
 echo -e "{$(date +%M:%S)} Menjalankan VMESS (di latarbelakang)...." >> screenlog.0
 echo -e "{$(date +%M:%S)} Menjalankan Badvpn-tun2socks...." >> screenlog.0
-  if [ -f $(iptables -w 10 -t nat -L|grep MASQ|grep tcp|awk '{print $1}'|awk "NR==1") ]; then
-iptables -w 10 -A POSTROUTING --proto tcp -t nat -o tun0 -j MASQUERADE 2>/dev/null
+/etc/init.d/firewall reload 2>/dev/null
+  if [ -f $(iptables -t nat -L|grep MASQ|grep tcp|awk '{print $1}'|awk "NR==1") ]; then
+iptables -A POSTROUTING --proto tcp -t nat -o tun0 -j MASQUERADE 2>/dev/null
   fi
 pudp=$(grep pudp= config.txt|awk -F "=" '{print $2}');sleep 1
 screen -dmS gerbang badvpn-tun2socks --tundev tun0 --netif-ipaddr 10.0.0.2 --netif-netmask 255.255.255.0 --socks-server-addr 127.0.0.1:10808 --udpgw-remote-server-addr 127.0.0.1:$pudp --udpgw-transparent-dns --loglevel 0;sleep 3
@@ -540,10 +541,11 @@ echo " Port: $port" >> screenlog.0
 echo " Pass: **********" >> screenlog.0
 echo "#############################################" >> screenlog.0
 echo -e "{$(date +%M:%S)} Menjalankan trojan VPN (di latarbelakang).." >> screenlog.0
-screen -dmS troj trojan -c /tmp/trojan.conf;sleep 2
+screen -dmS troj trojan -c /tmp/trojan.conf;sleep 1
 echo -e "{$(date +%M:%S)} Menjalankan Badvpn-tun2socks...." >> screenlog.0
-  if [ -f $(iptables -w 10 -t nat -L|grep MASQ|grep tcp|awk '{print $1}'|awk "NR==1") ]; then
-iptables -w 10 -A POSTROUTING --proto tcp -t nat -o tun0 -j MASQUERADE 2>/dev/null
+/etc/init.d/firewall reload 2>/dev/null
+  if [ -f $(iptables -t nat -L|grep MASQ|grep tcp|awk '{print $1}'|awk "NR==1") ]; then
+iptables -A POSTROUTING --proto tcp -t nat -o tun0 -j MASQUERADE 2>/dev/null
   fi
 pudp=$(grep pudp config.txt|awk -F "=" '{print $2}');sleep 1
 screen -dmS gerbang badvpn-tun2socks --tundev tun0 --netif-ipaddr 10.0.0.2 --netif-netmask 255.255.255.0 --socks-server-addr 127.0.0.1:1080 --udpgw-remote-server-addr 127.0.0.1:$pudp --udpgw-transparent-dns --loglevel 0;sleep 2
@@ -728,8 +730,9 @@ done
 cd /www/xderm 2>/dev/null
 ############################################################
 echo -e "{$(date +%M:%S)} Menjalankan Badvpn-tun2socks...." >> screenlog.0
-  if [ -f $(iptables -w 10 -t nat -L|grep MASQ|grep tcp|awk '{print $1}'|awk "NR==1") ]; then
-iptables -w 10 -A POSTROUTING --proto tcp -t nat -o tun0 -j MASQUERADE 2>/dev/null
+/etc/init.d/firewall reload 2>/dev/null
+  if [ -f $(iptables -t nat -L|grep MASQ|grep tcp|awk '{print $1}'|awk "NR==1") ]; then
+iptables -A POSTROUTING --proto tcp -t nat -o tun0 -j MASQUERADE 2>/dev/null
   fi
 pudp=$(grep pudp config.txt|awk -F "=" '{print $2}');sleep 1
 screen -dmS gerbang badvpn-tun2socks --tundev tun0 --netif-ipaddr 10.0.0.2 --netif-netmask 255.255.255.0 --socks-server-addr 127.0.0.1:1080 --udpgw-remote-server-addr 127.0.0.1:$pudp --udpgw-transparent-dns --loglevel 0;sleep 2
@@ -812,4 +815,4 @@ case $1 in
  flushx;echo -e "{$(date +%M:%S)} Selesai." >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
 ;;
 esac
-echo -e "           Current versi 2.4 Copyright ®2021" >> screenlog.0
+echo -e "           Current versi 2.5 Copyright ®2021" >> screenlog.0
