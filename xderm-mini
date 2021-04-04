@@ -144,7 +144,7 @@ ifaces=$(ip r|grep default|awk '{print $3}')
    if [ $(echo $ifaces|awk -F "." '{print $4}'|wc -c) != "2" ]; then
   ipg=$(ip r|grep default|awk '{print $3}');ifaces=$(ip r|grep default|awk '{print $5}')
   ip route add $host dev $ifaces via $ipg 2>/dev/null
-  ip route add 8.8.8.8 $ifaces via $ipg 2>/dev/null
+  route add 8.8.8.8 gw $ipg 2>/dev/null
   route del default;ip route add default dev $ifaces via $ipg metric 1 2>/dev/null
   else
   type=gw;route add $host $type $ifaces 2>/dev/null
