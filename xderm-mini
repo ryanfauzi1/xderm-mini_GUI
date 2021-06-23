@@ -800,7 +800,7 @@ interf=\$(ip r|grep default|awk '{print \$3}'|awk 'NR==1')
  else
   type=dev;route add $host \$type \$interf 2>/dev/null
   route add 8.8.8.8 \$type \$interf 2>/dev/null
-  route del default;route add default \$type $interf metric 1 2>/dev/null
+  route del default;route add default \$type \$interf metric 1 2>/dev/null
   fi
  else
   break
