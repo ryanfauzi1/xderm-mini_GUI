@@ -144,7 +144,7 @@ ifaces=$(ip r|grep default|awk '{print $3}')
    if [ $(echo $ifaces|awk -F "." '{print $4}'|wc -c) != "2" ]; then
   ipg=$(ip r|grep default|awk '{print $3}');ifaces=$(ip r|grep default|awk '{print $5}')
   ip route add $host dev $ifaces via $ipg 2>/dev/null
-  route add 8.8.8.8 gw $ipg 2>/dev/null
+  ip route add 8.8.8.8 $ifaces via $ipg 2>/dev/null
   route del default;ip route add default dev $ifaces via $ipg metric 1 2>/dev/null
   else
   type=gw;route add $host $type $ifaces 2>/dev/null
@@ -194,21 +194,21 @@ host=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/
  url="https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main"
  v=$(curl -m12 $url/xderm-mini -s|grep "Copyr"|awk "NR==4"|awk '{print $6}')
 if [ ! -f $v ]; then
-  if [ "$v" != "2.6" ]; then
+  if [ "$v" != "2.7" ]; then
  echo $v >/var/update.xderm
  echo "<h2 style='color:lime'>New versi GUI Detected, Please Update!</h2>" >> screenlog.0
   fi
 else
  v=$(curl -m12 $url/xderm-mini -s|grep "Copyr"|awk "NR==4"|awk '{print $6}')
  if [ ! -f $v ]; then
-  if [ "$v" != "2.6" ]; then
+  if [ "$v" != "2.7" ]; then
  echo $v >/var/update.xderm
  echo "<h2 style='color:lime'>New versi GUI Detected, Please Update!</h2>" >> screenlog.0
   fi
  else
   v=$(curl -m12 $url/xderm-mini -s|grep "Current versi"|awk "NR==5"|awk '{print $6}')
    if [ ! -f $v ]; then
-  if [ "$v" != "2.6" ]; then
+  if [ "$v" != "2.7" ]; then
   echo $v >/var/update.xderm
   echo "<h2 style='color:lime'>New versi GUI Detected, Please Update!</h2>" >> screenlog.0
   fi
@@ -223,7 +223,7 @@ fi
  sleep 1
  v=$(curl -m12 $url/xderm-mini -s|grep "Copyr"|awk "NR==4"|awk '{print $6}')
  if [ ! -f $v ]; then
-  if [ "$v" != "2.6" ]; then
+  if [ "$v" != "2.7" ]; then
  echo -e " (Memperbarui..)" >> screenlog.0;sleep 1
  rm -rf xderm-mini
   while [ -f $cekx ]; do
@@ -248,7 +248,7 @@ fi
   }
  start () {
 #########################
-echo -e "{$(date +%M:%S)} v.binari saat ini 2.6" >> screenlog.0
+echo -e "{$(date +%M:%S)} v.binari saat ini 2.7" >> screenlog.0
   if [ -f $(grep mode= config.txt|awk -F "=" '{print $2}') ]; then
 echo "mode=0" >> config.txt
   fi
@@ -678,7 +678,7 @@ r=$(curl -m4 88.198.46.60 -w "%{http_code}" --proxy socks5://127.0.0.1:1080 -s -
   fi
 konek=n
 done
- if [ $konek != y ]; then
+ if [ $konek != "y" ]; then
 cd /www/xderm;echo "Not Connect!" >> screenlog.0
 flushx;echo -e "{$(date +%M:%S)} Berhenti." >> screenlog.0
 cp screenlog.0 log/log.txt 2>/dev/null;rm -rf log/screenlog.0;exit
@@ -758,15 +758,65 @@ else
 fi
 echo -e "{$(date +%M:%S)} Menjalankan rekonek otomatis..." >> screenlog.0
 echo "#!/bin/bash
+p=0
 while true; do
-r=\$(curl -m75 google.com -w \"%{http_code}\" --proxy socks5://127.0.0.1:1080 -s -o /dev/null|head -c2);sleep 2
+ if [ ! -f \$(ip r|grep $host|awk 'NR==1'|awk '{print \$1}') ]; then
+r=\$(curl -m50 google.com -w \"%{http_code}\" --proxy socks5://127.0.0.1:1080 -s -o /dev/null|head -c2);sleep 2
+ else
+r=0
+ fi
   if [ \$r != 30 ]; then
-killall -q sshpass;rm -rf /root/.ssh/known_hosts*
+killall -q sshpass;rm -rf /root/.ssh/known_hosts*;route del default dev tun0 2>/dev/null
+((p++));echo \"         (Jumlah AutoRekonek: \$p)\" > /www/xderm/screenlog.0
+echo \"**********************************************\" >> /www/xderm/screenlog.0
+cat /www/xderm/log/logr.txt|grep binari >> /www/xderm/screenlog.0
+cat /www/xderm/log/logr.txt|grep Mode >> /www/xderm/screenlog.0
+cat /www/xderm/log/logr.txt|grep Inject >> /www/xderm/screenlog.0
+echo \"##############################################\" >> /www/xderm/screenlog.0
+cat /www/xderm/log/logr.txt|grep Host: >> /www/xderm/screenlog.0
+cat /www/xderm/log/logr.txt|grep Port: >> /www/xderm/screenlog.0
+cat /www/xderm/log/logr.txt|grep User: >> /www/xderm/screenlog.0
+cat /www/xderm/log/logr.txt|grep Pass: >> /www/xderm/screenlog.0
+cat /www/xderm/log/logr.txt|grep UDPgw: >> /www/xderm/screenlog.0
+echo \"##############################################\" >> /www/xderm/screenlog.0
+echo -e \"{\$(date +%M:%S)} Koneksi Hilang !! Menunggu Sumber....\" >> /www/xderm/screenlog.0
+ while true; do
+ if [ -f \$(ip r|grep $host|awk 'NR==1'|awk '{print \$1}') ]; then
+interf=\$(ip r|grep default|awk '{print \$3}'|awk 'NR==1')
+    if [ -f \$interf ]; then
+     sleep 2;continue
+    fi
+  if [ ! -f \$(echo \$interf|awk -F '.' '{print \$2}') ]; then
+   if [ \$(echo \$interf|awk -F '.' '{print \$4}'|wc -c) != \"2\" ]; then
+  ipg=\$(ip r|grep default|awk '{print \$3}');interf=\$(ip r|grep default|awk '{print \$5}')
+  ip route add $host dev \$interf via \$ipg 2>/dev/null
+  ip route add 8.8.8.8 \$interf via \$ipg 2>/dev/null
+  route del default;ip route add default dev \$interf via \$ipg metric 1 2>/dev/null
+  else
+  type=gw;route add $host \$type \$interf 2>/dev/null
+  route add 8.8.8.8 \$type \$interf 2>/dev/null
+  route del default;route add default \$type \$interf metric 1 2>/dev/null
+   fi
+ else
+  type=dev;route add $host \$type \$interf 2>/dev/null
+  route add 8.8.8.8 \$type \$interf 2>/dev/null
+  route del default;route add default \$type $interf metric 1 2>/dev/null
+  fi
+ else
+  break
+ fi
+sleep 2
+ done
+echo -e \"{\$(date +%M:%S)} Memperbaiki Koneksi + Routing Ulang.. \" >> /www/xderm/screenlog.0
  if [ $(cat /www/xderm/config/stun) != "no" ]; then
 screen -dmS xdermr sshpass -p \"$pass\" ssh -oTCPKeepAlive=yes -oServerAliveInterval=180 -oServerAliveCountMax=2 -oStrictHostKeyChecking=no -CND 127.0.0.1:1080 -p 8780 $user@localhost;sleep 10
+route add default gw 10.0.0.2 metric 0 2>/dev/null
+echo -e \"{\$(date +%M:%S)} Selesai.\" >> /www/xderm/screenlog.0
 else
 screen -dmS xdermr sshpass -p \"$pass\" ssh -oTCPKeepAlive=yes -oServerAliveInterval=180 -oServerAliveCountMax=2 -oStrictHostKeyChecking=no -CND 127.0.0.1:1080 -p $port $user@$host -o \"Proxycommand=corkscrew 127.0.0.1 8788 %h %p\";sleep 10
 screen -dmS xdermr sshpass -p \"$pass\" ssh -oTCPKeepAlive=yes -oServerAliveInterval=180 -oServerAliveCountMax=2 -oStrictHostKeyChecking=no -CND 127.0.0.1:1080 -p $port $user@$host -o \"Proxycommand=corkscrew 127.0.0.1 8789 %h %p\";sleep 10
+route add default gw 10.0.0.2 metric 0 2>/dev/null
+echo -e \"{\$(date +%M:%S)} Selesai.\" >> /www/xderm/screenlog.0
  fi
   fi
 sleep 1
@@ -774,7 +824,8 @@ done" > /tmp/autorekonek;cd /tmp;chmod +x autorekonek
 screen -dmS auto ./autorekonek;sleep 2;rm -rf autorekonek
 fi
 cd /www/xderm/ 2>/dev/null
-echo -e "{$(date +%M:%S)} Selesai." >> screenlog.0;cp screenlog.0 log/log.txt;cupdate;exit
+echo -e "{$(date +%M:%S)} Selesai." >> screenlog.0
+cp screenlog.0 log/log.txt;cp screenlog.0 log/logr.txt;cupdate;exit
 }
  enable () {
  if [ ! -f $(cat /etc/rc.local|grep exit|awk '{print $1}' 2>/dev/null) ]; then
@@ -816,4 +867,4 @@ case $1 in
  flushx;echo -e "{$(date +%M:%S)} Selesai." >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
 ;;
 esac
-echo -e "           Current versi 2.6 Copyright ®2021" >> screenlog.0
+echo -e "           Current versi 2.7 Copyright ®2021" >> screenlog.0
