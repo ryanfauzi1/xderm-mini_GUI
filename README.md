@@ -10,6 +10,9 @@ wget -O installer-login https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_
 
 #khusus update manual
 
+#install thema by agus
+wget -O installtheme https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/installtheme && bash installtheme
+
 wget -O update-manual https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/update-manual && chmod +x update-manual && ./update-manual
 
 (pastikan sudah pernah menginstall paket pendukung!!!)
