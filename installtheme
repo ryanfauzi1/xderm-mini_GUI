@@ -1,5 +1,5 @@
 #!/bin/bash
 wget -O /www/xderm/img/ico.png --no-check-certificate https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/ico.png
-wget -O /www/xderm/img/background.jpg --no-check-certificate https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/background.
+wget -O /www/xderm/img/background.jpg --no-check-certificate https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/background.jpg
 wget -O /www/xderm/img/image.png --no-check-certificate https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/image.png
 clear;echo "Selesai, Silahkan clear cache browser!"
