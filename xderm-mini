@@ -158,12 +158,6 @@ ifaces=$(ip r|grep default|awk '{print $3}')
  fi
  }
  flushx () {
-  if [ -f $(https-dns-proxy -version 2>/dev/null|awk '{print $1}'|awk "NR==1") ]; then
-   echo "Paket https-dns-proxy belom terinstall. install dulu!" >> screenlog.0
-   echo "Gunakan Koneksi normal dan" >> screenlog.0
-   echo "Ketik: opkg update && opkg install https-dns-proxy" >> screenlog.0
-   cp screenlog.0 log/log.txt 2>/dev/null;exit
-  fi
 if [ -f $(base64 --help 2>/dev/null|awk "NR==2"|awk '{print $1}') ]; then
  echo "Paket base64 belom terinstall. install dulu!" >> screenlog.0
  echo "Ketik: opkg update && opkg install coreutils-base64" >> screenlog.0
@@ -264,12 +258,6 @@ mode=$(grep mode= config.txt|awk -F "=" '{print $2}')
     echo "Installer script ain: https://github.com/vitoharhari/xderm-mini" >> screenlog.0
     cp screenlog.0 log/log.txt 2>/dev/null;exit
    fi   
-  if [ -f $(https-dns-proxy -version 2>/dev/null|awk '{print $1}'|awk "NR==1") ]; then
-   echo "Paket https-dns-proxy belom terinstall. install dulu!" >> screenlog.0
-   echo "Gunakan Koneksi normal dan" >> screenlog.0
-   echo "Ketik: opkg update && opkg install https-dns-proxy" >> screenlog.0
-   cp screenlog.0 log/log.txt 2>/dev/null;exit
-  fi
   if [ -f $(ls /usr/bin/stunnel 2>/dev/null|awk -F '/' '{print $4}'|awk "NR==1") ]; then
    echo "Paket stunnel belom terinstall. install dulu!" >> screenlog.0
    echo "Gunakan Koneksi normal dan" >> screenlog.0
@@ -460,21 +448,6 @@ echo -e "{$(date +%M:%S)} Menggunakan $ifaces sebagai Pusat." >> screenlog.0
 echo -e "{$(date +%M:%S)} Routing Host, IP Gateway dan dns.." >> screenlog.0
 ifconfig tun0 10.0.0.1 netmask 255.255.255.0 2>/dev/null
 route add default gw 10.0.0.2 metric 0 2>/dev/null
-if [ ! -f $(cat config/dns 2>/dev/null|awk -F '=' '{print $2}') ]; then
-  if [ $(cat config/dns 2>/dev/null|awk -F '=' '{print $2}') == "yes" ]; then
-echo -e "{$(date +%M:%S)} Restarting DNS-Resolver.." >> screenlog.0
-/etc/init.d/https-dns-proxy start 2>/dev/null
-sed -i "$(grep -n 5054 /etc/config/dhcp 2>/dev/null|awk -F ":" '{print $1}')s/.*//" /etc/config/dhcp 2>/dev/null
- else
-     if [ -f $(grep -n 8.8.8.8 /etc/config/dhcp 2>/dev/null|awk -F ":" '{print $1}') ]; then
-     sed -i "15 i\        list server '8.8.8.8#53'" /etc/config/dhcp 2>/dev/null
-     fi
-  fi
-else
- if [ -f $(grep -n 8.8.8.8 /etc/config/dhcp 2>/dev/null|awk -F ":" '{print $1}') ]; then
- sed -i "15 i\        list server '8.8.8.8#53'" /etc/config/dhcp 2>/dev/null
- fi
-fi
 /etc/init.d/dnsmasq restart 2>/dev/null
 n=0;echo -ne "{$(date +%M:%S)} Menguji Koneksi... " >> screenlog.0
  while [ $n != 5 ]; do
@@ -553,21 +526,6 @@ echo -e "{$(date +%M:%S)} Menggunakan $ifaces sebagai Pusat." >> screenlog.0
 echo -e "{$(date +%M:%S)} Routing Host, IP Gateway dan dns.." >> screenlog.0
 ifconfig tun0 10.0.0.1 netmask 255.255.255.0 2>/dev/null
 route add default gw 10.0.0.2 metric 0 2>/dev/null
-if [ ! -f $(cat config/dns 2>/dev/null|awk -F '=' '{print $2}') ]; then
-  if [ $(cat config/dns 2>/dev/null|awk -F '=' '{print $2}') == "yes" ]; then
-echo -e "{$(date +%M:%S)} Restarting DNS-Resolver.." >> screenlog.0
-/etc/init.d/https-dns-proxy start 2>/dev/null
-sed -i "$(grep -n 5054 /etc/config/dhcp 2>/dev/null|awk -F ":" '{print $1}')s/.*//" /etc/config/dhcp 2>/dev/null
- else
-     if [ -f $(grep -n 8.8.8.8 /etc/config/dhcp 2>/dev/null|awk -F ":" '{print $1}') ]; then
-     sed -i "15 i\        list server '8.8.8.8#53'" /etc/config/dhcp 2>/dev/null
-     fi
-  fi
-else
- if [ -f $(grep -n 8.8.8.8 /etc/config/dhcp 2>/dev/null|awk -F ":" '{print $1}') ]; then
- sed -i "15 i\        list server '8.8.8.8#53'" /etc/config/dhcp 2>/dev/null
- fi
-fi
 /etc/init.d/dnsmasq restart 2>/dev/null
 n=0;echo -ne "{$(date +%M:%S)} Menguji Koneksi... " >> screenlog.0
  while [ $n != 5 ]; do
@@ -741,21 +699,6 @@ ifconfig tun0 10.0.0.1 netmask 255.255.255.0 2>/dev/null
 echo -e "{$(date +%M:%S)} Menggunakan $ifaces sebagai Pusat sumber." >> screenlog.0
 echo -e "{$(date +%M:%S)} Routing Host, IP Gateway dan dns.." >> screenlog.0
 route add default gw 10.0.0.2 metric 0 2>/dev/null
-if [ ! -f $(cat config/dns 2>/dev/null|awk -F '=' '{print $2}') ]; then
-  if [ $(cat config/dns 2>/dev/null|awk -F '=' '{print $2}') == "yes" ]; then
-echo -e "{$(date +%M:%S)} Restarting DNS-Resolver.." >> screenlog.0
-/etc/init.d/https-dns-proxy start 2>/dev/null
-sed -i "$(grep -n 5054 /etc/config/dhcp 2>/dev/null|awk -F ":" '{print $1}')s/.*//" /etc/config/dhcp 2>/dev/null
- else
-     if [ -f $(grep -n 8.8.8.8 /etc/config/dhcp 2>/dev/null|awk -F ":" '{print $1}') ]; then
-     sed -i "15 i\        list server '8.8.8.8#53'" /etc/config/dhcp 2>/dev/null
-     fi
-  fi
-else
- if [ -f $(grep -n 8.8.8.8 /etc/config/dhcp 2>/dev/null|awk -F ":" '{print $1}') ]; then
- sed -i "15 i\        list server '8.8.8.8#53'" /etc/config/dhcp 2>/dev/null
- fi
-fi
 echo -e "{$(date +%M:%S)} Menjalankan rekonek otomatis..." >> screenlog.0
 echo "#!/bin/bash
 p=0
