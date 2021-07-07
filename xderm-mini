@@ -385,25 +385,6 @@ killall -q openssl
 echo "Closed!" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
    fi
  fi
-echo -ne "{$(date +%M:%S)} AutoSync Time.. " >> screenlog.0
-data=$(curl $sni -is|grep ate:|awk -F ", " '{print $2}'|sed 's/ GMT//g')
-bln=$(echo $data|awk '{print $2}');thn=$(echo $data|awk '{print $3}')
-tgl=$(echo $data|awk '{print $1}');jam=$(echo $data|awk '{print $4}')
-   case $bln in
- "Jan") bln="01";;
- "Feb") bln="02";;
- "Mar") bln="03";;
- "Apr") bln="04";;
- "May") bln="05";;
- "Jun") bln="06";;
- "Jul") bln="07";;
- "Aug") bln="08";;
- "Sep") bln="09";;
- "Oct") bln="10";;
- "Nov") bln="11";;
- "Dec") bln="12";;
-    esac
-date -s "$(echo $thn-$bln-$tgl $jam)" 2>/dev/null;date|sed 's/  / /g' >> screenlog.0
 mkdir -p /usr/local/etc/v2ray/;juuid=1;n=2
 portv=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|sed ':a;N;$!ba;s/\n  //g'|awk -F '"port' '{print $2}'|grep :|sed ':a;N;$!ba;s/\n/ /g'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
   if [ ! -f $portv ]; then
@@ -653,6 +634,7 @@ echo -e "{$(date +%M:%S)} Routing Host, IP Gateway dan dns.." >> screenlog.0
 ifconfig tun0 10.0.0.1 netmask 255.255.255.0 2>/dev/null
 route add default gw 10.0.0.2 metric 0 2>/dev/null
 /etc/init.d/dnsmasq restart 2>/dev/null
+date -s "$(curl worldtimeapi.org/api/timezone/asia/Bangkok -s|awk -F 'datetime":"' '{print $2}'|awk -F. '{print $1}'|sed 's/T/ /g')"
 ##########################################scripted
 echo "#!/bin/bash
 t=0
