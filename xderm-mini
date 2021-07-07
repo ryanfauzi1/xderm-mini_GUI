@@ -676,15 +676,15 @@ terpilih=\$pingtrojan;terpilihport=1081;nama=trojan
   fi
    if [ \$(cat /tmp/currentmode.txt) == \"vmess\" ]; then
     if [ \$pingvmess -eq 999999 ]; then
-     t=1
+     t=3
     fi
    elif [ \$(cat /tmp/currentmode.txt) == \"trojan\" ]; then
     if [ \$pingtrojan -eq 999999 ]; then
-     t=1
+     t=3
     fi
    elif [ \$(cat /tmp/currentmode.txt) == \"ssh\" ]; then
     if [ \$pingssh -eq 999999 ]; then
-     t=1
+     t=3
     fi
    fi
    if [ \$nama != \$(cat /tmp/currentmode.txt) ]; then
