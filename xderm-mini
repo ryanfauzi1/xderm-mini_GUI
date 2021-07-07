@@ -1,5 +1,4 @@
 #!/bin/bash
-#ryanfauzi1
  injekpy () {
 sni=$(grep sni= config.txt|awk -F "=" '{print $2}')
 echo "#!/usr/bin/python
@@ -641,19 +640,19 @@ t=0
 while true; do
 pingssh=\$(timeout 3 httping -c1 -x 127.0.0.1:1080 -g http://google.com -5 2>/dev/null|awk \"NR==2\"|awk -F 'time=' '{print \$2}'|awk -F. '{print \$1}')
   if [ -f \$pingssh ]; then
-pingsshx=\"Closed!\";pingssh=999999
+pingsshx=\"Timeout!\";pingssh=999999
 else
 pingsshx=\"\$pingssh ms\"
   fi
 pingtrojan=\$(timeout 3 httping -c1 -x 127.0.0.1:1081 -g http://google.com -5 2>/dev/null|awk \"NR==2\"|awk -F 'time=' '{print \$2}'|awk -F. '{print \$1}')
   if [ -f \$pingtrojan ]; then
-pingtrojanx=\"Closed!\";pingtrojan=999999
+pingtrojanx=\"Timeout!\";pingtrojan=999999
 else
 pingtrojanx=\"\$pingtrojan ms\"
   fi
 pingvmess=\$(timeout 3 httping -c1 -x 127.0.0.1:10808 -g http://google.com -5 2>/dev/null|awk \"NR==2\"|awk -F 'time=' '{print \$2}'|awk -F. '{print \$1}')
   if [ -f \$pingvmess ]; then
-pingvmessx=\"Closed!\";pingvmess=999999
+pingvmessx=\"Timeout!\";pingvmess=999999
 else
 pingvmessx=\"\$pingvmess ms\"
   fi
