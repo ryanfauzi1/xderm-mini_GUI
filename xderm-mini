@@ -113,9 +113,6 @@ def main():
 
 if __name__ == '__main__':
     main()" > /tmp/xderm.py
-     if [ -f $portv ]; then
-      echo "Akun vmess belom disetting!" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
-     fi
 screen -dmS injek$lpinjek python3 /tmp/xderm.py*;sleep 1;rm -rf /tmp/xderm.py*
 }
  injek () {
