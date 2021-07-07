@@ -113,10 +113,14 @@ def main():
 
 if __name__ == '__main__':
     main()" > /tmp/xderm.py
+     if [ -f $portv ]; then
+      echo "Akun vmess belom disetting!" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
+     fi
 screen -dmS injek$lpinjek python3 /tmp/xderm.py*;sleep 1;rm -rf /tmp/xderm.py*
 }
  injek () {
 host=$(grep host= config.txt|awk -F "=" '{print $2}')
+host=$(ping $host -w1 -c1|awk "NR==1"|awk -F '(' '{print $2}'|awk -F ')' '{print $1}')
 port=$(grep port= config.txt|awk -F "=" '{print $2}')
 sni=$(grep sni= config.txt|awk -F "=" '{print $2}')
 echo "[ssh]
@@ -127,32 +131,44 @@ sni = $sni" > /tmp/stunnel.conf
 stunnel /tmp/stunnel.conf
 }
  routing () {
- mode=$(grep mode= config.txt|awk -F "=" '{print $2}')
+mode=$(grep mode= config.txt|awk -F "=" '{print $2}'|awk '{print $1}')
   if [ $mode -eq 0 ]; then
-  host=$(grep host= config.txt|awk -F "=" '{print $2}')
-  elif [ $mode -eq 1 ]; then
-   port=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|sed ':a;N;$!ba;s/\n  //g'|awk -F '"port' '{print $2}'|grep :|sed ':a;N;$!ba;s/\n/ /g'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
-    if [ -f $port ]; then
-   echo "Akun vmess belom disetting!" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
+    if [ -f $host ]; then
+     echo "Akun SSH belom disetting!" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
     fi
-   host=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|sed ':a;N;$!ba;s/\n  //g'|awk -F '"add' '{print $2}'|grep :|sed ':a;N;$!ba;s/\n/ /g'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
-  elif [ $mode -eq 2 ]; then
-  host=$(grep trojan:// config.txt|awk -F "://" '{print $2}'|awk -F "@" '{print $2}'|awk -F ":" '{print $1}'|awk "NR==1")
-  fi
+  elif [ $mode -eq 1 ]; then
+    if [ -f $hostv ]; then
+     echo "Akun vmess belom disetting!" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
+    fi     
+elif [ $mode -eq 2 ]; then
+    if [ -f $hostt ]; then
+     echo "Akun trojan belom disetting!" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
+    fi
+   elif [ $mode -eq 3 ]; then
+    if [ -f $host ]; then
+     echo "Akun SSH belom disetting!" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
+    fi
+   fi
 ifaces=$(ip r|grep default|awk '{print $3}')
  if [ ! -f $(echo $ifaces|awk -F "." '{print $2}') ]; then
    if [ $(echo $ifaces|awk -F "." '{print $4}'|wc -c) != "2" ]; then
   ipg=$(ip r|grep default|awk '{print $3}');ifaces=$(ip r|grep default|awk '{print $5}')
   ip route add $host dev $ifaces via $ipg 2>/dev/null
+  ip route add $hostt dev $ifaces via $ipg 2>/dev/null
+  ip route add $hostv dev $ifaces via $ipg 2>/dev/null
   ip route add 8.8.8.8 $ifaces via $ipg 2>/dev/null
   route del default;ip route add default dev $ifaces via $ipg metric 1 2>/dev/null
   else
   type=gw;route add $host $type $ifaces 2>/dev/null
+  route add $hostt $type $ifaces 2>/dev/null
+  route add $hostv $type $ifaces 2>/dev/null
   route add 8.8.8.8 $type $ifaces 2>/dev/null
   route del default;route add default $type $ifaces metric 1 2>/dev/null
    fi
  else
   type=dev;route add $host $type $ifaces 2>/dev/null
+  route add $hostt $type $ifaces 2>/dev/null
+  route add $hostv $type $ifaces 2>/dev/null
   route add 8.8.8.8 $type $ifaces 2>/dev/null
   route del default;route add default $type $ifaces metric 1 2>/dev/null
  fi
@@ -164,7 +180,9 @@ if [ -f $(base64 --help 2>/dev/null|awk "NR==2"|awk '{print $1}') ]; then
  echo >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
 fi
 echo -e "{$(date +%M:%S)} Membersihkan sisa sisa, Tunggu...." >> screenlog.0
-killall -q sshpass vpn stunnel openvpn trojan autorekonek v2ray badvpn-tun2socks
+killall -q sshpass vpn stunnel openvpn
+killall -q trojan v2ray badvpn-tun2socks
+killall -q autorekonek automode
 kill $(ps w|grep python3|grep xderm.py|awk "NR==1"|awk '{print $1}') 2>/dev/null
 kill $(ps w|grep badvpn|grep tun|awk "NR==1"|awk '{print $1}') 2>/dev/null
  mode=$(grep mode= config.txt|awk -F "=" '{print $2}')
@@ -179,7 +197,7 @@ kill $(ps w|grep badvpn|grep tun|awk "NR==1"|awk '{print $1}') 2>/dev/null
   elif [ $mode -eq 2 ]; then
   host=$(grep trojan:// config.txt|awk -F "://" '{print $2}'|awk -F "@" '{print $2}'|awk -F ":" '{print $1}'|awk "NR==1")
   fi
-route del $host 2>/dev/null;route del 8.8.8.8 2>/dev/null
+route del $host 2>/dev/null;route del $hostt 2>/dev/null;route del $hostv 2>/dev/null;route del 8.8.8.8 2>/dev/null
 screen -d -m ip link delete tun0 2>/dev/null;screen -d -m ip link delete tun1 2>/dev/null
 /etc/init.d/https-dns-proxy stop 2>/dev/null
 host=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|sed ':a;N;$!ba;s/\n  //g'|awk -F '"add' '{print $2}'|grep :|sed ':a;N;$!ba;s/\n/ /g'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g');route del $host 2>/dev/null
@@ -188,21 +206,21 @@ host=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/
  url="https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main"
  v=$(curl -m12 $url/xderm-mini -s|grep "Copyr"|awk "NR==4"|awk '{print $6}')
 if [ ! -f $v ]; then
-  if [ "$v" != "2.8" ]; then
+  if [ "$v" != "2.9" ]; then
  echo $v >/var/update.xderm
  echo "<h2 style='color:lime'>New versi GUI Detected, Please Update!</h2>" >> screenlog.0
   fi
 else
  v=$(curl -m12 $url/xderm-mini -s|grep "Copyr"|awk "NR==4"|awk '{print $6}')
  if [ ! -f $v ]; then
-  if [ "$v" != "2.8" ]; then
+  if [ "$v" != "2.9" ]; then
  echo $v >/var/update.xderm
  echo "<h2 style='color:lime'>New versi GUI Detected, Please Update!</h2>" >> screenlog.0
   fi
  else
   v=$(curl -m12 $url/xderm-mini -s|grep "Current versi"|awk "NR==5"|awk '{print $6}')
    if [ ! -f $v ]; then
-  if [ "$v" != "2.8" ]; then
+  if [ "$v" != "2.9" ]; then
   echo $v >/var/update.xderm
   echo "<h2 style='color:lime'>New versi GUI Detected, Please Update!</h2>" >> screenlog.0
   fi
@@ -217,7 +235,7 @@ fi
  sleep 1
  v=$(curl -m12 $url/xderm-mini -s|grep "Copyr"|awk "NR==4"|awk '{print $6}')
  if [ ! -f $v ]; then
-  if [ "$v" != "2.8" ]; then
+  if [ "$v" != "2.9" ]; then
  echo -e " (Memperbarui..)" >> screenlog.0;sleep 1
  rm -rf xderm-mini
   while [ -f $cekx ]; do
@@ -242,16 +260,19 @@ fi
   }
  start () {
 #########################
-echo -e "{$(date +%M:%S)} v.binari saat ini 2.8" >> screenlog.0
-  if [ -f $(grep mode= config.txt|awk -F "=" '{print $2}') ]; then
+killall -q stunnel;echo -e "{$(date +%M:%S)} v.binari saat ini 2.9" >> screenlog.0
+pudp=$(grep pudp= config.txt 2>/dev/null|awk -F "=" '{print $2}'|awk '{print $1}')
+ if [ -f $pudp ]; then
+pudp=7300
+ fi
+sni=$(grep sni= config.txt 2>/dev/null|awk -F "=" '{print $2}'|awk '{print $1}')
+ if [ -f $sni ]; then
+echo "Masukkan bug sni terlebih dahulu!" >> screenlog.0;exit
+ fi
+mode=$(grep mode= config.txt|awk -F "=" '{print $2}'|awk '{print $1}')
+  if [ -f $mode ]; then
 echo "mode=0" >> config.txt
   fi
-  if [ -f $(grep sni= config.txt|awk -F "=" '{print $2}') ]; then
-echo "Masukkan bug sni terlebih dahulu!" >> screenlog.0;exit
-  fi
-pudp=$(grep pudp= config.txt 2>/dev/null|awk -F "=" '{print $2}')
-sni=$(grep sni= config.txt 2>/dev/null|awk -F "=" '{print $2}')
-mode=$(grep mode= config.txt|awk -F "=" '{print $2}')
    if [ -f $(badvpn-tun2socks -version 2>/dev/null|awk '{print $1}'|awk "NR==1") ]; then
     echo "Paket badvpn-tun2socks belom terinstall. install dulu!" >> screenlog.0
     echo "Gunakan Koneksi normal dan" >> screenlog.0
@@ -264,23 +285,498 @@ mode=$(grep mode= config.txt|awk -F "=" '{print $2}')
    echo "Ketik: opkg update && opkg install stunnel" >> screenlog.0
    cp screenlog.0 log/log.txt 2>/dev/null;exit
   fi
+ if [ -f $(v2ray -version 2>/dev/null|awk '{print $1}'|awk "NR==1") ]; then
+  echo "Paket V2Ray belom terinstall. install dulu!" >> screenlog.0
+  echo "Gunakan Koneksi normal dan" >> screenlog.0
+  echo "Installer: https://github.com/vitoharhari/xderm-mini" >> screenlog.0
+  cp screenlog.0 log/log.txt 2>/dev/null;exit
+ fi
+  if [ -f $(base64 --help 2>/dev/null|awk "NR==2"|awk '{print $1}') ]; then
+   echo "Paket base64 belom terinstall. install dulu!" >> screenlog.0
+   echo "Gunakan Koneksi normal dan" >> screenlog.0
+   echo "Ketik: opkg update && opkg install coreutils-base64" >> screenlog.0
+   cp screenlog.0 log/log.txt 2>/dev/null;exit
+  fi
+   if [ -f $(ls /usr/bin/trojan 2>/dev/null|awk -F '/' '{print $4}'|awk "NR==1") ]; then
+    echo -e "#!/bin/bash\nwget -O /usr/bin/trojan https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/trojan_aarch64_cortex-a53\nchmod +x /usr/bin/trojan\necho -e 'Silahkan start ulang xdermnya!, terima kasih.'" > /root/itroj;chmod +x /root/itroj
+    echo "Paket trojan belom terinstall. install dulu!" >> screenlog.0
+    echo "Gunakan Koneksi normal dan" >> screenlog.0
+    echo "Khusus Pengguna STB B860h dan HG680p" >> screenlog.0
+    echo "Ketik ./itroj di terminal root" >> screenlog.0
+    cp screenlog.0 log/log.txt 2>/dev/null;exit
+   fi
+  if [ -f $(ls /usr/bin/corkscrew 2>/dev/null|awk -F '/' '{print $4}'|awk "NR==1") ]; then
+   echo "Paket corkscrew belom terinstall. install dulu!" >> screenlog.0
+   echo "Gunakan Koneksi normal dan" >> screenlog.0
+   echo "Khusus Pengguna STB B860h dan HG680p" >> screenlog.0
+   echo "Ketik: bash /root/icork" >> screenlog.0
+   echo -e "wget https://github.com/ryanfauzi1/xderm-mini_GUI/raw/main/corkscrew_2.0-Rureka.com_aarch64_cortex-a53.ipk\nopkg install corkscrew_2.0-Rureka.com_aarch64_cortex-a53.ipk" > /root/icork
+   chmod +x /root/icork
+   cp screenlog.0 log/log.txt 2>/dev/null;exit
+  fi
+   if [ -f $(find /usr -iname "openssh-cl*" -type f|awk "NR==1"|awk -F '/' '{print $2}' 2>/dev/null) ]; then
+    echo "Paket openssh-client belom terinstall. install dulu!" >> screenlog.0
+    echo "Gunakan Koneksi normal dan ketik:" >> screenlog.0
+    echo "opkg update && opkg install openssh-client" >> screenlog.0
+    cp screenlog.0 log/log.txt 2>/dev/null;exit
+   fi
+  if [ -f $(ls /usr/bin/sshpass 2>/dev/null|awk -F '/' '{print $4}'|awk "NR==1") ]; then
+   echo "Paket sshpass belom terinstall. install dulu!" >> screenlog.0
+   echo "Gunakan Koneksi normal dan" >> screenlog.0
+   echo "Khusus Pengguna STB B860h dan HG680p" >> screenlog.0
+   echo "Ketik: bash /root/isshp" >> screenlog.0
+   echo -e "opkg remove sshpass\nwget https://rureka.com/files/sshpass/sshpass_1.06-Rureka.com_aarch64_cortex-a53.ipk\nopkg install sshpass_1.06-Rureka.com_aarch64_cortex-a53.ipk" > /root/isshp
+   chmod +x /root/isshp
+   cp screenlog.0 log/log.txt 2>/dev/null;exit
+  fi
+ if [ -f $(echo "exit"|openssl 2>/dev/null) ]; then
+  echo -e " tidak ada paket openssl, install dulu!" >> screenlog.0
+  echo -e " Gunakan Koneksi normal dan" >> screenlog.0
+  echo -e " opkg update && opkg install openssl-util" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
+ fi
+ if [ -f $(ls /usr/bin/httping 2>/dev/null|awk -F '/' '{print $4}'|awk "NR==1") ]; then
+  echo -e " tidak ada paket httping, install dulu!" >> screenlog.0
+  echo -e " Gunakan Koneksi normal dan" >> screenlog.0
+  echo -e " opkg update && opkg install httping" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
+ fi
+ if [ -f $(ls /usr/bin/timeout 2>/dev/null|awk -F '/' '{print $4}'|awk "NR==1") ]; then
+  echo -e " tidak ada paket timeout, install dulu!" >> screenlog.0
+  echo -e " Gunakan Koneksi normal dan" >> screenlog.0
+  echo -e " opkg update && opkg install coreutils-timeout" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
+ fi
 touch /etc/crontabs/root
 if [ ! -f $(cat /etc/crontabs/root 2>/dev/null|grep xderm|awk '{print $2}'|awk "NR==1") ]; then
 echo > /etc/crontabs/root
  fi
-if [ $mode -eq 1 ]; then
- if [ -f $(v2ray -version 2>/dev/null|awk '{print $1}'|awk "NR==1") ]; then
- echo "Paket V2Ray belom terinstall. install dulu!" >> screenlog.0
- echo "Gunakan Koneksi normal dan" >> screenlog.0
- echo "Installer: https://github.com/vitoharhari/xderm-mini" >> screenlog.0
- cp screenlog.0 log/log.txt 2>/dev/null;exit
+    if [ $mode -eq 3 ]; then
+flushx;ssa=8;echo -e "{$(date +%M:%S)} Mode yang dipilih: $mode [MultiMode]" >> screenlog.0
+host=$(grep host= config.txt|awk -F "=" '{print $2}'|awk '{print $1}')
+ if [ -f $host ]; then
+echo -e "{$(date +%M:%S)} Config SSH belom disetting !!" >> screenlog.0;sleep 1;exit 2>/dev/null
  fi
- if [ -f $(base64 --help 2>/dev/null|awk "NR==2"|awk '{print $1}') ]; then
- echo "Paket base64 belom terinstall. install dulu!" >> screenlog.0
- echo "Gunakan Koneksi normal dan" >> screenlog.0
- echo "Ketik: opkg update && opkg install coreutils-base64" >> screenlog.0
- cp screenlog.0 log/log.txt 2>/dev/null;exit
+port=$(grep port= config.txt|awk -F "=" '{print $2}'|awk '{print $1}')
+user=$(grep user= config.txt|awk -F "=" '{print $2}'|awk '{print $1}')
+pass=$(grep pass= config.txt|awk -F "=" '{print $2}'|awk '{print $1}')
+echo -ne "{$(date +%M:%S)} Menunggu Sumber Internet... " >> screenlog.0
+ while true; do
+interf=$(ip r|grep default|sed 's/default via 10.0.0//g'|grep default|awk '{print $3}'|awk 'NR==1'|awk -F. '{print $1}')
+    if [ -f $interf ]; then
+     sleep 2;continue
+     else
+  if [ ! -f $(timeout 3 ping $sni -c1 -w1 2>/dev/null|awk -F '(' '{print $2}'|awk "NR==1"|awk -F. '{print $1}'|awk '{print $1}') ]; then
+   echo OK >> screenlog.0;break
+  fi 
+   fi
+ done
+#########################
+host=$(ping $host -w1 -c1|awk "NR==1"|awk -F '(' '{print $2}'|awk -F ')' '{print $1}')
+echo -ne "{$(date +%M:%S)} Menguji bug SNI (openssl).. " >> screenlog.0
+supp=$(echo "QUIT"|timeout 10 openssl s_client -connect 8.8.8.8:443 -servername $sni 2>/dev/null|grep supp|awk '{print $4}')
+ if [ ! -f $supp ]; then
+echo "OK" >> screenlog.0
+else
+killall -q openssl
+ supp=$(echo "QUIT"|timeout 10 openssl s_client -connect 8.8.8.8:443 -servername $sni 2>/dev/null|grep supp|awk '{print $4}')
+   if [ ! -f $supp ]; then
+echo "OK" >> screenlog.0
+ else
+killall -q openssl
+echo "Closed!" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
+   fi
  fi
+echo -ne "{$(date +%M:%S)} AutoSync Time.. " >> screenlog.0
+data=$(curl $sni -is|grep ate:|awk -F ", " '{print $2}'|sed 's/ GMT//g')
+bln=$(echo $data|awk '{print $2}');thn=$(echo $data|awk '{print $3}')
+tgl=$(echo $data|awk '{print $1}');jam=$(echo $data|awk '{print $4}')
+   case $bln in
+ "Jan") bln="01";;
+ "Feb") bln="02";;
+ "Mar") bln="03";;
+ "Apr") bln="04";;
+ "May") bln="05";;
+ "Jun") bln="06";;
+ "Jul") bln="07";;
+ "Aug") bln="08";;
+ "Sep") bln="09";;
+ "Oct") bln="10";;
+ "Nov") bln="11";;
+ "Dec") bln="12";;
+    esac
+date -s "$(echo $thn-$bln-$tgl $jam)" >/dev/null;date|sed 's/  / /g' >> screenlog.0
+mkdir -p /usr/local/etc/v2ray/;juuid=1;n=2
+portv=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|sed ':a;N;$!ba;s/\n  //g'|awk -F '"port' '{print $2}'|grep :|sed ':a;N;$!ba;s/\n/ /g'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
+  if [ ! -f $portv ]; then
+ while [ $juuid -lt 17 ]; do
+uuid=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|sed ':a;N;$!ba;s/\n  //g'|awk -F 'id' '{print $"'$n'"}'|grep :|sed ':a;N;$!ba;s/\n/ /g'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
+juuid=$(echo $uuid|wc -c);((n++))
+ done
+hostv=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|sed ':a;N;$!ba;s/\n  //g'|awk -F '"add' '{print $2}'|grep :|sed ':a;N;$!ba;s/\n/ /g'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
+aid=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|sed ':a;N;$!ba;s/\n  //g'|awk -F '"aid' '{print $2}'|grep :|sed ':a;N;$!ba;s/\n/ /g'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
+net=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|sed ':a;N;$!ba;s/\n  //g'|awk -F '"net' '{print $2}'|grep :|sed ':a;N;$!ba;s/\n/ /g'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
+path=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|sed ':a;N;$!ba;s/\n  //g'|awk -F '"path' '{print $2}'|grep :|sed ':a;N;$!ba;s/\n/ /g'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
+path=$(echo $path|sed 's/\\u003d/=/g'|sed 's/\\u0026/\&/g')
+tls=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|sed ':a;N;$!ba;s/\n/ /g'|awk -F 'tls":' '{print $2}'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g' -e 's/}//g')
+if [ -f $tls ]; then
+tls=$(grep vmess: /www/xderm/config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|grep tls|sed -e 's/:/=/g' -e 's/ //g' -e 's/"//g' -e 's/}//g'|awk -F "=" '{print $1}')
+ if [ ! -f $tls ]; then
+  if [ $tls != "tls" ]; then
+  tls=""
+  fi
+ fi
+fi
+   fi
+echo "{
+  \"policy\": null,
+  \"log\": {
+    \"access\": \"\",
+    \"error\": \"\",
+    \"loglevel\": \"none\"
+  },
+  \"inbounds\": [
+    {
+      \"tag\": \"proxy\",
+      \"port\": 10808,
+      \"listen\": \"127.0.0.1\",
+      \"protocol\": \"socks\",
+      \"sniffing\": {
+        \"enabled\": false,
+        \"destOverride\": [
+          \"http\",
+          \"tls\"
+        ]
+      },
+      \"settings\": {
+        \"auth\": \"noauth\",
+        \"udp\": true,
+        \"ip\": null,
+        \"address\": null,
+        \"clients\": null
+      },
+      \"streamSettings\": null
+    }
+  ],
+  \"outbounds\": [
+    {
+      \"tag\": \"proxy\",
+      \"protocol\": \"vmess\",
+      \"settings\": {
+        \"vnext\": [
+          {
+            \"address\": \"$hostv\",
+            \"port\": $portv,
+            \"users\": [
+              {
+                \"id\": \"$uuid\",
+                \"alterId\": $aid,
+                \"email\": \"\",
+                \"security\": \"auto\"
+              }
+            ]
+          }
+        ],
+        \"servers\": null,
+        \"response\": null
+      },
+      \"streamSettings\": {
+        \"network\": \"$net\",
+        \"security\": \"$tls\",
+        \"tlsSettings\": {
+          \"allowInsecure\": true,
+          \"serverName\": \"$sni\"
+        },
+        \"tcpSettings\": null,
+        \"kcpSettings\": null,
+        \"wsSettings\": {
+          \"connectionReuse\": true,
+          \"path\": \"$path\",
+          \"headers\": {
+            \"Host\": \"$hostv\"
+          }
+        },
+        \"httpSettings\": null,
+        \"quicSettings\": null
+      },
+      \"mux\": {
+        \"enabled\": false,
+        \"concurrency\": 8
+      }
+    },
+    {
+      \"tag\": \"direct\",
+      \"protocol\": \"freedom\",
+      \"settings\": {
+        \"vnext\": null,
+        \"servers\": null,
+        \"response\": null
+      },
+      \"streamSettings\": null,
+      \"mux\": null
+    },
+    {
+      \"tag\": \"block\",
+      \"protocol\": \"blackhole\",
+      \"settings\": {
+        \"vnext\": null,
+        \"servers\": null,
+        \"response\": {
+          \"type\": \"http\"
+        }
+      },
+      \"streamSettings\": null,
+      \"mux\": null
+    }
+  ],
+  \"stats\": null,
+  \"api\": null,
+  \"dns\": null,
+  \"routing\": {
+    \"domainStrategy\": \"IPIfNonMatch\",
+    \"rules\": [
+      {
+        \"type\": \"field\",
+        \"port\": null,
+        \"inboundTag\": [
+          \"api\"
+        ],
+        \"outboundTag\": \"api\",
+        \"ip\": null,
+        \"domain\": null
+      }
+    ]
+  }
+}" > /usr/local/etc/v2ray/config.json
+hostt=$(grep trojan:// config.txt|awk -F "://" '{print $2}'|awk -F "@" '{print $2}'|awk -F ":" '{print $1}'|awk "NR==1")
+ if [ ! -f $hostt ]; then
+hostt=$(ping $hostt -w1 -c1|awk "NR==1"|awk -F '(' '{print $2}'|awk -F ')' '{print $1}')
+ fi
+portt=$(grep trojan:// config.txt|awk -F "://" '{print $2}'|awk -F "@" '{print $2}'|awk -F ":" '{print $2}'|awk -F "/" '{print $1}'|awk "NR==1")
+passt=$(grep trojan:// config.txt|awk -F "://" '{print $2}'|awk -F "@" '{print $1}'|awk "NR==1")
+echo "{
+    \"run_type\": \"client\",
+    \"local_addr\": \"127.0.0.1\",
+    \"local_port\": 1081,
+    \"remote_addr\": \"$hostt\",
+    \"remote_port\": $portt,
+    \"password\": [
+        \"$passt\"
+    ],
+    \"log_level\": 1,
+    \"ssl\": {
+        \"verify\": false,
+        \"verify_hostname\": true,
+        \"cert\": \"\",
+        \"cipher\": \"ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES128-SHA:ECDHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA:AES128-SHA:AES256-SHA:DES-CBC3-SHA\",
+        \"cipher_tls13\": \"TLS_AES_128_GCM_SHA256:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_256_GCM_SHA384\",
+        \"sni\": \"$sni\",
+        \"alpn\": [
+            \"h2\",
+            \"http/1.1\"
+        ],
+        \"reuse_session\": true,
+        \"session_ticket\": false,
+        \"curves\": \"\"
+    },
+    \"tcp\": {
+        \"no_delay\": true,
+        \"keep_alive\": true,
+        \"reuse_port\": false,
+        \"fast_open\": false,
+        \"fast_open_qlen\": 20
+    }
+}" > /tmp/trojan.conf;routing
+injj=$(cat /www/xderm/config/stun 2>/dev/null|awk "NR==1")
+ if [ -f $injj ]; then
+echo yes > /www/xderm/config/stun;injj=yes
+ fi
+rm -rf /root/.ssh/known_hosts*;echo -e "{$(date +%M:%S)} Menjalankan 3-Inject (latarbelakang)...." >> screenlog.0
+echo "*************************************************" >> screenlog.0
+  if [ $injj != "no" ]; then
+injek;sleep 1;screen -dmS login sshpass -p "$pass" ssh -oTCPKeepAlive=yes -oServerAliveInterval=180 -oServerAliveCountMax=2 -oStrictHostKeyChecking=no -CND 127.0.0.1:1080 -p 8780 $user@localhost
+  else
+tlsv="1_2";lpinjek="8789";injekpy;tlsv="1";lpinjek="8788";injekpy;sleep 1
+screen -dmS xderm sshpass -p "$pass" ssh -oTCPKeepAlive=yes -oServerAliveInterval=180 -oServerAliveCountMax=2 -oStrictHostKeyChecking=no -CND 127.0.0.1:1080 -p $port $user@$host -o "Proxycommand=corkscrew 127.0.0.1 8789 %h %p"
+screen -dmS xderm sshpass -p "$pass" ssh -oTCPKeepAlive=yes -oServerAliveInterval=180 -oServerAliveCountMax=2 -oStrictHostKeyChecking=no -CND 127.0.0.1:1080 -p $port $user@$host -o "Proxycommand=corkscrew 127.0.0.1 8788 %h %p"
+  fi
+ if [ ! -f $hostt ]; then
+screen -dmS troj trojan -c /tmp/trojan.conf;sleep 1
+pingtrojan=$(timeout 5 httping -c3 -x 127.0.0.1:1081 -g http://google.com -5 2>/dev/null|awk "NR==4"|awk -F 'time=' '{print $2}'|awk -F. '{print $1}')
+  if [ -f $pingtrojan ]; then
+pingtrojanx="Closed!";pingtrojan=9999
+else
+pingtrojanx="$pingtrojan ms"
+  fi
+echo -e "{$(date +%M:%S)} Trojan: $hostt, P: $pingtrojanx" >> screenlog.0
+ fi
+ if [ ! -f $hostv ]; then
+screen -dmS pimes v2ray -config /usr/local/etc/v2ray/config.json;sleep 1
+pingvmess=$(timeout 5 httping -c3 -x 127.0.0.1:10808 -g http://google.com -5 2>/dev/null|awk "NR==4"|awk -F 'time=' '{print $2}'|awk -F. '{print $1}')
+  if [ -f $pingvmess ]; then
+pingvmessx="Closed!";pingvmess=9999
+else
+pingvmessx="$pingvmess ms"
+  fi
+echo -e "{$(date +%M:%S)} Vmess:  $hostv, P: $pingvmessx" >> screenlog.0
+ fi
+sleep 3;pingssh=$(timeout 5 httping -c3 -x 127.0.0.1:1080 -g http://google.com -5 2>/dev/null|awk "NR==4"|awk -F 'time=' '{print $2}'|awk -F. '{print $1}')
+  if [ -f $pingssh ]; then
+pingsshx="Closed!";pingssh=9999
+else
+pingsshx="$pingssh ms"
+  fi
+   if [ ! -f $pingvmess ]; then
+  if [ $pingssh -lt $pingvmess ]; then
+terpilih=$pingssh;terpilihport=1080;nama=ssh
+else
+terpilih=$pingvmess;terpilihport=10808;nama=vmess
+  fi
+ else
+ terpilih=$pingssh;terpilihport=1080;nama=ssh
+   fi
+  if [ ! -f $pingtrojan ]; then
+ if [ $pingtrojan -lt $terpilih ]; then
+terpilihport=1081;nama=trojan
+ fi 
+  fi
+echo -e "{$(date +%M:%S)} SSH-ssl: $host, P: $pingsshx" >> screenlog.0
+echo "*************************************************" >> screenlog.0
+echo -e "{$(date +%M:%S)} Memilih Mode tercepat saat ini [$nama]" >> screenlog.0
+echo $nama >/tmp/currentmode.txt
+echo -e "{$(date +%M:%S)} Merefresh firewall...." >> screenlog.0
+xtable=$(/etc/init.d/firewall reload 2>/dev/null)
+  if [ -f $(iptables -t nat -L|grep MASQ|grep tcp|awk '{print $1}'|awk "NR==1") ]; then
+iptables -A POSTROUTING --proto tcp -t nat -o tun0 -j MASQUERADE 2>/dev/null
+  fi
+echo -e "{$(date +%M:%S)} Menjalankan Badvpn-tun2socks...." >> screenlog.0
+screen -dmS gerbang badvpn-tun2socks --tundev tun0 --netif-ipaddr 10.0.0.2 --netif-netmask 255.255.255.0 --socks-server-addr 127.0.0.1:$terpilihport --udpgw-remote-server-addr 127.0.0.1:$pudp --udpgw-transparent-dns --loglevel 0;sleep 3
+echo -e "{$(date +%M:%S)} Routing Host, IP Gateway dan dns.." >> screenlog.0
+ifconfig tun0 10.0.0.1 netmask 255.255.255.0 2>/dev/null
+route add default gw 10.0.0.2 metric 0 2>/dev/null
+/etc/init.d/dnsmasq restart 2>/dev/null
+##########################################scripted
+echo "#!/bin/bash
+t=0
+while true; do
+pingssh=\$(timeout 3 httping -c1 -x 127.0.0.1:1080 -g http://google.com -5 2>/dev/null|awk \"NR==2\"|awk -F 'time=' '{print \$2}'|awk -F. '{print \$1}')
+  if [ -f \$pingssh ]; then
+pingsshx=\"Closed!\";pingssh=999999
+else
+pingsshx=\"\$pingssh ms\"
+  fi
+pingtrojan=\$(timeout 3 httping -c1 -x 127.0.0.1:1081 -g http://google.com -5 2>/dev/null|awk \"NR==2\"|awk -F 'time=' '{print \$2}'|awk -F. '{print \$1}')
+  if [ -f \$pingtrojan ]; then
+pingtrojanx=\"Closed!\";pingtrojan=999999
+else
+pingtrojanx=\"\$pingtrojan ms\"
+  fi
+pingvmess=\$(timeout 3 httping -c1 -x 127.0.0.1:10808 -g http://google.com -5 2>/dev/null|awk \"NR==2\"|awk -F 'time=' '{print \$2}'|awk -F. '{print \$1}')
+  if [ -f \$pingvmess ]; then
+pingvmessx=\"Closed!\";pingvmess=999999
+else
+pingvmessx=\"\$pingvmess ms\"
+  fi
+sed -i \"s|\$(cat /www/xderm/log/log.txt|grep Trojan|awk -F. '{print \$4}')|\$(cat /www/xderm/log/log.txt|grep Trojan|awk -F. '{print \$4}'|awk -F: '{print \$1}'): \$pingtrojanx|g\" /www/xderm/log/log.txt
+sed -i \"s|\$(cat /www/xderm/log/log.txt|grep Vmess|awk -F. '{print \$4}')|\$(cat /www/xderm/log/log.txt|grep Vmess|awk -F. '{print \$4}'|awk -F: '{print \$1}'): \$pingvmessx|g\" /www/xderm/log/log.txt
+sed -i \"s|\$(cat /www/xderm/log/log.txt|grep SSH|awk -F. '{print \$4}')|\$(cat /www/xderm/log/log.txt|grep SSH|awk -F. '{print \$4}'|awk -F: '{print \$1}'): \$pingsshx|g\" /www/xderm/log/log.txt
+cat /www/xderm/log/log.txt > /www/xderm/screenlog.0
+   if [ ! -f \$pingvmess ]; then
+  if [ \$pingssh -lt \$pingvmess ]; then
+terpilih=\$pingssh;terpilihport=1080;nama=ssh
+else
+terpilih=\$pingvmess;terpilihport=10808;nama=vmess
+  fi
+ else
+ terpilih=\$pingssh;terpilihport=1080;nama=ssh
+   fi
+  if [ ! -f \$pingtrojan ]; then
+ if [ \$pingtrojan -lt \$terpilih ]; then
+terpilih=\$pingtrojan;terpilihport=1081;nama=trojan
+ fi
+  fi
+   if [ \$(cat /tmp/currentmode.txt) == \"vmess\" ]; then
+    if [ \$pingvmess -eq 999999 ]; then
+     t=4
+    fi
+   elif [ \$(cat /tmp/currentmode.txt) == \"trojan\" ]; then
+    if [ \$pingtrojan -eq 999999 ]; then
+     t=4
+    fi
+   elif [ \$(cat /tmp/currentmode.txt) == \"ssh\" ]; then
+    if [ \$pingssh -eq 999999 ]; then
+  killall -q sshpass;rm -rf /root/.ssh/known_hosts*
+ if [ $(cat /www/xderm/config/stun) != \"no\" ]; then
+screen -dmS xdermr sshpass -p \"$pass\" ssh -oTCPKeepAlive=yes -oServerAliveInterval=180 -oServerAliveCountMax=2 -oStrictHostKeyChecking=no -CND 127.0.0.1:1080 -p 8780 $user@localhost;sleep 3
+else
+screen -dmS xdermr sshpass -p \"$pass\" ssh -oTCPKeepAlive=yes -oServerAliveInterval=180 -oServerAliveCountMax=2 -oStrictHostKeyChecking=no -CND 127.0.0.1:1080 -p $port $user@$host -o \"Proxycommand=corkscrew 127.0.0.1 8788 %h %p\"
+screen -dmS xdermr sshpass -p \"$pass\" ssh -oTCPKeepAlive=yes -oServerAliveInterval=180 -oServerAliveCountMax=2 -oStrictHostKeyChecking=no -CND 127.0.0.1:1080 -p $port $user@$host -o \"Proxycommand=corkscrew 127.0.0.1 8789 %h %p\";sleep 3
+ fi
+     t=4
+    fi
+   fi
+   if [ \$nama != \$(cat /tmp/currentmode.txt) ]; then
+   ((t++))
+    if [ \$t -eq 5 ]; then
+traficd=\$(ifconfig tun0|grep MiB|awk -F. '{print \$1}'|awk -F \"(\" '{print \$2}')
+sleep 5
+  if [ -f \$traficd ]; then
+ traficd=0;tfd=0
+  else
+let tfd=\$(ifconfig tun0|grep MiB|awk -F. '{print \$1}'|awk -F \"(\" '{print \$2}')-\$traficd
+  fi
+echo \"tfd : \$tfd\"
+ if [ \$tfd -lt 2 ]; then
+    killall -q badvpn-tun2socks
+    screen -dmS gerbang badvpn-tun2socks --tundev tun0 --netif-ipaddr 10.0.0.2 --netif-netmask 255.255.255.0 --socks-server-addr 127.0.0.1:\$terpilihport --udpgw-remote-server-addr 127.0.0.1:$pudp --udpgw-transparent-dns --loglevel 0;sleep 2
+    ifconfig tun0 10.0.0.1 netmask 255.255.255.0 2>/dev/null
+    route add default gw 10.0.0.2 metric 0 2>/dev/null
+    echo \$nama >/tmp/currentmode.txt;t=0
+    sed -i \"s|\$(cat /www/xderm/log/log.txt|grep tercepat|awk -F \"[\" '{print \$2}'|awk -F \"]\" '{print \$1}')|\$nama|g\" /www/xderm/log/log.txt
+    cat /www/xderm/log/log.txt > /www/xderm/screenlog.0
+ fi
+    t=0
+    fi
+   else
+    t=0
+   fi
+ while true; do
+ if [ -f \$(ip r|grep $host|awk 'NR==1'|awk '{print \$1}') ]; then
+interf=\$(ip r|grep default|sed 's/default via 10.0.0//g'|grep default|awk '{print \$3}'|awk 'NR==1')
+    if [ -f \$interf ]; then
+     sleep 2;continue
+    fi
+  if [ ! -f \$(echo \$interf|awk -F '.' '{print \$2}') ]; then
+   if [ \$(echo \$interf|awk -F '.' '{print \$4}'|wc -c) != \"2\" ]; then
+  ipg=\$(ip r|grep default|awk '{print \$3}')
+  interf=\$(ip r|grep default|sed 's/default via 10.0.0//g'|grep default|awk '{print \$5}')
+  ip route add $host dev \$interf via \$ipg 2>/dev/null
+  ip route add $hostt dev \$interf via \$ipg 2>/dev/null
+  ip route add $hostv dev \$interf via \$ipg 2>/dev/null
+  ip route add 8.8.8.8 \$interf via \$ipg 2>/dev/null
+  route del default;ip route add default dev \$interf via \$ipg metric 1 2>/dev/null
+  else
+  type=gw
+  route add $host \$type \$interf 2>/dev/null
+  route add $hostt \$type \$interf 2>/dev/null
+  route add $hostv \$type \$interf 2>/dev/null
+  route add 8.8.8.8 \$type \$interf 2>/dev/null
+  route del default;route add default \$type \$interf metric 1 2>/dev/null
+   fi
+ else
+  type=dev
+  route add $host \$type \$interf 2>/dev/null
+  route add $hostt \$type \$interf 2>/dev/null
+  route add $hostv \$type \$interf 2>/dev/null
+  route add 8.8.8.8 \$type \$interf 2>/dev/null
+  route del default;route add default \$type \$interf metric 1 2>/dev/null
+  fi
+ else
+  break
+ fi
+ done
+ if [ -f \$(ip r|grep 10.0.0.2|awk '{print \$1}') ]; then
+  route add default gw 10.0.0.2 metric 0 2>/dev/null
+ fi
+done" > /tmp/automode;chmod +x /tmp/automode;screen -d -m /tmp/automode
+elif [ $mode -eq 1 ]; then
  flushx;ssa=8;echo -e "{$(date +%M:%S)} Mode yang dipilih: $mode [vmess]" >> screenlog.0
  port=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|sed ':a;N;$!ba;s/\n  //g'|awk -F '"port' '{print $2}'|grep :|sed ':a;N;$!ba;s/\n/ /g'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
     if [ -f $port ]; then
@@ -442,7 +938,6 @@ xtable=$(/etc/init.d/firewall reload 2>/dev/null)
   if [ -f $(iptables -t nat -L|grep MASQ|grep tcp|awk '{print $1}'|awk "NR==1") ]; then
 iptables -A POSTROUTING --proto tcp -t nat -o tun0 -j MASQUERADE 2>/dev/null
   fi
-pudp=$(grep pudp= config.txt|awk -F "=" '{print $2}');sleep 1
 screen -dmS gerbang badvpn-tun2socks --tundev tun0 --netif-ipaddr 10.0.0.2 --netif-netmask 255.255.255.0 --socks-server-addr 127.0.0.1:10808 --udpgw-remote-server-addr 127.0.0.1:$pudp --udpgw-transparent-dns --loglevel 0;sleep 3
 echo -e "{$(date +%M:%S)} Menggunakan $ifaces sebagai Pusat." >> screenlog.0
 echo -e "{$(date +%M:%S)} Routing Host, IP Gateway dan dns.." >> screenlog.0
@@ -462,14 +957,6 @@ sleep 1;((n++))
   echo -e "Tak ada jawaban?" >> screenlog.0
    fi
 elif [ $(grep mode= config.txt|awk -F "=" '{print $2}') -eq 2 ]; then
-  if [ -f $(ls /usr/bin/trojan 2>/dev/null|awk -F '/' '{print $4}'|awk "NR==1") ]; then
-echo -e "#!/bin/bash\nwget -O /usr/bin/trojan https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/trojan_aarch64_cortex-a53\nchmod +x /usr/bin/trojan\necho -e 'Silahkan start ulang xdermnya!, terima kasih.'" > /root/itroj;chmod +x /root/itroj
-echo "Paket trojan belom terinstall. install dulu!" >> screenlog.0
-echo "Gunakan Koneksi normal dan" >> screenlog.0
-echo "Khusus Pengguna STB B860h dan HG680p" >> screenlog.0
-echo "Ketik ./itroj di terminal root" >> screenlog.0
-   cp screenlog.0 log/log.txt 2>/dev/null;exit
-  fi
 flushx;echo -e "{$(date +%M:%S)} Mode yang dipilih: $mode [trojan]" >> screenlog.0;routing
 host=$(grep trojan:// config.txt|awk -F "://" '{print $2}'|awk -F "@" '{print $2}'|awk -F ":" '{print $1}'|awk "NR==1")
 host=$(ping $host -w1 -c1|awk "NR==1"|awk -F '(' '{print $2}'|awk -F ')' '{print $1}')
@@ -514,14 +1001,13 @@ echo " Host: $host" >> screenlog.0
 echo " Port: $port" >> screenlog.0
 echo " Pass: **********" >> screenlog.0
 echo "#############################################" >> screenlog.0
-echo -e "{$(date +%M:%S)} Menjalankan trojan VPN (di latarbelakang).." >> screenlog.0
+echo -e "{$(date +%M:%S)} Menjalankan trojan VPN (latarbelakang).." >> screenlog.0
 screen -dmS troj trojan -c /tmp/trojan.conf;sleep 1
 echo -e "{$(date +%M:%S)} Menjalankan Badvpn-tun2socks...." >> screenlog.0
 xtable=$(/etc/init.d/firewall reload 2>/dev/null)
   if [ -f $(iptables -t nat -L|grep MASQ|grep tcp|awk '{print $1}'|awk "NR==1") ]; then
 iptables -A POSTROUTING --proto tcp -t nat -o tun0 -j MASQUERADE 2>/dev/null
   fi
-pudp=$(grep pudp config.txt|awk -F "=" '{print $2}');sleep 1
 screen -dmS gerbang badvpn-tun2socks --tundev tun0 --netif-ipaddr 10.0.0.2 --netif-netmask 255.255.255.0 --socks-server-addr 127.0.0.1:1080 --udpgw-remote-server-addr 127.0.0.1:$pudp --udpgw-transparent-dns --loglevel 0;sleep 2
 echo -e "{$(date +%M:%S)} Menggunakan $ifaces sebagai Pusat." >> screenlog.0
 echo -e "{$(date +%M:%S)} Routing Host, IP Gateway dan dns.." >> screenlog.0
@@ -573,50 +1059,20 @@ sleep 1;((n++))
    if [ $n != "ok" ]; then
   echo -e "Tak ada jawaban?" >> screenlog.0
    fi
-elif [ $(grep mode= config.txt|awk -F "=" '{print $2}') -eq 0 ]; then
-  if [ -f $(ls /usr/bin/corkscrew 2>/dev/null|awk -F '/' '{print $4}'|awk "NR==1") ]; then
-echo "Paket corkscrew belom terinstall. install dulu!" >> screenlog.0
-echo "Gunakan Koneksi normal dan" >> screenlog.0
-echo "Khusus Pengguna STB B860h dan HG680p" >> screenlog.0
-echo "Ketik: bash /root/icork" >> screenlog.0
-echo -e "wget https://github.com/ryanfauzi1/xderm-mini_GUI/raw/main/corkscrew_2.0-Rureka.com_aarch64_cortex-a53.ipk\nopkg install corkscrew_2.0-Rureka.com_aarch64_cortex-a53.ipk" > /root/icork
-chmod +x /root/icork
-   cp screenlog.0 log/log.txt 2>/dev/null;exit
-  fi
-  if [ -f $(find /usr -iname "openssh-cl*" -type f|awk "NR==1"|awk -F '/' '{print $2}' 2>/dev/null) ]; then
-echo "Paket openssh-client belom terinstall. install dulu!" >> screenlog.0
-echo "Gunakan Koneksi normal dan ketik:" >> screenlog.0
-echo "opkg update && opkg install openssh-client" >> screenlog.0
-  cp screenlog.0 log/log.txt 2>/dev/null;exit
-  fi
-  if [ -f $(ls /usr/bin/sshpass 2>/dev/null|awk -F '/' '{print $4}'|awk "NR==1") ]; then
-echo "Paket sshpass belom terinstall. install dulu!" >> screenlog.0
-echo "Gunakan Koneksi normal dan" >> screenlog.0
-echo "Khusus Pengguna STB B860h dan HG680p" >> screenlog.0
-echo "Ketik: bash /root/isshp" >> screenlog.0
-echo -e "opkg remove sshpass\nwget https://rureka.com/files/sshpass/sshpass_1.06-Rureka.com_aarch64_cortex-a53.ipk\nopkg install sshpass_1.06-Rureka.com_aarch64_cortex-a53.ipk" > /root/isshp
-chmod +x /root/isshp
-   cp screenlog.0 log/log.txt 2>/dev/null;exit
-  fi
-host=$(grep host= config.txt|awk -F "=" '{print $2}')
+elif [ $(grep mode= config.txt|awk -F "=" '{print $2}'|awk '{print $1}') -eq 0 ]; then
+host=$(grep host= config.txt|awk -F "=" '{print $2}'|awk '{print $1}')
  if [ -f $host ]; then
 echo -e "{$(date +%M:%S)} Config SSH belom disetting !!" >> screenlog.0;sleep 1;exit 2>/dev/null
  fi
-port=$(grep port= config.txt|awk -F "=" '{print $2}')
-user=$(grep user= config.txt|awk -F "=" '{print $2}')
-pass=$(grep pass= config.txt|awk -F "=" '{print $2}')
+port=$(grep port= config.txt|awk -F "=" '{print $2}'|awk '{print $1}')
+user=$(grep user= config.txt|awk -F "=" '{print $2}'|awk '{print $1}')
+pass=$(grep pass= config.txt|awk -F "=" '{print $2}'|awk '{print $1}')
 #########################
-flushx;killall -q timeout;ifaces=$(ip r|grep default|awk '{print $3}');routing
+flushx;routing
 echo -e "{$(date +%M:%S)} Mode yang dipilih: $mode [ssh]" >> screenlog.0
 echo "#!/bin/bash
 sleep 10;killall -q openssl" > /tmp/timeou;chmod +x /tmp/timeou;screen -dmS cb /tmp/timeou
 echo -ne "{$(date +%M:%S)} Menguji bug SNI (openssl).. " >> screenlog.0
- if [ -f $(echo "exit"|openssl 2>/dev/null) ]; then
-echo -e " tidak ada paket openssl, install dulu!" >> screenlog.0
-echo -e " Gunakan Koneksi normal dan" >> screenlog.0
-echo -e " opkg update && opkg install openssl-util" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
- fi
-sleep 2
 supp=$(echo "QUIT"|openssl s_client -connect 8.8.8.8:443 -servername $sni 2>/dev/null|grep supp|awk '{print $4}')
  if [ ! -f $supp ]; then
 echo "OK" >> screenlog.0
@@ -630,7 +1086,6 @@ killall -q openssl timeou
 echo "Closed!" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
    fi 
  fi
-host=$(grep host= config.txt|awk -F "=" '{print $2}')
 echo -ne "{$(date +%M:%S)} Menjalankan Inject " >> screenlog.0
 killall -q openssl timeou;rm -rf /tmp/timeou
 injj=$(cat /www/xderm/config/stun 2>/dev/null|awk "NR==1")
@@ -865,4 +1320,4 @@ case $1 in
  flushx;echo -e "{$(date +%M:%S)} Selesai." >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
 ;;
 esac
-echo -e "           Current versi 2.8 Copyright ®2021" >> screenlog.0
+echo -e "           Current versi 2.9 Copyright ®2021" >> screenlog.0
