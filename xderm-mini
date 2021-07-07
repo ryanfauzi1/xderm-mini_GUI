@@ -402,7 +402,7 @@ tgl=$(echo $data|awk '{print $1}');jam=$(echo $data|awk '{print $4}')
  "Nov") bln="11";;
  "Dec") bln="12";;
     esac
-date -s "$(echo $thn-$bln-$tgl $jam)" >/dev/null;date|sed 's/  / /g' >> screenlog.0
+date -s "$(echo $thn-$bln-$tgl $jam)" 2>/dev/null;date|sed 's/  / /g' >> screenlog.0
 mkdir -p /usr/local/etc/v2ray/;juuid=1;n=2
 portv=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|sed ':a;N;$!ba;s/\n  //g'|awk -F '"port' '{print $2}'|grep :|sed ':a;N;$!ba;s/\n/ /g'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
   if [ ! -f $portv ]; then
