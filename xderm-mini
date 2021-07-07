@@ -348,6 +348,7 @@ touch /etc/crontabs/root
 if [ ! -f $(cat /etc/crontabs/root 2>/dev/null|grep xderm|awk '{print $2}'|awk "NR==1") ]; then
 echo > /etc/crontabs/root
  fi
+ killall -q stunnel
     if [ $mode -eq 3 ]; then
 flushx;ssa=8;echo -e "{$(date +%M:%S)} Mode yang dipilih: $mode [MultiMode]" >> screenlog.0
 host=$(grep host= config.txt|awk -F "=" '{print $2}'|awk '{print $1}')
