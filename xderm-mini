@@ -707,7 +707,7 @@ terpilih=\$pingtrojan;terpilihport=1081;nama=trojan
    fi
    if [ \$nama != \$(cat /tmp/currentmode.txt) ]; then
    ((t++))
-    if [ \$t -eq 5 ]; then
+    if [ \$t -eq 7 ]; then
   if [ \$pingssh -eq 999999 ]; then
  killall -q sshpass;rm -rf /root/.ssh/known_hosts*
  if [ $(cat /www/xderm/config/stun) != \"no\" ]; then
