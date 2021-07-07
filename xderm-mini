@@ -138,10 +138,12 @@ mode=$(grep mode= config.txt|awk -F "=" '{print $2}'|awk '{print $1}')
      echo "Akun SSH belom disetting!" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
     fi
   elif [ $mode -eq 1 ]; then
+  hostv=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|sed ':a;N;$!ba;s/\n  //g'|awk -F '"add' '{print $2}'|grep :|sed ':a;N;$!ba;s/\n/ /g'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
     if [ -f $hostv ]; then
      echo "Akun vmess belom disetting!" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
     fi     
 elif [ $mode -eq 2 ]; then
+  hostt=$(grep trojan:// config.txt|awk -F "://" '{print $2}'|awk -F "@" '{print $2}'|awk -F ":" '{print $1}'|awk "NR==1")
     if [ -f $hostt ]; then
      echo "Akun trojan belom disetting!" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
     fi
