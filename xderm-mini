@@ -1,5 +1,5 @@
 #!/bin/bash
-#xderm_mini2021_stable1
+#ryanfauzi
  injekpy () {
 sni=$(grep sni= config.txt|awk -F "=" '{print $2}')
 echo "#!/usr/bin/python
