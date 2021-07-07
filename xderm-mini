@@ -638,19 +638,19 @@ date -s "$(curl worldtimeapi.org/api/timezone/asia/Bangkok -s|awk -F 'datetime":
 echo "#!/bin/bash
 t=0
 while true; do
-pingssh=\$(timeout 3 httping -c1 -x 127.0.0.1:1080 -g http://google.com -5 2>/dev/null|awk \"NR==2\"|awk -F 'time=' '{print \$2}'|awk -F. '{print \$1}')
+pingssh=\$(timeout 5 httping -c1 -x 127.0.0.1:1080 -g http://google.com -5 2>/dev/null|awk \"NR==2\"|awk -F 'time=' '{print \$2}'|awk -F. '{print \$1}')
   if [ -f \$pingssh ]; then
 pingsshx=\"Timeout!\";pingssh=999999
 else
 pingsshx=\"\$pingssh ms\"
   fi
-pingtrojan=\$(timeout 3 httping -c1 -x 127.0.0.1:1081 -g http://google.com -5 2>/dev/null|awk \"NR==2\"|awk -F 'time=' '{print \$2}'|awk -F. '{print \$1}')
+pingtrojan=\$(timeout 5 httping -c1 -x 127.0.0.1:1081 -g http://google.com -5 2>/dev/null|awk \"NR==2\"|awk -F 'time=' '{print \$2}'|awk -F. '{print \$1}')
   if [ -f \$pingtrojan ]; then
 pingtrojanx=\"Timeout!\";pingtrojan=999999
 else
 pingtrojanx=\"\$pingtrojan ms\"
   fi
-pingvmess=\$(timeout 3 httping -c1 -x 127.0.0.1:10808 -g http://google.com -5 2>/dev/null|awk \"NR==2\"|awk -F 'time=' '{print \$2}'|awk -F. '{print \$1}')
+pingvmess=\$(timeout 5 httping -c1 -x 127.0.0.1:10808 -g http://google.com -5 2>/dev/null|awk \"NR==2\"|awk -F 'time=' '{print \$2}'|awk -F. '{print \$1}')
   if [ -f \$pingvmess ]; then
 pingvmessx=\"Timeout!\";pingvmess=999999
 else
@@ -676,20 +676,20 @@ terpilih=\$pingtrojan;terpilihport=1081;nama=trojan
   fi
    if [ \$(cat /tmp/currentmode.txt) == \"vmess\" ]; then
     if [ \$pingvmess -eq 999999 ]; then
-     t=3
+     t=5
     fi
    elif [ \$(cat /tmp/currentmode.txt) == \"trojan\" ]; then
     if [ \$pingtrojan -eq 999999 ]; then
-     t=3
+     t=5
     fi
    elif [ \$(cat /tmp/currentmode.txt) == \"ssh\" ]; then
     if [ \$pingssh -eq 999999 ]; then
-     t=3
+     t=5
     fi
    fi
    if [ \$nama != \$(cat /tmp/currentmode.txt) ]; then
    ((t++))
-    if [ \$t -eq 7 ]; then
+    if [ \$t -eq 6 ]; then
   if [ \$pingssh -eq 999999 ]; then
  killall -q sshpass;rm -rf /root/.ssh/known_hosts*
  if [ $(cat /www/xderm/config/stun) != \"no\" ]; then
