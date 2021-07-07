@@ -634,7 +634,7 @@ echo -e "{$(date +%M:%S)} Routing Host, IP Gateway dan dns.." >> screenlog.0
 ifconfig tun0 10.0.0.1 netmask 255.255.255.0 2>/dev/null
 route add default gw 10.0.0.2 metric 0 2>/dev/null
 /etc/init.d/dnsmasq restart 2>/dev/null
-date -s "$(curl worldtimeapi.org/api/timezone/asia/Bangkok -s|awk -F 'datetime":"' '{print $2}'|awk -F. '{print $1}'|sed 's/T/ /g')"
+date -s "$(curl worldtimeapi.org/api/timezone/asia/Bangkok -s|awk -F 'datetime":"' '{print $2}'|awk -F. '{print $1}'|sed 's/T/ /g')" 2>/dev/null
 ##########################################scripted
 echo "#!/bin/bash
 t=0
