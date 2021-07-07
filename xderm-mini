@@ -582,7 +582,7 @@ screen -dmS xderm sshpass -p "$pass" ssh -oTCPKeepAlive=yes -oServerAliveInterva
 screen -dmS troj trojan -c /tmp/trojan.conf;sleep 1
 pingtrojan=$(timeout 5 httping -c3 -x 127.0.0.1:1081 -g http://google.com -5 2>/dev/null|awk "NR==4"|awk -F 'time=' '{print $2}'|awk -F. '{print $1}')
   if [ -f $pingtrojan ]; then
-pingtrojanx="Closed!";pingtrojan=9999
+pingtrojanx="Timeout!";pingtrojan=9999
 else
 pingtrojanx="$pingtrojan ms"
   fi
@@ -592,7 +592,7 @@ echo -e "{$(date +%M:%S)} Trojan: $hostt, P: $pingtrojanx" >> screenlog.0
 screen -dmS pimes v2ray -config /usr/local/etc/v2ray/config.json;sleep 1
 pingvmess=$(timeout 5 httping -c3 -x 127.0.0.1:10808 -g http://google.com -5 2>/dev/null|awk "NR==4"|awk -F 'time=' '{print $2}'|awk -F. '{print $1}')
   if [ -f $pingvmess ]; then
-pingvmessx="Closed!";pingvmess=9999
+pingvmessx="Timeout!";pingvmess=9999
 else
 pingvmessx="$pingvmess ms"
   fi
@@ -600,7 +600,7 @@ echo -e "{$(date +%M:%S)} Vmess:  $hostv, P: $pingvmessx" >> screenlog.0
  fi
 sleep 3;pingssh=$(timeout 5 httping -c3 -x 127.0.0.1:1080 -g http://google.com -5 2>/dev/null|awk "NR==4"|awk -F 'time=' '{print $2}'|awk -F. '{print $1}')
   if [ -f $pingssh ]; then
-pingsshx="Closed!";pingssh=9999
+pingsshx="Timeout!";pingssh=9999
 else
 pingsshx="$pingssh ms"
   fi
