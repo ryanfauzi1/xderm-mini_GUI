@@ -638,19 +638,19 @@ date -s "$(curl worldtimeapi.org/api/timezone/asia/Bangkok -s|awk -F 'datetime":
 echo "#!/bin/bash
 t=0
 while true; do
-pingssh=\$(timeout 5 httping -c1 -x 127.0.0.1:1080 -g http://google.com -5 2>/dev/null|awk \"NR==2\"|awk -F 'time=' '{print \$2}'|awk -F. '{print \$1}')
+pingssh=\$(timeout 10 httping -c1 -x 127.0.0.1:1080 -g http://google.com -5 2>/dev/null|awk \"NR==2\"|awk -F 'time=' '{print \$2}'|awk -F. '{print \$1}')
   if [ -f \$pingssh ]; then
 pingsshx=\"Timeout!\";pingssh=999999
 else
 pingsshx=\"\$pingssh ms\"
   fi
-pingtrojan=\$(timeout 5 httping -c1 -x 127.0.0.1:1081 -g http://google.com -5 2>/dev/null|awk \"NR==2\"|awk -F 'time=' '{print \$2}'|awk -F. '{print \$1}')
+pingtrojan=\$(timeout 10 httping -c1 -x 127.0.0.1:1081 -g http://google.com -5 2>/dev/null|awk \"NR==2\"|awk -F 'time=' '{print \$2}'|awk -F. '{print \$1}')
   if [ -f \$pingtrojan ]; then
 pingtrojanx=\"Timeout!\";pingtrojan=999999
 else
 pingtrojanx=\"\$pingtrojan ms\"
   fi
-pingvmess=\$(timeout 5 httping -c1 -x 127.0.0.1:10808 -g http://google.com -5 2>/dev/null|awk \"NR==2\"|awk -F 'time=' '{print \$2}'|awk -F. '{print \$1}')
+pingvmess=\$(timeout 10 httping -c1 -x 127.0.0.1:10808 -g http://google.com -5 2>/dev/null|awk \"NR==2\"|awk -F 'time=' '{print \$2}'|awk -F. '{print \$1}')
   if [ -f \$pingvmess ]; then
 pingvmessx=\"Timeout!\";pingvmess=999999
 else
