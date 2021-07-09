@@ -66,15 +66,20 @@ Theme Installation by Agus Sriawan
 wget -O installtheme https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/installtheme && bash installtheme
 ```
 
+[Xderm-Mini Tools for STB by Vito Harhari](https://github.com/vitoharhari/xderm-mini)
+```
+wget --no-check-certificate "https://raw.githubusercontent.com/vitoharhari/xderm-mini/main/install-xderm-mini" -P /usr/bin/ && chmod 777 /usr/bin/install-xderm-mini && bash install-xderm-mini
+```
+
 Fix Download xderm-mini.php
 ```
 wget --no-check-certificate "https://raw.githubusercontent.com/helmiau/openwrt-config/main/fix-xderm-libernet-gui" -P /root/ && chmod 777 /root/fix-xderm-libernet-gui && cd /root && bash fix-xderm-libernet-gui
 ```
 
 ### Credits
-- @ryanfauzi1
-- Agus Sriawan
-- @vitoharhari
-- @helmiau
+- [Ryan Fauzi](github.com/ryanfauzi1) ~ Kang Developer
+- Agus Sriawan ~ Kang Ngetheme
+- [Vito Harhari](github.com/vitoharhari) ~ Kang bikin auto installer xderm-mini
+- [Helmi Amirudin](github.com/helmiau) ~ Kang Ngerapihin Readme
 
 Thank you
