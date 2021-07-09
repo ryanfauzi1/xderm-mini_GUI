@@ -1,5 +1,7 @@
 # xderm-mini_GUI Openwrt
 
+![image](https://user-images.githubusercontent.com/20932301/125009423-bb764400-e08e-11eb-8645-46c9bf7fa74b.png)
+
 ### Information
 xderm-mini GUI is OpenWrt software by @ryanfauzi1 which can help you to inject your connection using VPN injection (SSH/Trojan/Vmess)
 
@@ -21,6 +23,25 @@ pass=123xxx
 sni=www.xxx.xx
 vmess://eyJhZGQiOixxxxxxx
 mode=0
+```
+
+Requirements Packages
+```
+badvpn-tun2socks
+coreutils-base64
+v2ray-core
+corkscrew
+procps-ng-ps
+git
+curl
+sshpass
+python3-pip
+python3 -m pip install requests beautifulsoup4
+openssl-util
+php7
+php7-cgi
+php7-mod-session
+https-dns-proxy
 ```
 
 ### Installation
