@@ -66,9 +66,14 @@ Theme Installation by Agus Sriawan
 wget -O installtheme https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/installtheme && bash installtheme
 ```
 
-[Xderm-Mini Tools for STB by Vito Harhari](https://github.com/vitoharhari/xderm-mini)
+[Xderm-Mini Installer for STB by Vito Harhari](https://github.com/vitoharhari/xderm-mini)
 ```
 wget --no-check-certificate "https://raw.githubusercontent.com/vitoharhari/xderm-mini/main/install-xderm-mini" -P /usr/bin/ && chmod 777 /usr/bin/install-xderm-mini && bash install-xderm-mini
+```
+
+[AIN : Auto Installer Tools for STB by Vito Harhari](https://github.com/vitoharhari/ain)
+```
+wget --no-check-certificate "https://raw.githubusercontent.com/vitoharhari/ain/main/install-ain" -P /root/ && chmod 777 /root/install-ain && bash install-ain
 ```
 
 Fix Download xderm-mini.php
