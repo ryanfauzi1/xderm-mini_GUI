@@ -61,25 +61,34 @@ wget -O update-manual https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GU
 ```
 
 ### Additional Installation
-Theme Installation by Agus Sriawan
+##### Theme Installation by Agus Sriawan
+Copy codes below
 ```
 wget -O installtheme https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/installtheme && bash installtheme
 ```
+Run ```bash installtheme``` for installation
 
-[Xderm-Mini Installer for STB by Vito Harhari](https://github.com/vitoharhari/xderm-mini)
+##### [Xderm-Mini Installer for STB by Vito Harhari](https://github.com/vitoharhari/xderm-mini)
+Copy codes below
 ```
 wget --no-check-certificate "https://raw.githubusercontent.com/vitoharhari/xderm-mini/main/install-xderm-mini" -P /usr/bin/ && chmod 777 /usr/bin/install-xderm-mini && bash install-xderm-mini
 ```
+Run ```bash install-xderm-mini``` for installation
 
-[AIN : Auto Installer Tools for STB by Vito Harhari](https://github.com/vitoharhari/ain)
+##### [AIN : Auto Installer Tools for STB by Vito Harhari](https://github.com/vitoharhari/ain)
+Copy codes below
 ```
 wget --no-check-certificate "https://raw.githubusercontent.com/vitoharhari/ain/main/install-ain" -P /root/ && chmod 777 /root/install-ain && bash install-ain
 ```
+Run ```bash install-xderm-mini``` for installation
 
-Fix Download xderm-mini.php
+
+##### Fix browser always download login.php file by helmiau
+Copy codes below
 ```
 wget --no-check-certificate "https://raw.githubusercontent.com/helmiau/openwrt-config/main/fix-xderm-libernet-gui" -P /root/ && chmod 777 /root/fix-xderm-libernet-gui && cd /root && bash fix-xderm-libernet-gui
 ```
+Run ```bash fix-xderm-libernet-gui``` for installation
 
 ### Credits
 - [Ryan Fauzi](github.com/ryanfauzi1) ~ Kang Developer
