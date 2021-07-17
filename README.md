@@ -116,9 +116,9 @@ wget --no-check-certificate "https://raw.githubusercontent.com/helmiau/openwrt-c
 Run ```fix-xderm-libernet-gui``` for installation
 
 ## Credits
-- [Ryan Fauzi](github.com/ryanfauzi1) ~ Kang Developer
+- [Ryan Fauzi](https://github.com/ryanfauzi1) ~ Kang Developer
 - [Agus Sriawan](https://www.facebook.com/agussriawan.id) ~ Kang Tema
-- [Vito Harhari](github.com/vitoharhari) ~ Kang bikin auto installer xderm-mini
-- [Helmi Amirudin](github.com/helmiau) ~ Kang Ngerapihin Readme
+- [Vito Harhari](https://github.com/vitoharhari) ~ Kang bikin auto installer xderm-mini
+- [Helmi Amirudin](https://github.com/helmiau) ~ Kang Ngerapihin Readme
 
 Thank you
