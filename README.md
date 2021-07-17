@@ -5,26 +5,6 @@
 ## Information
 xderm-mini GUI is OpenWrt software by @ryanfauzi1 which can help you to inject your connection using VPN injection (SSH/Trojan/Vmess)
 
-WebUI Page : http://192.168.1.1/xderm
-
-Default ```auth.txt``` (WebUI Login Information)
-```
-Username  : admin
-Password  : xderm
-```
-
-Default ```config.txt```
-```
-host=103.157.1xx.xx
-port=443
-pudp=7300
-user=ryanxxxx
-pass=123xxx
-sni=www.xxx.xx
-vmess://eyJhZGQiOixxxxxxx
-mode=0
-```
-
 Requirements Packages
 ```
 badvpn-tun2socks
@@ -42,6 +22,35 @@ php7
 php7-cgi
 php7-mod-session
 https-dns-proxy
+```
+
+WebUI Page : http://192.168.1.1/xderm
+
+Default ```auth.txt``` (WebUI Login Information)
+```
+Username  : admin
+Password  : xderm
+```
+
+Default ```config.txt```
+```
+host=103.157.1xx.xx
+port=443
+pudp=7300
+user=ryanxxxx
+pass=123xxx
+sni=www.xxx.xx
+vmess://eyJhZGQiOixxxxxxx
+trojan://user@server:port
+mode=0
+```
+
+Connection mode information
+```
+mode=0    SSH/SSL mode
+mode=1    VMESS mode
+mode=2    TROJAN mode
+mode=3    Multi injection mode (SSH, VMESS, TROJAN)
 ```
 
 ## Installation
