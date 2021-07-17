@@ -1,19 +1,23 @@
-# xderm-mini_GUI Openwrt
 
 ![image](https://user-images.githubusercontent.com/20932301/125009423-bb764400-e08e-11eb-8645-46c9bf7fa74b.png)
 
+# xderm-mini GUI for OpenWrt
 ## Information
-xderm-mini GUI is OpenWrt software by @ryanfauzi1 which can help you to inject your connection using VPN injection (SSH/Trojan/Vmess)
+xderm-mini GUI is simple injector tool based on shell script and python commands for OpenWrt by @ryanfauzi1 which help you to inject your OpenWrt connection using VPN injection (SSH/Trojan/Vmess)
 
-WebUI Page : http://192.168.1.1/xderm
+<details><summary>Default information (WebUI address, webui login auth and config) (click to show)</summary>
+<p>
+  
+Default **WebUI Page** : http://192.168.1.1/xderm
 
-Default ```auth.txt``` (WebUI Login Information)
+Default **auth.txt** (WebUI Login Information) 
+
 ```
 Username  : admin
 Password  : xderm
 ```
 
-Default ```config.txt```
+Default **config.txt** 
 ```
 host=103.157.1xx.xx
 port=443
@@ -25,6 +29,9 @@ vmess://eyJhZGQiOixxxxxxx
 trojan://user@server:port
 mode=0
 ```
+  
+</p>
+</details>
 
 Connection mode information
 ```
