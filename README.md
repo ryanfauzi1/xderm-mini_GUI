@@ -4,8 +4,8 @@
 # xderm-mini GUI for OpenWrt
 Index page information
 - [About this software, Information, Default WebUI Page, Login Authorization and Configuration.](https://github.com/helmiau/xderm-mini_GUI#information)
-- [Installation, Requirements and Update.](https://github.com/helmiau/xderm-mini_GUI#additional-installation)
-- [Custom Theme, Xderm Auto Installer for STB, Xderm Mini Tools, etc.](https://github.com/helmiau/xderm-mini_GUI#information)
+- [Installation, Requirements and Update.](https://github.com/helmiau/xderm-mini_GUI#installation)
+- [Custom Theme, Xderm Auto Installer for STB, Xderm Mini Tools, etc.](https://github.com/helmiau/xderm-mini_GUI#additional-installation)
 
 
 ## Information
