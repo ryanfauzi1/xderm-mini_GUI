@@ -23,21 +23,6 @@ Username  : admin
 Password  : xderm
 ```
 
-you can change authentication by editing ```/root/auth.txt``` file or by running ```xdrauth``` command using terminal then follow the instructions.
-
-Default **config.txt** 
-```
-host=103.157.1xx.xx
-port=443
-pudp=7300
-user=ryanxxxx
-pass=123xxx
-sni=www.xxx.xx
-vmess://eyJhZGQiOixxxxxxx
-trojan://user@server:port
-mode=0
-```
-
 you can change default config by editing ```config1``` file inside ```/www/xderm/config``` folder.
   
 </p>
