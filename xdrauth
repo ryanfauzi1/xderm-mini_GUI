@@ -1,0 +1,52 @@
+#!/bin/bash
+#--------------------------------------------------------
+#   This script is used to change authentication of 
+#   Xderm-Mini GUI for OpenWrt by ryanfauzi1
+#   Script by helmiau a.k.a Helmi Amirudin
+#   Run ./xdrauth using terminal to use this script
+#--------------------------------------------------------
+
+USERNOW=$(grep user /root/auth.txt | sed 's/.*user=//')
+PASSNOW=$(grep passwd /root/auth.txt | sed 's/.*passwd=//')
+echo "====================="
+echo " Xderm-Mini WebUI Authentication"
+echo "====================="
+echo " Username : $USERNOW"
+echo " Password : $PASSNOW"
+echo "====================="
+echo " Change Username & Password = a/A"
+echo " Change Username Only = u/U"
+echo " Change Password Only = p/P"
+echo " Exit = type anything !"
+echo "====================="
+echo -n " Enter Your Option : " 
+read -r jawab
+echo "====================="
+if [[ $jawab == "a" || $jawab == "A" ]]; then
+echo -n " Enter New Username : " 
+read -r USERNEW
+echo "====================="
+echo -n " Enter New Password : " 
+read -r PASSNEW
+echo -e "user=$USERNEW\npasswd=$PASSNEW" > /root/auth.txt
+echo "====================="
+clear
+./xdrpass
+elif [[ $jawab == "u" || $jawab == "U" ]]; then
+echo -n " Enter New Username : " 
+read -r USERNEW
+echo -e "user=$USERNEW\npasswd=$PASSNOW" > /root/auth.txt
+echo "====================="
+clear
+./xdrpass
+elif [[ $jawab == "p" || $jawab == "P" ]]; then
+echo -n " Enter New Password : "
+read -r PASSNEW
+echo -e "user=$USERNOW\npasswd=$PASSNEW" > /root/auth.txt
+echo "====================="
+clear
+./xdrpass
+else
+echo " Exiting program !"
+exit
+fi
