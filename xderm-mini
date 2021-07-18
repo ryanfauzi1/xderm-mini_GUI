@@ -282,7 +282,8 @@ if [ ! -f $gtun ]; then
   if [ $gtun == "yes" ]; then
  if [ -f $(go-tun2socks -version 2>/dev/null|awk -F. '{print $1}'|awk "NR==1") ]; then
    echo -e "#!/bin/bash\nwget -O /usr/bin/go-tun2socks https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/go-tun2socks\nchmod +x /usr/bin/go-tun2socks\necho -e 'Silahkan start ulang xdermnya!, terima kasih.'" > /root/gotun;chmod +x /root/gotun
-   echo "Paket trojan belom terinstall. install dulu!" >> screenlog.0
+   echo "Anda Mencentang fitur 'go-tun2socks'." >> screenlog.0
+   echo "Paket go-tun2socks belom terinstall. install dulu!" >> screenlog.0
    echo "Gunakan Koneksi normal dan" >> screenlog.0
    echo "Khusus Pengguna STB B860h dan HG680p" >> screenlog.0
    echo "Ketik ./gotun di terminal root" >> screenlog.0
