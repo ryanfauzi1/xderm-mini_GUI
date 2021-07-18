@@ -23,18 +23,22 @@ Username  : admin
 Password  : xderm
 ```
 
-you can change default config by editing ```config1``` file inside ```/www/xderm/config``` folder.
+you can change authentication by editing ```/root/auth.txt``` file or by running ```xdrauth``` command using terminal then follow the instructions.
+
+Default **config.txt** 
+```
+host=103.157.1xx.xx
+port=443
+pudp=7300
+user=ryanxxxx
+pass=123xxx
+sni=www.xxx.xx
+vmess://eyJhZGQiOixxxxxxx
+trojan://user@server:port
+```
   
 </p>
 </details>
-
-Connection mode information
-```
-mode=0    SSH/SSL mode
-mode=1    VMESS mode
-mode=2    TROJAN mode
-mode=3    Multi injection mode (SSH, VMESS, TROJAN)
-```
 
 ## Installation
 Requirements Packages
