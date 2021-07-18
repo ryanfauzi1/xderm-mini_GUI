@@ -833,7 +833,6 @@ fi
 echo "##############################################" >> screenlog.0
 echo "  Host: $host" >> screenlog.0
 echo "  Port: $port" >> screenlog.0
-echo "  ID: $uuid" >> screenlog.0
 echo "  Net: $net" >> screenlog.0
 echo "  Path: $path" >> screenlog.0
 echo "##############################################" >> screenlog.0
