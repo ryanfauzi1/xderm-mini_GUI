@@ -648,10 +648,10 @@ xtable=$(/etc/init.d/firewall reload 2>/dev/null)
   fi
    if [ $(cat /www/xderm/config/gotun|awk "NR==1") == "yes" ]; then
 echo -e "{$(date +%M:%S)} Menjalankan go-tun2socks...." >> screenlog.0
-screen -dmS gerbang go-tun2socks -loglevel none -proxyServer 127.0.0.1:1080 -proxyType socks -tunName tun0 -tunAddr 10.0.0.2 -tunGw 10.0.0.1 -tunMask 255.255.255.0;sleep 2
+screen -dmS gerbang go-tun2socks -loglevel none -proxyServer 127.0.0.1:$terpilihport -proxyType socks -tunName tun0 -tunAddr 10.0.0.2 -tunGw 10.0.0.1 -tunMask 255.255.255.0;sleep 2
   else
 echo -e "{$(date +%M:%S)} Menjalankan badvpn-tun2socks...." >> screenlog.0
-screen -dmS gerbang badvpn-tun2socks --tundev tun0 --netif-ipaddr 10.0.0.2 --netif-netmask 255.255.255.0 --socks-server-addr 127.0.0.1:1080 --udpgw-remote-server-addr 127.0.0.1:$pudp --udpgw-transparent-dns --loglevel 0;sleep 2
+screen -dmS gerbang badvpn-tun2socks --tundev tun0 --netif-ipaddr 10.0.0.2 --netif-netmask 255.255.255.0 --socks-server-addr 127.0.0.1:$terpilihport --udpgw-remote-server-addr 127.0.0.1:$pudp --udpgw-transparent-dns --loglevel 0;sleep 2
    fi
 echo -e "{$(date +%M:%S)} Routing Host, IP Gateway dan dns.." >> screenlog.0
 ifconfig tun0 10.0.0.1 netmask 255.255.255.0 2>/dev/null
@@ -833,7 +833,6 @@ fi
 echo "##############################################" >> screenlog.0
 echo "  Host: $host" >> screenlog.0
 echo "  Port: $port" >> screenlog.0
-echo "  ID: $uuid" >> screenlog.0
 echo "  Net: $net" >> screenlog.0
 echo "  Path: $path" >> screenlog.0
 echo "##############################################" >> screenlog.0
@@ -975,10 +974,10 @@ xtable=$(/etc/init.d/firewall reload 2>/dev/null)
   fi
    if [ $(cat /www/xderm/config/gotun|awk "NR==1") == "yes" ]; then
 echo -e "{$(date +%M:%S)} Menjalankan go-tun2socks...." >> screenlog.0
-screen -dmS gerbang go-tun2socks -loglevel none -proxyServer 127.0.0.1:1080 -proxyType socks -tunName tun0 -tunAddr 10.0.0.2 -tunGw 10.0.0.1 -tunMask 255.255.255.0;sleep 2
+screen -dmS gerbang go-tun2socks -loglevel none -proxyServer 127.0.0.1:10808 -proxyType socks -tunName tun0 -tunAddr 10.0.0.2 -tunGw 10.0.0.1 -tunMask 255.255.255.0;sleep 2
   else
 echo -e "{$(date +%M:%S)} Menjalankan badvpn-tun2socks...." >> screenlog.0
-screen -dmS gerbang badvpn-tun2socks --tundev tun0 --netif-ipaddr 10.0.0.2 --netif-netmask 255.255.255.0 --socks-server-addr 127.0.0.1:1080 --udpgw-remote-server-addr 127.0.0.1:$pudp --udpgw-transparent-dns --loglevel 0;sleep 2
+screen -dmS gerbang badvpn-tun2socks --tundev tun0 --netif-ipaddr 10.0.0.2 --netif-netmask 255.255.255.0 --socks-server-addr 127.0.0.1:10808 --udpgw-remote-server-addr 127.0.0.1:$pudp --udpgw-transparent-dns --loglevel 0;sleep 2
    fi
 ifconfig tun0 10.0.0.1 netmask 255.255.255.0 2>/dev/null
 echo -e "{$(date +%M:%S)} Routing Host, IP Gateway dan dns.." >> screenlog.0
