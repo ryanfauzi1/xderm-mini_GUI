@@ -230,7 +230,7 @@ if ( window.history.replaceState ) {
 <?php
   exec('cat /var/update.xderm',$z);
     if ($z[0]) {
- if ( $z[0] != '2.9' ){
+ if ( $z[0] != '3.0' ){
 echo '<pre><h3 style="color:lime">New versi GUI Detected, Please Update!!</h3></pre>';
 };
     };
@@ -275,23 +275,43 @@ echo '<script>
  $config=$_POST['configbox'];
  $conf=$_POST['profile'];
  $use_stunnel=$_POST['use_stunnel'];
+ $use_gotun=$_POST['use_gotun'];
+ $use_restfw=$_POST['use_restfw'];
+ $use_waitmodem=$_POST['use_waitmodem'];
+ $mode=$_POST['mode'];
  if ($use_stunnel <> 'yes' ){$use_stunnel='no';}
+ if ($use_gotun <> 'yes' ){$use_gotun='no';}
+ if ($use_restfw <> 'yes' ){$use_restfw='no';}
+ if ($use_waitmodem <> 'yes' ){$use_waitmodem='no';}
+ exec('echo "'.$mode.'" > config/mode.default');
  exec('echo "'.$config.'" > config/'.$conf);
+ exec('sed -i \'/mode=/,+0 d\' config/'.$conf);
  exec('sed -i \'s/\r$//g\' config/'.$conf);
  exec('sed -i \':a;N;$!ba;s/\n\n//g\' config/'.$conf);
  exec('echo "'.$config.'" > config.txt');
  exec('sed -i \'s/\r$//g\' config.txt');
  exec('sed -i \':a;N;$!ba;s/\n\n//g\' config.txt');
  exec('echo "'.$use_stunnel.'" > config/stun');
+ exec('echo "'.$use_gotun.'" > config/gotun');
+ exec('echo "'.$use_restfw.'" > config/firewall');
+ exec('echo "'.$use_waitmodem.'" > config/modem');
  exec('echo "'.$conf.'" > config/default');
  exec('echo "Config telah di update." > screenlog.0');
  exec('echo "\''.$conf.'\' Menjadi default Config. !" >> screenlog.0');
-$use_boot=$_POST['use_boot'];
+ $use_boot=$_POST['use_boot'];
 if ($use_boot <> 'yes' ){ exec('./xderm-mini disable');
 } else { exec('./xderm-mini enable'); }
  exec("cat config/default",$default);
  }
 if($_POST['button2']){
+exec("cat config/mode.list|awk 'NR==1'",$adamode);
+$adamode=$adamode[0];
+if (!$adamode) {
+exec("echo SSH. >> config/mode.list");
+exec("echo Vmess. >> config/mode.list");
+exec("echo Trojan. >> config/mode.list");
+exec("echo Multi. >> config/mode.list"); }
+
 exec("cat config/config.list|awk 'NR==1'",$ada);
 $ada=$ada[0];
 if ($ada) {
@@ -317,7 +337,7 @@ $data5 = file_get_contents("config/config5");
 echo "<textarea name='configbox5' id='isi5' rows='3' cols='10' style='display:none;'>$data5</textarea>";
 } else {
 exec("mkdir -p config;touch config/config.list config/config1 config/config2");
-exec("touch config/config3 config/config4 config/config5");
+exec("touch config/config3 config/config4 config/config5 config/mode.list");
 exec("echo config1 >> config/config.list");
 exec("echo config2 >> config/config.list");
 exec("echo config3 >> config/config.list");
@@ -353,6 +373,40 @@ else {
 echo '<input type="checkbox" name="use_stunnel" value="yes">stunnel'; }
 exec("touch /etc/rc.local");
 exec("cat /etc/rc.local 2>/dev/null|grep xderm|grep button|awk '{print $2}'|awk 'NR==1'",$boot);
+
+exec("cat config/gotun|awk 'NR==1'",$gotun);
+  if (!$gotun[0]) { exec("echo no > config/gotun"); }
+ if ( $gotun[0] == "yes"){
+echo '<input type="checkbox" name="use_gotun" value="yes" checked>go-tun2socks'; }
+else {
+echo '<input type="checkbox" name="use_gotun" value="yes">go-tun2socks'; }
+
+exec("cat config/firewall|awk 'NR==1'",$restfw);
+  if (!$restfw[0]) { exec("echo no > config/firewall"); }
+ if ( $restfw[0] == "yes"){
+echo '<input type="checkbox" name="use_restfw" value="yes" checked>Restart Firewall<br>'; }
+else {
+echo '<input type="checkbox" name="use_restfw" value="yes">Restart Firewall<br>'; }
+
+echo '<select name="mode" id="idmode">';
+exec("cat config/mode.list",$modelist);
+exec("cat config/mode.default",$modedefault);
+$modedefault=$modedefault[0];
+$u=0;
+while($u<count($modelist)){
+if ( $modedefault == $modelist[$u] ){
+echo "<option value=\"$modelist[$u]\" selected>$modelist[$u]</option>";
+} else {
+echo "<option value=\"$modelist[$u]\">$modelist[$u]</option>";}
+  $u++;}
+
+exec("cat config/modem|awk 'NR==1'",$modem);
+  if (!$modem[0]) { exec("echo no > config/modem"); }
+ if ( $modem[0] == "yes"){
+echo '<input type="checkbox" name="use_waitmodem" value="yes" checked>Waiting Modem '; }
+else {
+echo '<input type="checkbox" name="use_waitmodem" value="yes">Waiting Modem '; }
+
  if ($boot[0]) {
 echo '<input type="checkbox" name="use_boot" value="yes" checked>ON-Boot'; }
 else {
@@ -366,7 +420,7 @@ echo '<div id="log" class="scroll"></div></pre></div>';
 </table></head>
 </div>
 	<div class="footer slide">
-        Xderm GUI v.2.9<br>
+        Xderm GUI v.3.0<br>
 		Theme Design by Agus Sriawan<br>
 		Copyright&copy Ryan Fauzi
     </div>

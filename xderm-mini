@@ -124,26 +124,27 @@ client = yes
 accept = localhost:8780
 connect = $host:$port
 sni = $sni" > /tmp/stunnel.conf
+killall -q stunnel
 stunnel /tmp/stunnel.conf
 }
  routing () {
-mode=$(grep mode= config.txt|awk -F "=" '{print $2}'|awk '{print $1}')
+mode=$(cat /www/xderm/config/mode.default|sed 's/\.//g')
 host=$(grep host= config.txt|awk -F "=" '{print $2}')
 hostt=$(grep trojan:// config.txt|awk -F "://" '{print $2}'|awk -F "@" '{print $2}'|awk -F ":" '{print $1}'|awk "NR==1")
 hostv=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|sed ':a;N;$!ba;s/\n  //g'|awk -F '"add' '{print $2}'|grep :|sed ':a;N;$!ba;s/\n/ /g'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
-  if [ $mode -eq 0 ]; then
+  if [ $mode == "SSH" ]; then
     if [ -f $host ]; then
      echo "Akun SSH belom disetting!" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
     fi
-  elif [ $mode -eq 1 ]; then
+  elif [ $mode == "Vmess" ]; then
     if [ -f $hostv ]; then
      echo "Akun vmess belom disetting!" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
     fi     
-elif [ $mode -eq 2 ]; then 
+elif [ $mode == "Trojan" ]; then 
     if [ -f $hostt ]; then
      echo "Akun trojan belom disetting!" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
     fi
-   elif [ $mode -eq 3 ]; then
+   elif [ $mode == "Multi" ]; then
     if [ -f $host ]; then
      echo "Akun SSH belom disetting!" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
     fi
@@ -181,20 +182,24 @@ fi
 echo -e "{$(date +%M:%S)} Membersihkan sisa sisa, Tunggu...." >> screenlog.0
 killall -q sshpass vpn stunnel openvpn
 killall -q trojan v2ray badvpn-tun2socks
-killall -q autorekonek automode
+killall -q autorekonek automode go-tun2socks
 kill $(ps w|grep python3|grep xderm.py|awk "NR==1"|awk '{print $1}') 2>/dev/null
 kill $(ps w|grep badvpn|grep tun|awk "NR==1"|awk '{print $1}') 2>/dev/null
- mode=$(grep mode= config.txt|awk -F "=" '{print $2}')
-  if [ $mode -eq 0 ]; then
+ mode=$(cat /www/xderm/config/mode.default|sed 's/\.//g')
+  if [ $mode == "SSH" ]; then
   host=$(grep host= config.txt|awk -F "=" '{print $2}')
-  elif [ $mode -eq 1 ]; then
+  elif [ $mode == "Vmess" ]; then
    port=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|sed ':a;N;$!ba;s/\n  //g'|awk -F '"port' '{print $2}'|grep :|sed ':a;N;$!ba;s/\n/ /g'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
     if [ -f $port ]; then
    echo "Akun vmess belom disetting!" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
     fi
-   host=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|sed ':a;N;$!ba;s/\n  //g'|awk -F '"add' '{print $2}'|grep :|sed ':a;N;$!ba;s/\n/ /g'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
-  elif [ $mode -eq 2 ]; then
-  host=$(grep trojan:// config.txt|awk -F "://" '{print $2}'|awk -F "@" '{print $2}'|awk -F ":" '{print $1}'|awk "NR==1")
+   hostv=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|sed ':a;N;$!ba;s/\n  //g'|awk -F '"add' '{print $2}'|grep :|sed ':a;N;$!ba;s/\n/ /g'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
+  elif [ $mode == "Trojan" ]; then
+  hostt=$(grep trojan:// config.txt|awk -F "://" '{print $2}'|awk -F "@" '{print $2}'|awk -F ":" '{print $1}'|awk "NR==1")
+  elif [ $mode == "Multi" ]; then
+  host=$(grep host= config.txt|awk -F "=" '{print $2}')
+  hostv=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|sed ':a;N;$!ba;s/\n  //g'|awk -F '"add' '{print $2}'|grep :|sed ':a;N;$!ba;s/\n/ /g'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
+  hostt=$(grep trojan:// config.txt|awk -F "://" '{print $2}'|awk -F "@" '{print $2}'|awk -F ":" '{print $1}'|awk "NR==1")
   fi
 route del $host 2>/dev/null;route del $hostt 2>/dev/null;route del $hostv 2>/dev/null;route del 8.8.8.8 2>/dev/null
 screen -d -m ip link delete tun0 2>/dev/null;screen -d -m ip link delete tun1 2>/dev/null
@@ -205,21 +210,21 @@ host=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/
  url="https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main"
  v=$(curl -m12 $url/xderm-mini -s|grep "Copyr"|awk "NR==4"|awk '{print $6}')
 if [ ! -f $v ]; then
-  if [ "$v" != "2.9" ]; then
+  if [ "$v" != "3.0" ]; then
  echo $v >/var/update.xderm
  echo "<h2 style='color:lime'>New versi GUI Detected, Please Update!</h2>" >> screenlog.0
   fi
 else
  v=$(curl -m12 $url/xderm-mini -s|grep "Copyr"|awk "NR==4"|awk '{print $6}')
  if [ ! -f $v ]; then
-  if [ "$v" != "2.9" ]; then
+  if [ "$v" != "3.0" ]; then
  echo $v >/var/update.xderm
  echo "<h2 style='color:lime'>New versi GUI Detected, Please Update!</h2>" >> screenlog.0
   fi
  else
   v=$(curl -m12 $url/xderm-mini -s|grep "Current versi"|awk "NR==5"|awk '{print $6}')
    if [ ! -f $v ]; then
-  if [ "$v" != "2.9" ]; then
+  if [ "$v" != "3.0" ]; then
   echo $v >/var/update.xderm
   echo "<h2 style='color:lime'>New versi GUI Detected, Please Update!</h2>" >> screenlog.0
   fi
@@ -234,7 +239,7 @@ fi
  sleep 1
  v=$(curl -m12 $url/xderm-mini -s|grep "Copyr"|awk "NR==4"|awk '{print $6}')
  if [ ! -f $v ]; then
-  if [ "$v" != "2.9" ]; then
+  if [ "$v" != "3.0" ]; then
  echo -e " (Memperbarui..)" >> screenlog.0;sleep 1
  rm -rf xderm-mini
   while [ -f $cekx ]; do
@@ -259,7 +264,7 @@ fi
   }
  start () {
 #########################
-killall -q stunnel;echo -e "{$(date +%M:%S)} v.binari saat ini 2.9" >> screenlog.0
+killall -q stunnel;echo -e "{$(date +%M:%S)} v.binari saat ini 3.0" >> screenlog.0
 pudp=$(grep pudp= config.txt 2>/dev/null|awk -F "=" '{print $2}'|awk '{print $1}')
  if [ -f $pudp ]; then
 pudp=7300
@@ -268,10 +273,23 @@ sni=$(grep sni= config.txt 2>/dev/null|awk -F "=" '{print $2}'|awk '{print $1}')
  if [ -f $sni ]; then
 echo "Masukkan bug sni terlebih dahulu!" >> screenlog.0;exit
  fi
-mode=$(grep mode= config.txt|awk -F "=" '{print $2}'|awk '{print $1}')
+mode=$(cat /www/xderm/config/mode.default|sed 's/\.//g')
   if [ -f $mode ]; then
-echo "mode=0" >> config.txt
+echo "SSH." > /www/xderm/config/mode.default
   fi
+gtun=$(cat /www/xderm/config/gotun 2>/dev/null)
+if [ ! -f $gtun ]; then
+  if [ $gtun == "yes" ]; then
+ if [ -f $(go-tun2socks -version 2>/dev/null|awk -F. '{print $1}'|awk "NR==1") ]; then
+   echo -e "#!/bin/bash\nwget -O /usr/bin/go-tun2socks https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/go-tun2socks\nchmod +x /usr/bin/go-tun2socks\necho -e 'Silahkan start ulang xdermnya!, terima kasih.'" > /root/gotun;chmod +x /root/gotun
+   echo "Paket trojan belom terinstall. install dulu!" >> screenlog.0
+   echo "Gunakan Koneksi normal dan" >> screenlog.0
+   echo "Khusus Pengguna STB B860h dan HG680p" >> screenlog.0
+   echo "Ketik ./gotun di terminal root" >> screenlog.0
+   cp screenlog.0 log/log.txt 2>/dev/null;exit
+ fi
+  fi
+fi
    if [ -f $(badvpn-tun2socks -version 2>/dev/null|awk '{print $1}'|awk "NR==1") ]; then
     echo "Paket badvpn-tun2socks belom terinstall. install dulu!" >> screenlog.0
     echo "Gunakan Koneksi normal dan" >> screenlog.0
@@ -347,8 +365,7 @@ touch /etc/crontabs/root
 if [ ! -f $(cat /etc/crontabs/root 2>/dev/null|grep xderm|awk '{print $2}'|awk "NR==1") ]; then
 echo > /etc/crontabs/root
  fi
- killall -q stunnel
-    if [ $mode -eq 3 ]; then
+    if [ $mode == "Multi" ]; then
 flushx;ssa=8;echo -e "{$(date +%M:%S)} Mode yang dipilih: $mode [MultiMode]" >> screenlog.0
 host=$(grep host= config.txt|awk -F "=" '{print $2}'|awk '{print $1}')
  if [ -f $host ]; then
@@ -357,6 +374,11 @@ echo -e "{$(date +%M:%S)} Config SSH belom disetting !!" >> screenlog.0;sleep 1;
 port=$(grep port= config.txt|awk -F "=" '{print $2}'|awk '{print $1}')
 user=$(grep user= config.txt|awk -F "=" '{print $2}'|awk '{print $1}')
 pass=$(grep pass= config.txt|awk -F "=" '{print $2}'|awk '{print $1}')
+waitmodem=$(cat /www/xderm/config/modem)
+ if [ -f $waitmodem ]; then
+echo no > /www/xderm/config/modem
+ fi
+  if [ $waitmodem == "yes" ]; then
 echo -ne "{$(date +%M:%S)} Menunggu Sumber Internet... " >> screenlog.0
  while true; do
 interf=$(ip r|grep default|sed 's/default via 10.0.0//g'|grep default|awk '{print $3}'|awk 'NR==1'|awk -F. '{print $1}')
@@ -368,22 +390,9 @@ interf=$(ip r|grep default|sed 's/default via 10.0.0//g'|grep default|awk '{prin
   fi 
    fi
  done
+  fi
 #########################
 host=$(ping $host -w1 -c1|awk "NR==1"|awk -F '(' '{print $2}'|awk -F ')' '{print $1}')
-echo -ne "{$(date +%M:%S)} Menguji bug SNI (openssl).. " >> screenlog.0
-supp=$(echo "QUIT"|timeout 10 openssl s_client -connect 8.8.8.8:443 -servername $sni 2>/dev/null|grep supp|awk '{print $4}')
- if [ ! -f $supp ]; then
-echo "OK" >> screenlog.0
-else
-killall -q openssl
- supp=$(echo "QUIT"|timeout 10 openssl s_client -connect 8.8.8.8:443 -servername $sni 2>/dev/null|grep supp|awk '{print $4}')
-   if [ ! -f $supp ]; then
-echo "OK" >> screenlog.0
- else
-killall -q openssl
-echo "Closed!" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
-   fi
- fi
 mkdir -p /usr/local/etc/v2ray/;juuid=1;n=2
 portv=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|sed ':a;N;$!ba;s/\n  //g'|awk -F '"port' '{print $2}'|grep :|sed ':a;N;$!ba;s/\n/ /g'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
   if [ ! -f $portv ]; then
@@ -622,13 +631,27 @@ echo -e "{$(date +%M:%S)} SSH-ssl: $host, P: $pingsshx" >> screenlog.0
 echo "*************************************************" >> screenlog.0
 echo -e "{$(date +%M:%S)} Memilih Mode tercepat saat ini [$nama]" >> screenlog.0
 echo $nama >/tmp/currentmode.txt
-echo -e "{$(date +%M:%S)} Merefresh firewall...." >> screenlog.0
-xtable=$(/etc/init.d/firewall reload 2>/dev/null)
   if [ -f $(iptables -t nat -L|grep MASQ|grep tcp|awk '{print $1}'|awk "NR==1") ]; then
 iptables -A POSTROUTING --proto tcp -t nat -o tun0 -j MASQUERADE 2>/dev/null
   fi
-echo -e "{$(date +%M:%S)} Menjalankan Badvpn-tun2socks...." >> screenlog.0
-screen -dmS gerbang badvpn-tun2socks --tundev tun0 --netif-ipaddr 10.0.0.2 --netif-netmask 255.255.255.0 --socks-server-addr 127.0.0.1:$terpilihport --udpgw-remote-server-addr 127.0.0.1:$pudp --udpgw-transparent-dns --loglevel 0;sleep 3
+pudp=$(grep pudp config.txt|awk -F "=" '{print $2}')
+  if [ -f $(cat /www/xderm/config/firewall|awk "NR==1") ]; then
+   echo no > /www/xderm/config/gotun
+  fi
+ if [ $(cat /www/xderm/config/firewall|awk "NR==1") == "yes" ]; then
+echo -e "{$(date +%M:%S)} Memuat ulang Firewall...." >> screenlog.0
+xtable=$(/etc/init.d/firewall reload 2>/dev/null)
+ fi
+  if [ -f $(cat /www/xderm/config/gotun|awk "NR==1") ]; then
+   echo no > /www/xderm/config/gotun
+  fi
+   if [ $(cat /www/xderm/config/gotun|awk "NR==1") == "yes" ]; then
+echo -e "{$(date +%M:%S)} Menjalankan go-tun2socks...." >> screenlog.0
+screen -dmS gerbang go-tun2socks -loglevel none -proxyServer 127.0.0.1:1080 -proxyType socks -tunName tun0 -tunAddr 10.0.0.2 -tunGw 10.0.0.1 -tunMask 255.255.255.0;sleep 2
+  else
+echo -e "{$(date +%M:%S)} Menjalankan badvpn-tun2socks...." >> screenlog.0
+screen -dmS gerbang badvpn-tun2socks --tundev tun0 --netif-ipaddr 10.0.0.2 --netif-netmask 255.255.255.0 --socks-server-addr 127.0.0.1:1080 --udpgw-remote-server-addr 127.0.0.1:$pudp --udpgw-transparent-dns --loglevel 0;sleep 2
+   fi
 echo -e "{$(date +%M:%S)} Routing Host, IP Gateway dan dns.." >> screenlog.0
 ifconfig tun0 10.0.0.1 netmask 255.255.255.0 2>/dev/null
 route add default gw 10.0.0.2 metric 0 2>/dev/null
@@ -760,7 +783,7 @@ interf=\$(ip r|grep default|sed 's/default via 10.0.0//g'|grep default|awk '{pri
   route add default gw 10.0.0.2 metric 0 2>/dev/null
  fi
 done" > /tmp/automode;chmod +x /tmp/automode;screen -d -m /tmp/automode
-elif [ $mode -eq 1 ]; then
+elif [ $mode == "Vmess" ]; then
  flushx;ssa=8;echo -e "{$(date +%M:%S)} Mode yang dipilih: $mode [vmess]" >> screenlog.0
  port=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|sed ':a;N;$!ba;s/\n  //g'|awk -F '"port' '{print $2}'|grep :|sed ':a;N;$!ba;s/\n/ /g'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
     if [ -f $port ]; then
@@ -769,6 +792,24 @@ elif [ $mode -eq 1 ]; then
  echo "Pastikan confignya tidak ada font gaib" >> screenlog.0
  echo "(font seperti spasi yang tidak kelihatan)" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
     fi
+waitmodem=$(cat /www/xderm/config/modem)
+ if [ -f $waitmodem ]; then
+echo no > /www/xderm/config/modem
+ fi
+  if [ $waitmodem == "yes" ]; then
+echo -ne "{$(date +%M:%S)} Menunggu Sumber Internet... " >> screenlog.0
+ while true; do
+interf=$(ip r|grep default|sed 's/default via 10.0.0//g'|grep default|awk '{print $3}'|awk 'NR==1'|awk -F. '{print $1}')
+    if [ -f $interf ]; then
+     sleep 2;continue
+     else
+  if [ ! -f $(timeout 3 ping $sni -c1 -w1 2>/dev/null|awk -F '(' '{print $2}'|awk "NR==1"|awk -F. '{print $1}'|awk '{print $1}') ]; then
+   echo OK >> screenlog.0;break
+  fi 
+   fi
+ done
+  fi
+#####################
 mkdir -p /usr/local/etc/v2ray/;juuid=1;n=2
  while [ $juuid -lt 17 ]; do
 uuid=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|sed ':a;N;$!ba;s/\n  //g'|awk -F 'id' '{print $"'$n'"}'|grep :|sed ':a;N;$!ba;s/\n/ /g'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
@@ -916,16 +957,30 @@ echo "{
   }
 }" > /usr/local/etc/v2ray/config.json
 screen -dmS pimes v2ray -config /usr/local/etc/v2ray/config.json;routing
-echo -e "{$(date +%M:%S)} Menjalankan VMESS (di latarbelakang)...." >> screenlog.0
-echo -e "{$(date +%M:%S)} Menjalankan Badvpn-tun2socks...." >> screenlog.0
-xtable=$(/etc/init.d/firewall reload 2>/dev/null)
-  if [ -f $(iptables -t nat -L|grep MASQ|grep tcp|awk '{print $1}'|awk "NR==1") ]; then
+echo -e "{$(date +%M:%S)} Menjalankan VMESS (latarbelakang)...." >> screenlog.0
+ if [ -f $(iptables -t nat -L|grep MASQ|grep tcp|awk '{print $1}'|awk "NR==1") ]; then
 iptables -A POSTROUTING --proto tcp -t nat -o tun0 -j MASQUERADE 2>/dev/null
+ fi
+pudp=$(grep pudp config.txt|awk -F "=" '{print $2}')
+  if [ -f $(cat /www/xderm/config/firewall|awk "NR==1") ]; then
+   echo no > /www/xderm/config/gotun
   fi
-screen -dmS gerbang badvpn-tun2socks --tundev tun0 --netif-ipaddr 10.0.0.2 --netif-netmask 255.255.255.0 --socks-server-addr 127.0.0.1:10808 --udpgw-remote-server-addr 127.0.0.1:$pudp --udpgw-transparent-dns --loglevel 0;sleep 3
-echo -e "{$(date +%M:%S)} Menggunakan $ifaces sebagai Pusat." >> screenlog.0
-echo -e "{$(date +%M:%S)} Routing Host, IP Gateway dan dns.." >> screenlog.0
+ if [ $(cat /www/xderm/config/firewall|awk "NR==1") == "yes" ]; then
+echo -e "{$(date +%M:%S)} Memuat ulang Firewall...." >> screenlog.0
+xtable=$(/etc/init.d/firewall reload 2>/dev/null)
+ fi
+  if [ -f $(cat /www/xderm/config/gotun|awk "NR==1") ]; then
+   echo no > /www/xderm/config/gotun
+  fi
+   if [ $(cat /www/xderm/config/gotun|awk "NR==1") == "yes" ]; then
+echo -e "{$(date +%M:%S)} Menjalankan go-tun2socks...." >> screenlog.0
+screen -dmS gerbang go-tun2socks -loglevel none -proxyServer 127.0.0.1:1080 -proxyType socks -tunName tun0 -tunAddr 10.0.0.2 -tunGw 10.0.0.1 -tunMask 255.255.255.0;sleep 2
+  else
+echo -e "{$(date +%M:%S)} Menjalankan badvpn-tun2socks...." >> screenlog.0
+screen -dmS gerbang badvpn-tun2socks --tundev tun0 --netif-ipaddr 10.0.0.2 --netif-netmask 255.255.255.0 --socks-server-addr 127.0.0.1:1080 --udpgw-remote-server-addr 127.0.0.1:$pudp --udpgw-transparent-dns --loglevel 0;sleep 2
+   fi
 ifconfig tun0 10.0.0.1 netmask 255.255.255.0 2>/dev/null
+echo -e "{$(date +%M:%S)} Routing Host, IP Gateway dan dns.." >> screenlog.0
 route add default gw 10.0.0.2 metric 0 2>/dev/null
 /etc/init.d/dnsmasq restart 2>/dev/null
 n=0;echo -ne "{$(date +%M:%S)} Menguji Koneksi... " >> screenlog.0
@@ -940,8 +995,26 @@ sleep 1;((n++))
    if [ $n != "ok" ]; then
   echo -e "Tak ada jawaban?" >> screenlog.0
    fi
-elif [ $(grep mode= config.txt|awk -F "=" '{print $2}') -eq 2 ]; then
+elif [ $mode == "Trojan" ]; then
 flushx;echo -e "{$(date +%M:%S)} Mode yang dipilih: $mode [trojan]" >> screenlog.0;routing
+waitmodem=$(cat /www/xderm/config/modem)
+ if [ -f $waitmodem ]; then
+echo no > /www/xderm/config/modem
+ fi
+  if [ $waitmodem == "yes" ]; then
+echo -ne "{$(date +%M:%S)} Menunggu Sumber Internet... " >> screenlog.0
+ while true; do
+interf=$(ip r|grep default|sed 's/default via 10.0.0//g'|grep default|awk '{print $3}'|awk 'NR==1'|awk -F. '{print $1}')
+    if [ -f $interf ]; then
+     sleep 2;continue
+     else
+  if [ ! -f $(timeout 3 ping $sni -c1 -w1 2>/dev/null|awk -F '(' '{print $2}'|awk "NR==1"|awk -F. '{print $1}'|awk '{print $1}') ]; then
+   echo OK >> screenlog.0;break
+  fi 
+   fi
+ done
+  fi
+###################
 host=$(grep trojan:// config.txt|awk -F "://" '{print $2}'|awk -F "@" '{print $2}'|awk -F ":" '{print $1}'|awk "NR==1")
 host=$(ping $host -w1 -c1|awk "NR==1"|awk -F '(' '{print $2}'|awk -F ')' '{print $1}')
 port=$(grep trojan:// config.txt|awk -F "://" '{print $2}'|awk -F "@" '{print $2}'|awk -F ":" '{print $2}'|awk -F "/" '{print $1}'|awk "NR==1")
@@ -987,15 +1060,22 @@ echo " Pass: **********" >> screenlog.0
 echo "#############################################" >> screenlog.0
 echo -e "{$(date +%M:%S)} Menjalankan trojan VPN (latarbelakang).." >> screenlog.0
 screen -dmS troj trojan -c /tmp/trojan.conf;sleep 1
-echo -e "{$(date +%M:%S)} Menjalankan Badvpn-tun2socks...." >> screenlog.0
-xtable=$(/etc/init.d/firewall reload 2>/dev/null)
-  if [ -f $(iptables -t nat -L|grep MASQ|grep tcp|awk '{print $1}'|awk "NR==1") ]; then
+ if [ -f $(iptables -t nat -L|grep MASQ|grep tcp|awk '{print $1}'|awk "NR==1") ]; then
 iptables -A POSTROUTING --proto tcp -t nat -o tun0 -j MASQUERADE 2>/dev/null
+ fi
+pudp=$(grep pudp config.txt|awk -F "=" '{print $2}')
+  if [ -f $(cat /www/xderm/config/gotun|awk "NR==1") ]; then
+   echo no > /www/xderm/config/gotun
   fi
+   if [ $(cat /www/xderm/config/gotun|awk "NR==1") == "yes" ]; then
+echo -e "{$(date +%M:%S)} Menjalankan go-tun2socks...." >> screenlog.0
+screen -dmS gerbang go-tun2socks -loglevel none -proxyServer 127.0.0.1:1080 -proxyType socks -tunName tun0 -tunAddr 10.0.0.2 -tunGw 10.0.0.1 -tunMask 255.255.255.0;sleep 2
+  else
+echo -e "{$(date +%M:%S)} Menjalankan badvpn-tun2socks...." >> screenlog.0
 screen -dmS gerbang badvpn-tun2socks --tundev tun0 --netif-ipaddr 10.0.0.2 --netif-netmask 255.255.255.0 --socks-server-addr 127.0.0.1:1080 --udpgw-remote-server-addr 127.0.0.1:$pudp --udpgw-transparent-dns --loglevel 0;sleep 2
-echo -e "{$(date +%M:%S)} Menggunakan $ifaces sebagai Pusat." >> screenlog.0
-echo -e "{$(date +%M:%S)} Routing Host, IP Gateway dan dns.." >> screenlog.0
+   fi
 ifconfig tun0 10.0.0.1 netmask 255.255.255.0 2>/dev/null
+echo -e "{$(date +%M:%S)} Routing Host, IP Gateway dan dns.." >> screenlog.0
 route add default gw 10.0.0.2 metric 0 2>/dev/null
 /etc/init.d/dnsmasq restart 2>/dev/null
 n=0;echo -ne "{$(date +%M:%S)} Menguji Koneksi... " >> screenlog.0
@@ -1003,6 +1083,13 @@ n=0;echo -ne "{$(date +%M:%S)} Menguji Koneksi... " >> screenlog.0
 r=$(curl -m4 88.198.46.60 -w "%{http_code}" -s -o /dev/null|head -c2)
   if [ $r -eq 30 ]; then
    echo '<pre><h2 style="color:#006400" "text-overflow:ellipsis">HTTP/1.1 200 OK</h2></pre>' >> screenlog.0
+  if [ -f $(cat /www/xderm/config/firewall|awk "NR==1") ]; then
+   echo no > /www/xderm/config/firewall
+  fi
+ if [ $(cat /www/xderm/config/firewall|awk "NR==1") == "yes" ]; then
+echo -e "{$(date +%M:%S)} Memuat ulang Firewall...." >> screenlog.0
+xtable=$(/etc/init.d/firewall reload 2>/dev/null)
+ fi
 echo -e "{$(date +%M:%S)} Menjalankan Autorc.. (latarbelakang)" >> screenlog.0
 echo "#!/bin/bash
 p=0
@@ -1043,7 +1130,7 @@ sleep 1;((n++))
    if [ $n != "ok" ]; then
   echo -e "Tak ada jawaban?" >> screenlog.0
    fi
-elif [ $(grep mode= config.txt|awk -F "=" '{print $2}'|awk '{print $1}') -eq 0 ]; then
+elif [ $mode == "SSH" ]; then
 host=$(grep host= config.txt|awk -F "=" '{print $2}'|awk '{print $1}')
  if [ -f $host ]; then
 echo -e "{$(date +%M:%S)} Config SSH belom disetting !!" >> screenlog.0;sleep 1;exit 2>/dev/null
@@ -1054,6 +1141,24 @@ pass=$(grep pass= config.txt|awk -F "=" '{print $2}'|awk '{print $1}')
 #########################
 flushx;routing
 echo -e "{$(date +%M:%S)} Mode yang dipilih: $mode [ssh]" >> screenlog.0
+waitmodem=$(cat /www/xderm/config/modem)
+ if [ -f $waitmodem ]; then
+echo no > /www/xderm/config/modem
+ fi
+  if [ $waitmodem == "yes" ]; then
+echo -ne "{$(date +%M:%S)} Menunggu Sumber Internet... " >> screenlog.0
+ while true; do
+interf=$(ip r|grep default|sed 's/default via 10.0.0//g'|grep default|awk '{print $3}'|awk 'NR==1'|awk -F. '{print $1}')
+    if [ -f $interf ]; then
+     sleep 2;continue
+     else
+  if [ ! -f $(timeout 3 ping $sni -c1 -w1 2>/dev/null|awk -F '(' '{print $2}'|awk "NR==1"|awk -F. '{print $1}'|awk '{print $1}') ]; then
+   echo OK >> screenlog.0;break
+  fi 
+   fi
+ done
+  fi
+###########################
 echo "#!/bin/bash
 sleep 10;killall -q openssl" > /tmp/timeou;chmod +x /tmp/timeou;screen -dmS cb /tmp/timeou
 echo -ne "{$(date +%M:%S)} Menguji bug SNI (openssl).. " >> screenlog.0
@@ -1090,7 +1195,7 @@ echo "  User: $user" >> screenlog.0
 echo "  Pass: ********" >> screenlog.0
 echo "  Port UDPgw: $pudp" >> screenlog.0
 echo "##############################################" >> screenlog.0
-echo -e "{$(date +%M:%S)} Menjalankan SSH (di latarbelakang)...." >> screenlog.0
+echo -e "{$(date +%M:%S)} Menjalankan SSH (latarbelakang)...." >> screenlog.0
  if [ $injj != "no" ]; then
 rm -rf /root/.ssh/known_hosts* /www/xderm/log/screenlog.0;cd /www/xderm/log 2>/dev/null
 screen -dmS login sshpass -p "$pass" ssh -oTCPKeepAlive=yes -oServerAliveInterval=180 -oServerAliveCountMax=2 -oStrictHostKeyChecking=no -CND 127.0.0.1:1080 -p 8780 $user@localhost
@@ -1162,15 +1267,28 @@ done
  fi
 cd /www/xderm 2>/dev/null
 ############################################################
-echo -e "{$(date +%M:%S)} Menjalankan Badvpn-tun2socks...." >> screenlog.0
-xtable=$(/etc/init.d/firewall reload 2>/dev/null)
-  if [ -f $(iptables -t nat -L|grep MASQ|grep tcp|awk '{print $1}'|awk "NR==1") ]; then
+ if [ -f $(iptables -t nat -L|grep MASQ|grep tcp|awk '{print $1}'|awk "NR==1") ]; then
 iptables -A POSTROUTING --proto tcp -t nat -o tun0 -j MASQUERADE 2>/dev/null
+ fi
+pudp=$(grep pudp config.txt|awk -F "=" '{print $2}')
+  if [ -f $(cat /www/xderm/config/firewall|awk "NR==1") ]; then
+   echo no > /www/xderm/config/gotun
   fi
-pudp=$(grep pudp config.txt|awk -F "=" '{print $2}');sleep 1
+ if [ $(cat /www/xderm/config/firewall|awk "NR==1") == "yes" ]; then
+echo -e "{$(date +%M:%S)} Memuat ulang Firewall...." >> screenlog.0
+xtable=$(/etc/init.d/firewall reload 2>/dev/null)
+ fi
+  if [ -f $(cat /www/xderm/config/gotun|awk "NR==1") ]; then
+   echo no > /www/xderm/config/gotun
+  fi
+   if [ $(cat /www/xderm/config/gotun|awk "NR==1") == "yes" ]; then
+echo -e "{$(date +%M:%S)} Menjalankan go-tun2socks...." >> screenlog.0
+screen -dmS gerbang go-tun2socks -loglevel none -proxyServer 127.0.0.1:1080 -proxyType socks -tunName tun0 -tunAddr 10.0.0.2 -tunGw 10.0.0.1 -tunMask 255.255.255.0;sleep 2
+  else
+echo -e "{$(date +%M:%S)} Menjalankan badvpn-tun2socks...." >> screenlog.0
 screen -dmS gerbang badvpn-tun2socks --tundev tun0 --netif-ipaddr 10.0.0.2 --netif-netmask 255.255.255.0 --socks-server-addr 127.0.0.1:1080 --udpgw-remote-server-addr 127.0.0.1:$pudp --udpgw-transparent-dns --loglevel 0;sleep 2
+   fi
 ifconfig tun0 10.0.0.1 netmask 255.255.255.0 2>/dev/null
-echo -e "{$(date +%M:%S)} Menggunakan $ifaces sebagai Pusat sumber." >> screenlog.0
 echo -e "{$(date +%M:%S)} Routing Host, IP Gateway dan dns.." >> screenlog.0
 route add default gw 10.0.0.2 metric 0 2>/dev/null
 echo -e "{$(date +%M:%S)} Menjalankan rekonek otomatis..." >> screenlog.0
@@ -1304,4 +1422,4 @@ case $1 in
  flushx;echo -e "{$(date +%M:%S)} Selesai." >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
 ;;
 esac
-echo -e "           Current versi 2.9 Copyright ®2021" >> screenlog.0
+echo -e "           Current versi 3.0 Copyright ®2021" >> screenlog.0
