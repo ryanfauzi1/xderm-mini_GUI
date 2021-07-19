@@ -95,13 +95,6 @@ wget -O update-manual https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GU
 ```
 
 ## Additional Installation
-#### Theme Installation by Agus Sriawan
-Copy codes below
-```
-wget -O installtheme https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/installtheme && bash installtheme
-```
-Run **```installtheme```** for installation/usage.
-
 #### [Xderm-Mini Installer for STB by Vito Harhari](https://github.com/vitoharhari/xderm-mini)
 Copy codes below
 ```
@@ -116,7 +109,6 @@ wget --no-check-certificate "https://raw.githubusercontent.com/vitoharhari/ain/m
 ```
 Run **```install-ain```** for installation/usage.
 
-
 #### Fix browser always download login.php file by helmiau
 Copy codes below
 ```
@@ -124,13 +116,47 @@ wget -O /bin/fixphp "https://raw.githubusercontent.com/helmiau/openwrt-config/ma
 ```
 Run **```fixphp```** for installation/usage.
 
+## Custom Theme
+#### Blue Light Theme by Agus Sriawan
+
+<details><summary>Click here to show screenshots</summary>
+<p>
+  
+  ![image](https://user-images.githubusercontent.com/20932301/126102219-f2dbcbb0-3ee3-4952-8076-a144b0e5e7f8.png)
+  
+</p>
+</details>
+
+Copy codes below
+```
+wget -O installtheme https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/installtheme && bash installtheme
+```
+Run **```installtheme```** for installation/usage.
+
+
+#### Mejikuhibiniu (RGB) Theme by Adi Putra
+
+<details><summary>Click here to show screenshots</summary>
+<p>
+  
+![image](https://user-images.githubusercontent.com/20932301/126102454-445d1172-6571-4bc5-93ea-37d7d06416ff.png)
+  
+</p>
+</details>
+
+Copy codes below
+```
+wget -O install-theme-putra https://raw.githubusercontent.com/Putra-0/theme-xderm-putra/main/install-theme-putra && bash install-theme-putra
+```
+Run **```install-theme-putra```** for installation/usage.
+
+
 ## Credits
-- [Ryan Fauzi](https://github.com/ryanfauzi1) ~ Kang Developer
-- [Agus Sriawan](https://www.facebook.com/agussriawan.id) ~ Kang Tema, Kang Buat Logo Tulisan XDERM MINI
+- [Tuhan](https://id.wikipedia.org/wiki/Tuhan) ~ Penguasa semesta, sang pemilik ilmu sekaligus sumbernya.
+- [Ryan Fauzi](https://github.com/ryanfauzi1) ~ Kang developer utama sing paling guanteng | Kang gebuk bug xderm sekaligus improvisasi
+- [Agus Sriawan](https://www.facebook.com/agussriawan.id) ~ Kang bikin tema Blue Light | Kang desain logo tulisan XDERM-MINI
 - [Vito Harhari](https://github.com/vitoharhari) ~ Kang bikin auto installer xderm-mini
-- [Helmi Amirudin](https://github.com/helmiau) ~ Kang Ngerapihin Readme, Kang Buat Logo Icon XDRERM MINI & Improve logo jadul
-
-
-
-
+- [Helmi Amirudin](https://github.com/helmiau) ~ Kang ngerapihin README | Kang desain logo ikon XDRM, improve logo & tagline
+- [Adi Putra](https://github.com/Putra-0) ~ Kang bikin [Tema Mejikuhibiniu RGB](https://github.com/Putra-0/theme-xderm-putra)
+<br>
 <h5 align="center">Copyright by <a href="https://github.com/ryanfauzi1">Ryan Fauzi</a> ® 2021 <br> Thank You ! 🤝</h3>
