@@ -51,6 +51,8 @@ trojan://user@server:port
 <details><summary>Click here to show some screenshots</summary>
 <p>
   
+![image](https://user-images.githubusercontent.com/20932301/126107228-9c227a82-b4f0-43c6-82f9-f744e5aabf54.png)
+
 ![image](https://user-images.githubusercontent.com/20932301/125009423-bb764400-e08e-11eb-8645-46c9bf7fa74b.png)
   
 </p>
