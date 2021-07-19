@@ -222,8 +222,12 @@ if ( window.history.replaceState ) {
 				<input type="submit" name="button2" class="btn geser" id="config"
 					value="Config"/>
 				
-				<input type="submit" name="button4" class="btn geser" id"update"
+				<input type="submit" name="button4" class="btn geser" id="update"
 					value="Update"/>
+					
+				<input type="submit" name="button5" class="btn geser" id="about"
+					value="About"/>
+
 				</td></tr>
 			</table>
 		</center>
@@ -267,6 +271,9 @@ echo '<script>
   }
   if (isset($_POST['button3'])) {
   exec('cp log/log.txt screenlog.0 2>/dev/null');
+  }
+  if (isset($_POST['button5'])) {
+  exec('echo " " > screenlog.0');
   }
 ?>
 <table align="center"><tr><td class="script_txt"><div class="inline-block"><pre>
@@ -320,21 +327,21 @@ $default=$default[0];
  if ($default) {
 echo "<h4><center><b>profile that is active now: $default</b></center></h4>";
 $data = file_get_contents("config/$default");
-echo "<textarea name='configbox' id='isi' placeholder='Masukkan config disini' rows='9' cols='50'>$data</textarea>";
+echo "<textarea name='configbox' id='isi' placeholder='Masukkan config disini' rows='9' cols='50' wrap='hard'>$data</textarea>";
  } else {
 $data = file_get_contents("config.txt");
-echo "<textarea name='configbox' id='isi' placeholder='Masukkan config disini' rows='9' cols='50'>$data</textarea>";
+echo "<textarea name='configbox' id='isi' placeholder='Masukkan config disini' rows='9' cols='50' wrap='hard'>$data</textarea>";
  }
 $data1 = file_get_contents("config/config1");
-echo "<textarea name='configbox1' id='isi1' rows='3' cols='10' style='display:none;'>$data1</textarea>";
+echo "<textarea name='configbox1' id='isi1' rows='3' cols='10' style='display:none;' wrap='hard'>$data1</textarea>";
 $data2 = file_get_contents("config/config2");
-echo "<textarea name='configbox2' id='isi2' rows='3' cols='10' style='display:none;'>$data2</textarea>";
+echo "<textarea name='configbox2' id='isi2' rows='3' cols='10' style='display:none;' wrap='hard'>$data2</textarea>";
 $data3 = file_get_contents("config/config3");
-echo "<textarea name='configbox3' id='isi3' rows='3' cols='10' style='display:none;'>$data3</textarea>";
+echo "<textarea name='configbox3' id='isi3' rows='3' cols='10' style='display:none;' wrap='hard'>$data3</textarea>";
 $data4 = file_get_contents("config/config4");
-echo "<textarea name='configbox4' id='isi4' rows='3' cols='10' style='display:none;'>$data4</textarea>";
+echo "<textarea name='configbox4' id='isi4' rows='3' cols='10' style='display:none;' wrap='hard'>$data4</textarea>";
 $data5 = file_get_contents("config/config5");
-echo "<textarea name='configbox5' id='isi5' rows='3' cols='10' style='display:none;'>$data5</textarea>";
+echo "<textarea name='configbox5' id='isi5' rows='3' cols='10' style='display:none;' wrap='hard'>$data5</textarea>";
 } else {
 exec("mkdir -p config;touch config/config.list config/config1 config/config2");
 exec("touch config/config3 config/config4 config/config5 config/mode.list");
@@ -345,7 +352,7 @@ exec("echo config4 >> config/config.list");
 exec("echo config5 >> config/config.list");
 exec("echo config1 >> config/default");
 $data = file_get_contents("config.txt");
-echo "<textarea name='configbox' id='isi' rows='9' cols='50'>$data</textarea>";
+echo "<textarea name='configbox' id='isi' rows='9' cols='50' wrap='hard'>$data</textarea>";
 $config=$_POST['configbox'];
 $conf=$_POST['profile'];
 exec('echo "'.$config.'" > config/'.$conf);
@@ -411,17 +418,71 @@ echo '<input type="checkbox" name="use_waitmodem" value="yes">Waiting Modem '; }
 echo '<input type="checkbox" name="use_boot" value="yes" checked>ON-Boot'; }
 else {
 echo '<input type="checkbox" name="use_boot" value="yes">ON-Boot'; }
-echo '<input type="submit" name="simpan" class="btn geser" value="Simpan"/></form></div>';
+echo  "\n\n";
+echo '<input type="submit" name="simpan" class="btn geser" style="display: flex; width: 98%; height: 50px; margin-right: 20px; flex-shrink: 0; font-weight: bold; ! important;" value="Save Xderm Settings and VPN Profile"/></form></div>';
 } else {
 echo '<div id="log" class="scroll"></div></pre></div>';
 }
+
+if($_POST['button5']){
+echo '<div class="footer slide" style="display: flex; height: 110%; flex-shrink: 0; font-weight: bold; font-size: 120%; font-align: center; ! important; margin-top: -10%"><p style="text-align:center">
+        Xderm Mini Informations
+    </div>';
+echo "
+<textarea readonly rows='12' cols='50' wrap='hard' style='text-align:center; background-color: #FFFFFF; ! important';>
+Xderm Mini is simple injector tool based on shell script and python commands for OpenWrt by @ryanfauzi1 which help you to inject your OpenWrt connection using VPN injection (SSH/Trojan/Vmess).
+
+===============
+Additional Installation
+===============
+
+Add login page
+wget -O installer-login https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/installer-login && bash installer-login
+
+Remove login page
+wget -O /bin/xderm-rmlogin https://raw.githubusercontent.com/helmiau/openwrt-config/main/rmlogin-xderm && chmod +x /bin/xderm-rmlogin && xderm-rmlogin
+
+Manual Update
+wget -O update-manual https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/update-manual && chmod +x update-manual && ./update-manual
+
+Fix download index.php file
+wget -O /bin/fixphp https://raw.githubusercontent.com/helmiau/openwrt-config/main/fix-xderm-libernet-gui && chmod +x /bin/fixphp && fixphp
+
+===============
+
+===============
+Default auth.txt (WebUI Login Information)
+===============
+Username  : admin
+Password  : xderm
+===============
+Edit /root/auth.txt file or by run xdrauth command using terminal to change password
+===============
+
+===============
+Default config.txt
+===============
+host=103.157.1xx.xx
+port=443
+pudp=7300
+user=ryanxxxx
+pass=123xxx
+sni=www.xxx.xx
+vmess://eyJhZGQiOixxxxxxx
+trojan://user@server:port
+===============
+
+</textarea>
+";
+echo '<p style="text-align:center; font-size:80%;">Read more info at <a href="https://github.com/ryanfauzi1/xderm-mini_GUI">Xderm Mini Github Repo</a></p>';
+echo '<div class="footer slide" style="display: flex; height: 110%; flex-shrink: 0; font-weight: bold; font-size: 80%; font-align: center; ! important; padding-bottom: 10px"><p style="text-align:center">
+        Logo by Helmi Amirudin • Theme by Agus Sriawan<br>
+		Xderm Version.3.0 • Copyright &copy Ryan Fauzi
+    </div>';
+}
+
 ?>
 </td></tr>
 </table></head>
 </div>
-	<div class="footer slide">
-        Xderm GUI v.3.0<br>
-		Theme Design by Agus Sriawan<br>
-		Copyright&copy Ryan Fauzi
-    </div>
 </html>
