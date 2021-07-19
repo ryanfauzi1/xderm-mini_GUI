@@ -13,7 +13,7 @@ wget -O /www/xderm/config.txt $url/config.txt -q
 wget -O /www/xderm/js/jquery-2.1.3.min.js $url/jquery-2.1.3.min.js -q
 wget -O /www/xderm/img/image.png $url/image.png -q
 wget -O /www/xderm/img/fav.ico $url/fav.ico -q
-wget -O /bin/xdrauth https://raw.githubusercontent.com/helmiau/xderm-mini_GUI/main/xdrauth
+wget -O /bin/xdrauth $url/xdrauth -q
 chmod +x /bin/xdrauth
 echo Start > /www/xderm/log/st
 echo -e "user=admin\npasswd=xderm" > /root/auth.txt
