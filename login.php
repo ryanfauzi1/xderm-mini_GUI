@@ -37,7 +37,7 @@ echo '<!DOCTYPE>
 		}
 
 		.box_login {
-			width: 300px;
+			width: 450px;
 			border: none;
 			border-radius: 10px;
 			margin: 5% auto;
