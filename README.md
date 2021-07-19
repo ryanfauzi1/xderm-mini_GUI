@@ -131,7 +131,8 @@ Run **```fixphp```** for installation/usage.
 
 Copy codes below
 ```
-wget -O installtheme https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/installtheme && bash installtheme
+wget -O installtheme https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/installtheme -q && bash installtheme && wget -O /www/xderm/img/image.png https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/image.png -q
+
 ```
 Run **```installtheme```** for installation/usage.
 
@@ -148,7 +149,8 @@ Run **```installtheme```** for installation/usage.
 
 Copy codes below
 ```
-wget -O install-theme-putra https://raw.githubusercontent.com/Putra-0/theme-xderm-putra/main/install-theme-putra && bash install-theme-putra
+wget -O install-theme-putra https://raw.githubusercontent.com/Putra-0/theme-xderm-putra/main/install-theme-putra && bash install-theme-putra -q && wget -O /www/xderm/img/image.png https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/image.png -q
+
 ```
 Run **```install-theme-putra```** for installation/usage.
 
