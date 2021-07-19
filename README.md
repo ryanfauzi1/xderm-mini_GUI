@@ -91,6 +91,11 @@ Login Page Installation
 wget -O installer-login https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/installer-login && bash installer-login
 ```
 
+Login Page Removal
+```
+wget -O /bin/xderm-rmlogin "https://raw.githubusercontent.com/helmiau/openwrt-config/main/rmlogin-xderm" && chmod +x /bin/xderm-rmlogin && bash xderm-rmlogin
+```
+
 for Manual Update
 ```
 wget -O update-manual https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/update-manual && chmod +x update-manual && ./update-manual
