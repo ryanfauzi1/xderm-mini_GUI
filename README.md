@@ -1,7 +1,12 @@
+<p align="center">
+  <img src="https://github.com/helmiau/xderm-mini_GUI/blob/main/xderm-logo/xderm-icon-256px.png?raw=true" height="140" alt="Xderm Mini Logo"/>
+  <br>
+  <br>
+  <img src="https://github.com/helmiau/xderm-mini_GUI/blob/main/xderm-logo/xderm-logo-typo-tagline-1500px.png?raw=true" height="70" alt="Xderm Mini Logo"/>
+  <br>
+  <br>
+</p>
 
-![image](https://user-images.githubusercontent.com/20932301/125009423-bb764400-e08e-11eb-8645-46c9bf7fa74b.png)
-
-# xderm-mini GUI for OpenWrt
 Index page information
 - [About this software, Information, Default WebUI Page, Login Authorization and Configuration.](https://github.com/ryanfauzi1/xderm-mini_GUI#information)
 - [Installation, Requirements and Update.](https://github.com/ryanfauzi1/xderm-mini_GUI#installation)
@@ -11,7 +16,7 @@ Index page information
 ## Information
 xderm-mini GUI is simple injector tool based on shell script and python commands for OpenWrt by @ryanfauzi1 which help you to inject your OpenWrt connection using VPN injection (SSH/Trojan/Vmess).
 
-Current version : **```3.0```** Copyright ®2021
+**Current version : ```3.0```**
 
 <details><summary>Default information (WebUI address, webui login auth and config) (click to show)</summary>
 <p>
@@ -38,6 +43,15 @@ sni=www.xxx.xx
 vmess://eyJhZGQiOixxxxxxx
 trojan://user@server:port
 ```
+  
+</p>
+</details>
+
+**Screenshots**
+<details><summary>Click here to show some screenshots</summary>
+<p>
+  
+![image](https://user-images.githubusercontent.com/20932301/125009423-bb764400-e08e-11eb-8645-46c9bf7fa74b.png)
   
 </p>
 </details>
@@ -112,8 +126,11 @@ Run **```fixphp```** for installation/usage.
 
 ## Credits
 - [Ryan Fauzi](https://github.com/ryanfauzi1) ~ Kang Developer
-- [Agus Sriawan](https://www.facebook.com/agussriawan.id) ~ Kang Tema
+- [Agus Sriawan](https://www.facebook.com/agussriawan.id) ~ Kang Tema, Kang Buat Logo Tulisan XDERM MINI
 - [Vito Harhari](https://github.com/vitoharhari) ~ Kang bikin auto installer xderm-mini
-- [Helmi Amirudin](https://github.com/helmiau) ~ Kang Ngerapihin Readme
+- [Helmi Amirudin](https://github.com/helmiau) ~ Kang Ngerapihin Readme, Kang Buat Logo Icon XDRERM MINI & Improve logo jadul
 
-Thank you
+
+
+
+<h5 align="center">Copyright by <a href="https://github.com/ryanfauzi1">Ryan Fauzi</a> ® 2021 <br> Thank You ! 🤝</h3>
