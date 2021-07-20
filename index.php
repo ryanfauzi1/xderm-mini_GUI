@@ -355,6 +355,9 @@ Jika <go-tun2socks> dicentang, maka
 semua lalu lintas diatur oleh go-tun2socks
 Jika tidak, akan digantikan badvpn-tun2socks
 
+Khusus mode SSH tidak support UDP jika
+Menggunakan go-tun2socks.
+
 khusus pengguna selain FW 18,
 silahkan centang <Restart Firewall>
 Guna mencegah terjadinya notif error.
