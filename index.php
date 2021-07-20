@@ -255,7 +255,7 @@ if (file_exists($filename)) {
 <?php
   exec('cat /var/update.xderm',$z);
     if ($z[0]) {
- if ( $z[0] != '3.0' ){
+ if ( $z[0] != '3.1' ){
 echo '<pre><h3 style="color:lime">New versi GUI Detected, Please Update!!</h3></pre>';
 };
     };
@@ -303,14 +303,18 @@ echo '<script>
  if ($use_gotun <> 'yes' ){$use_gotun='no';}
  if ($use_restfw <> 'yes' ){$use_restfw='no';}
  if ($use_waitmodem <> 'yes' ){$use_waitmodem='no';}
+ $config = str_replace( "\r", "", $config);
  exec('echo "'.$mode.'" > config/mode.default');
  exec('echo "'.$config.'" > config/'.$conf);
- exec('sed -i \'/mode=/,+0 d\' config/'.$conf);
- exec('sed -i \'s/\r$//g\' config/'.$conf);
- exec('sed -i \':a;N;$!ba;s/\n\n//g\' config/'.$conf);
+ exec('sed \'/host=\|port=\|pudp=\|user=\|pass=\|sni=\|mode=\|trojan\|\n/d\' config/\''.$conf.'\' > /var/vmess1.txt');
+ exec('awk \'{ printf "%s", $0 }\' /var/vmess1.txt > /var/vmess2.txt');
  exec('echo "'.$config.'" > config.txt');
  exec('sed -i \'s/\r$//g\' config.txt');
+ exec('sed -i \'s/\r$//g\' config/'.$conf);
+ exec('sed -i \':a;N;$!ba;s/\n\n//g\' config/'.$conf);
  exec('sed -i \':a;N;$!ba;s/\n\n//g\' config.txt');
+ exec('sed -i \'/^#/!s/mode=.*//\' config/'.$conf);
+ exec('sed -i \'/^#/!s/mode=.*//\' config.txt');
  exec('echo "'.$use_stunnel.'" > config/stun');
  exec('echo "'.$use_gotun.'" > config/gotun');
  exec('echo "'.$use_restfw.'" > config/firewall');
@@ -388,7 +392,7 @@ echo '<center>
                                         value="Force Reinstall Xderm Mini"/>
 										
                                 <input type="submit" name="button4" class="btn geser"  id="update"
-                                        value="Current Version 3.0 • Check Update"/>
+                                        value="Current Version 3.1 • Check Update"/>
 </center>';
 
 echo '<div class="footer slide" style="display: flex; height: 110%; flex-shrink: 0; font-weight: bold; font-size: 80%; font-align: center; ! important; padding-bottom: 10px"><p style="text-align:center">
