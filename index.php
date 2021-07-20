@@ -267,6 +267,7 @@ if ( $o[0] == 'Start' ) {
  exec('chmod +x xderm-mini');
  exec('screen -L -dmS gua ./xderm-mini start');
  exec('echo Stop > log/st');
+echo "<pre><div id='log' class='scroll'></div></pre>";
 echo '<script>
   document.getElementById("strp").value="Stop";
 </script>';
@@ -276,6 +277,7 @@ echo '<script>
  exec('chmod +x xderm-mini');
  exec('screen -L -dmS gu ./xderm-mini stop');
  exec('echo Start > log/st');
+echo "<pre><div id='log' class='scroll'></div></pre>";
 echo '<script>
   document.getElementById("strp").value="Start";
 </script>';
