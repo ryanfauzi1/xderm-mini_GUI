@@ -15,6 +15,7 @@ wget -O /www/xderm/img/image.png $url/image.png -q
 wget -O /www/xderm/img/fav.ico $url/fav.ico -q
 wget -O /www/xderm/img/ico.png $url/ico.png -q
 wget -O /www/xderm/img/background.jpg $url/background.jpg -q
+wget -O /www/xderm/xdrtheme-blue-agus $url/adds/xdrtheme-blue-agus -q
 wget -O /bin/xdrauth $url/adds/xdrauth -q
 chmod +x /bin/xdrauth
 wget -O /bin/xdrtool $url/adds/xdrtool -q
