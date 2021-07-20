@@ -86,6 +86,24 @@ Main Xderm-Mini Installation
 wget -O installer https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/installer && chmod +x installer && ./installer
 ```
 
+**Run ```xdrtool``` command using terminal to Setup Xderm Mini after initial installation**
+
+This xdrtool contains : below command lists
+```
+===========================================
+|              Command Lists              |
+===========================================
+  Change Username & Password  = 1 / a / A
+  Change Username Only        = 2 / u / U
+  Change Password Only        = 3 / p / P
+  Install Login Page          = 4 / lp / LP
+  Remove Login Page           = 5 / rlp/ RLP
+  Manual Update               = 6 / mu / MU
+  Fix index.php downloading   = 7 / fp / FP
+  Install Default Theme       = 8 / dt / DT
+===========================================
+```
+
 Login Page Installation
 ```
 wget -O installer-login https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/installer-login && bash installer-login
