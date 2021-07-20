@@ -288,7 +288,8 @@ echo '<script>
   exec('chmod +x xderm-mini');
   exec('screen -L -dmS upd ./xderm-mini update');
   echo "<div id='loglain' class='scroll'></div></pre>";
-  }
+}
+
 ?>
 <?php
  if (isset($_POST['simpan'])) {
@@ -511,8 +512,16 @@ echo '<input type="checkbox" name="use_boot" value="yes">ON-Boot'; }
 echo '<input type="submit" name="simpan" class="btn geser" width: 98%; height: 30px; margin-right: 20px; flex-shrink: 0; font-weight: bold; ! important;" value="Simpan"/></form></div>';
 echo '<div id="logx" class="scr"></div></pre>';
 } else {
-if($_POST['button3']){
+if(!$_POST['button5']){
+ if (!isset($_POST['simpan'])) {
+  if(!$_POST['button6']){
+   if(!$_POST['button7']){
+    if(!$_POST['button4']){
 echo '<div id="log" class="scroll"></div></pre>';
+    }
+   }
+  }
+ }
 }
 }
 if($_POST['button6']){
@@ -530,8 +539,7 @@ if (file_exists("login.php") | file_exists("header.php")) {
  echo 'Login page is available, now installing online mode !';
  exec('wget -O /www/xderm/login.php https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/login.php -q');
  exec('wget -O /www/xderm/header.php https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/header.php -q');
- echo 'Login page installed ! Refresh this page';
-}
+ echo 'Login page installed ! Refresh this page'; }
 }
 if($_POST['button7']){
 echo 'Force Reinstall Xderm Mini !<br/>';
@@ -561,7 +569,6 @@ exec('chmod +x /bin/xdrtool');
 echo 'Installing new files<br/>';
 echo 'Installation done ! Refresh this page<br/>';
 }
-
 ?>
 </head>
 </div>
