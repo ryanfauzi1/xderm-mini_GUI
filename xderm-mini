@@ -195,7 +195,7 @@ kill $(ps w|grep badvpn|grep tun|awk "NR==1"|awk '{print $1}') 2>/dev/null
   elif [ $mode == "Vmess" ]; then
    port=$(grep vmess: /var/vmess2.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|sed ':a;N;$!ba;s/\n  //g'|awk -F '"port' '{print $2}'|grep :|sed ':a;N;$!ba;s/\n/ /g'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
     if [ -f $port ]; then
-   echo "Akun vmess belom disetting!" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
+   echo "Akun vmess belom disetting!" >> screenlog.0;exit
     fi
    hostv=$(grep vmess: /var/vmess2.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|sed ':a;N;$!ba;s/\n  //g'|awk -F '"add' '{print $2}'|grep :|sed ':a;N;$!ba;s/\n/ /g'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
   elif [ $mode == "Trojan" ]; then
@@ -687,10 +687,10 @@ pingvmessx=\"Timeout!\";pingvmess=999999
 else
 pingvmessx=\"\$pingvmess ms\"
   fi
-sed -i \"s|\$(cat /www/xderm/log/log.txt|grep Trojan|awk -F. '{print \$4}')|\$(cat /www/xderm/log/log.txt|grep Trojan|awk -F. '{print \$4}'|awk -F: '{print \$1}'): \$pingtrojanx|g\" /www/xderm/log/log.txt
-sed -i \"s|\$(cat /www/xderm/log/log.txt|grep Vmess|awk -F. '{print \$4}')|\$(cat /www/xderm/log/log.txt|grep Vmess|awk -F. '{print \$4}'|awk -F: '{print \$1}'): \$pingvmessx|g\" /www/xderm/log/log.txt
-sed -i \"s|\$(cat /www/xderm/log/log.txt|grep SSH|awk -F. '{print \$4}')|\$(cat /www/xderm/log/log.txt|grep SSH|awk -F. '{print \$4}'|awk -F: '{print \$1}'): \$pingsshx|g\" /www/xderm/log/log.txt
-cat /www/xderm/log/log.txt > /www/xderm/screenlog.0
+sed -i \"s|\$(cat /www/xderm/screenlog.0|grep Trojan|awk -F. '{print \$4}')|\$(cat /www/xderm/screenlog.0|grep Trojan|awk -F. '{print \$4}'|awk -F: '{print \$1}'): \$pingtrojanx|g\" /www/xderm/screenlog.0
+sed -i \"s|\$(cat /www/xderm/screenlog.0|grep Vmess|awk -F. '{print \$4}')|\$(cat /www/xderm/screenlog.0|grep Vmess|awk -F. '{print \$4}'|awk -F: '{print \$1}'): \$pingvmessx|g\" /www/xderm/screenlog.0
+sed -i \"s|\$(cat /www/xderm/screenlog.0|grep SSH|awk -F. '{print \$4}')|\$(cat /www/xderm/screenlog.0|grep SSH|awk -F. '{print \$4}'|awk -F: '{print \$1}'): \$pingsshx|g\" /www/xderm/screenlog.0
+cat /www/xderm/screenlog.0 > /www/xderm/screenlog.0
    if [ ! -f \$pingvmess ]; then
   if [ \$pingssh -lt \$pingvmess ]; then
 terpilih=\$pingssh;terpilihport=1080;nama=ssh
@@ -751,8 +751,7 @@ screen -dmS gerbang badvpn-tun2socks --tundev tun0 --netif-ipaddr 10.0.0.2 --net
     ifconfig tun0 10.0.0.1 netmask 255.255.255.0 2>/dev/null
     route add default gw 10.0.0.2 metric 0 2>/dev/null
     echo \$nama >/tmp/currentmode.txt;t=0
-    sed -i \"s|\$(cat /www/xderm/log/log.txt|grep tercepat|awk -F \"[\" '{print \$2}'|awk -F \"]\" '{print \$1}')|\$nama|g\" /www/xderm/log/log.txt
-    cat /www/xderm/log/log.txt > /www/xderm/screenlog.0
+    sed -i \"s|\$(cat /www/xderm/screenlog.0|grep tercepat|awk -F \"[\" '{print \$2}'|awk -F \"]\" '{print \$1}')|\$nama|g\" /www/xderm/screenlog.0
  fi
     t=0
     fi
@@ -805,7 +804,7 @@ elif [ $mode == "Vmess" ]; then
  echo "Akun vmess belom disetting!" >> screenlog.0
  echo "Jika merasa sudah setup, cek ulang confignya" >> screenlog.0
  echo "Pastikan confignya tidak ada font gaib" >> screenlog.0
- echo "(font seperti spasi yang tidak kelihatan)" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
+ echo "(font seperti spasi yang tidak kelihatan)" >> screenlog.0;exit
     fi
 waitmodem=$(cat /www/xderm/config/modem)
  if [ -f $waitmodem ]; then
