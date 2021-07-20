@@ -91,7 +91,7 @@ ceklogin();
 		
 		.footer {
 			width: 100%;
-			height: 50px;
+			height: 10px;
 			display: flex;
 			justify-content: center;
 			align-items: center;
@@ -208,7 +208,6 @@ if ( window.history.replaceState ) {
 	<center>
 <?php
 $filename = 'login.php';
-
 if (file_exists($filename)) {
     echo '<a href="login.php" onClick="logout()">';
 } else {
@@ -283,6 +282,9 @@ echo '<script>
   if (isset($_POST['button6'])) {
   exec('echo > screenlog.0');
   }
+  if (isset($_POST['button7'])) {
+  exec('echo > screenlog.0');
+  }
 ?>
 <table align="center"><tr><td class="script_txt"><div class="inline-block"><pre>
 <?php
@@ -321,40 +323,39 @@ if ($use_boot <> 'yes' ){ exec('./xderm-mini disable');
  }
 
 if($_POST['button5']){
-echo "<h3><center>Xderm Mini Informations</b></center></h3>";
-echo "<p align='center'><textarea name='aboutbox' id='aboutbox' rows='12' cols='55' wrap='hard'>
+echo "<h3><center><b>Xderm Mini Informations</b></center></h3>";
+echo "<center><p align='center'><textarea name='aboutbox' id='aboutbox' rows='9' cols='50' style='
+			border-radius: 0px;
+			padding: 10px 10px;
+			background-color: white; 
+			font-align: center; ! important;' wrap='hard'>
 Xderm Mini is simple injector tool based on shell script and python commands for OpenWrt by @ryanfauzi1 which help you to inject your OpenWrt connection using VPN injection (SSH/Trojan/Vmess).
 
-===============
-Additional Installation
-===============
+===========================================
+|          xdrtool Command Lists          |
+===========================================
+Change Username & Password  = 1 / a / A
+Change Username Only        = 2 / u / U
+Change Password Only        = 3 / p / P
+Install Login Page          = 4 / lp / LP
+Remove Login Page           = 5 / rlp/ RLP
+Manual Update               = 6 / mu / MU
+Fix index.php downloading   = 7 / fp / FP
+Install Default Theme       = 8 / dt / DT
+===========================================
 
-Add login page
-wget -O installer-login https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/installer-login && bash installer-login
-
-Remove login page
-wget -O /bin/xderm-rmlogin https://raw.githubusercontent.com/helmiau/openwrt-config/main/rmlogin-xderm && chmod +x /bin/xderm-rmlogin && xderm-rmlogin
-
-Manual Update
-wget -O update-manual https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/update-manual && chmod +x update-manual && ./update-manual
-
-Fix download index.php file
-wget -O /bin/fixphp https://raw.githubusercontent.com/helmiau/openwrt-config/main/fix-xderm-libernet-gui && chmod +x /bin/fixphp && fixphp
-
-===============
-
-===============
+===========================================
 Default auth.txt (WebUI Login Information)
-===============
+===========================================
 Username  : admin
 Password  : xderm
-===============
+===========================================
 Edit /root/auth.txt file or by run xdrauth command using terminal to change password
-===============
+===========================================
 
-===============
+===========================================
 Default config.txt
-===============
+===========================================
 host=103.157.1xx.xx
 port=443
 pudp=7300
@@ -363,14 +364,17 @@ pass=123xxx
 sni=www.xxx.xx
 vmess://eyJhZGQiOixxxxxxx
 trojan://user@server:port
-===============
+===========================================
 
-</textarea></p>";
-echo '<p style="text-align:center; font-size:80%;">Read more info at <a href="https://github.com/ryanfauzi1/xderm-mini_GUI" target="_blank">Xderm Mini Github Repo</a></p></table>';
+</textarea></p></center>";
+echo '<p style="text-align:center; font-size:85%;">Read more info at <a href="https://github.com/ryanfauzi1/xderm-mini_GUI" target="_blank">Xderm Mini Github Repo</a></p></table>';
 echo '<center>
                                 <input type="submit" name="button6" class="btn geser" id="rmlogin"
                                         value="Remove / Install Login Page"/>
 
+                                <input type="submit" name="button7" class="btn geser"  id="reinstall"
+                                        value="Force Reinstall Xderm Mini"/>
+										
                                 <input type="submit" name="button4" class="btn geser"  id="update"
                                         value="Current Version 3.0 • Check Update"/>
 </center>';
@@ -511,7 +515,14 @@ if (file_exists("login.php") | file_exists("header.php")) {
 	echo '<p style="text-align:center; font-size:80%;">Login page installed ! Refresh this page';
 }
 }
+if($_POST['button7']){
+echo 'Force Reinstall Xderm Mini !<br/>';
+exec('wget -O /www/xderm/login.php https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/login.php -q');
+echo 'Installation done ! Refresh this page<br/>';
+}
+
 ?>
+
 </head>
 </div>
 </html>
