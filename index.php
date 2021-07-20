@@ -439,8 +439,7 @@ echo '<div id="log" class="scroll"></div></pre></div>';
 if($_POST['button5']){
 echo '<div class="footer slide" style="display: flex; height: 110%; flex-shrink: 0; font-weight: bold; font-size: 120%; font-align: center; ! important; margin-top: -10%"><p style="text-align:center">
         Xderm Mini Informations';
-echo "
-<textarea readonly rows='6' cols='50' wrap='hard' style='text-align:center; background-color: #FFFFFF; ! important';>
+echo "<textarea readonly rows='6' cols='50' wrap='hard' style='text-align:center; background-color: #FFFFFF; ! important';>
 Xderm Mini is simple injector tool based on shell script and python commands for OpenWrt by @ryanfauzi1 which help you to inject your OpenWrt connection using VPN injection (SSH/Trojan/Vmess).
 
 ===============
@@ -497,12 +496,12 @@ echo '<center>
 	
 				</td></tr>
 			</table>
-		</center>
+		</center></div>
 ';
 echo '<div class="footer slide" style="display: flex; height: 110%; flex-shrink: 0; font-weight: bold; font-size: 80%; font-align: center; ! important; padding-bottom: 10px"><p style="text-align:center">
         Logo & Mods by <a href="https://me.helmiau.my.id" target="_blank">Helmi Amirudin</a> • Theme by <a href="https://www.facebook.com/agussriawan.id" target="_blank">Agus Sriawan</a><br>
 		Main Developer <a href="https://github.com/ryanfauzi1" target="_blank">Ryan Fauzi</a> • Copyright &copy 2021
-    </div></div>';
+    </div>';
 }
 
 
