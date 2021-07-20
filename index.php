@@ -319,6 +319,67 @@ if ($use_boot <> 'yes' ){ exec('./xderm-mini disable');
  exec("cat config/default",$default);
  exec('echo -e "user=$userlogin\npasswd=$passlogin" > /root/auth.txt');
  }
+
+if($_POST['button5']){
+echo "<h3><center>Xderm Mini Informations</b></center></h3>";
+echo "<p align='center'><textarea name='aboutbox' id='aboutbox' rows='12' cols='55' wrap='hard'>
+Xderm Mini is simple injector tool based on shell script and python commands for OpenWrt by @ryanfauzi1 which help you to inject your OpenWrt connection using VPN injection (SSH/Trojan/Vmess).
+
+===============
+Additional Installation
+===============
+
+Add login page
+wget -O installer-login https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/installer-login && bash installer-login
+
+Remove login page
+wget -O /bin/xderm-rmlogin https://raw.githubusercontent.com/helmiau/openwrt-config/main/rmlogin-xderm && chmod +x /bin/xderm-rmlogin && xderm-rmlogin
+
+Manual Update
+wget -O update-manual https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/update-manual && chmod +x update-manual && ./update-manual
+
+Fix download index.php file
+wget -O /bin/fixphp https://raw.githubusercontent.com/helmiau/openwrt-config/main/fix-xderm-libernet-gui && chmod +x /bin/fixphp && fixphp
+
+===============
+
+===============
+Default auth.txt (WebUI Login Information)
+===============
+Username  : admin
+Password  : xderm
+===============
+Edit /root/auth.txt file or by run xdrauth command using terminal to change password
+===============
+
+===============
+Default config.txt
+===============
+host=103.157.1xx.xx
+port=443
+pudp=7300
+user=ryanxxxx
+pass=123xxx
+sni=www.xxx.xx
+vmess://eyJhZGQiOixxxxxxx
+trojan://user@server:port
+===============
+
+</textarea></p>";
+echo '<p style="text-align:center; font-size:80%;">Read more info at <a href="https://github.com/ryanfauzi1/xderm-mini_GUI" target="_blank">Xderm Mini Github Repo</a></p></table>';
+echo '<center>
+                                <input type="submit" name="button6" class="btn geser" id="rmlogin"
+                                        value="Remove / Install Login Page"/>
+
+                                <input type="submit" name="button4" class="btn geser"  id="update"
+                                        value="Current Version 3.0 • Check Update"/>
+</center>';
+
+echo '<div class="footer slide" style="display: flex; height: 110%; flex-shrink: 0; font-weight: bold; font-size: 80%; font-align: center; ! important; padding-bottom: 10px"><p style="text-align:center">
+        Logo & Mods by <a href="https://me.helmiau.my.id" target="_blank">Helmi Amirudin</a> • Theme by <a href="https://www.facebook.com/agussriawan.id" target="_blank">Agus Sriawan</a><br>
+                Main Developer <a href="https://github.com/ryanfauzi1" target="_blank">Ryan Fauzi</a> • Copyright &copy 2021
+    </div>';
+}
 if($_POST['button2']){
 exec("cat config/mode.list|awk 'NR==1'",$adamode);
 $adamode=$adamode[0];
@@ -427,82 +488,10 @@ echo '<input type="checkbox" name="use_waitmodem" value="yes">Waiting Modem '; }
 echo '<input type="checkbox" name="use_boot" value="yes" checked>ON-Boot'; }
 else {
 echo '<input type="checkbox" name="use_boot" value="yes">ON-Boot'; }
-echo  "\n\n";
-echo '<center><input type="text" autofocus name="userlogin" class="form_login" style="width: 40%; margin-right: 10px; flex-shrink: 0; font-weight: bold; ! important;" placeholder="New login username">';
-echo '<input type="text" autofocus name="passlogin" class="form_login" style="width: 40%; margin-right: 10px; flex-shrink: 0; font-weight: bold; ! important;" placeholder="New login password"></center>';
-echo  "\n";
-echo '<input type="submit" name="simpan" class="btn geser" style="display: flex; width: 98%; height: 30px; margin-right: 20px; flex-shrink: 0; font-weight: bold; ! important;" value="Save Xderm Settings and VPN Profile"/></form></div>';
+echo '<input type="submit" name="simpan" class="btn geser" width: 98%; height: 30px; margin-right: 20px; flex-shrink: 0; font-weight: bold; ! important;" value="Simpan"/></form></div>';
 } else {
-echo '<div id="log" class="scroll"></div></pre></div>';
+echo '<div id="log" class="scroll"></div></pre></div></table>';
 }
-
-if($_POST['button5']){
-echo "<h3><center>Xderm Mini Informations</b></center></h3>";
-echo "<textarea name='aboutbox' id='aboutbox' rows='3' cols='8' wrap='hard'>
-Xderm Mini is simple injector tool based on shell script and python commands for OpenWrt by @ryanfauzi1 which help you to inject your OpenWrt connection using VPN injection (SSH/Trojan/Vmess).
-
-===============
-Additional Installation
-===============
-
-Add login page
-wget -O installer-login https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/installer-login && bash installer-login
-
-Remove login page
-wget -O /bin/xderm-rmlogin https://raw.githubusercontent.com/helmiau/openwrt-config/main/rmlogin-xderm && chmod +x /bin/xderm-rmlogin && xderm-rmlogin
-
-Manual Update
-wget -O update-manual https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/update-manual && chmod +x update-manual && ./update-manual
-
-Fix download index.php file
-wget -O /bin/fixphp https://raw.githubusercontent.com/helmiau/openwrt-config/main/fix-xderm-libernet-gui && chmod +x /bin/fixphp && fixphp
-
-===============
-
-===============
-Default auth.txt (WebUI Login Information)
-===============
-Username  : admin
-Password  : xderm
-===============
-Edit /root/auth.txt file or by run xdrauth command using terminal to change password
-===============
-
-===============
-Default config.txt
-===============
-host=103.157.1xx.xx
-port=443
-pudp=7300
-user=ryanxxxx
-pass=123xxx
-sni=www.xxx.xx
-vmess://eyJhZGQiOixxxxxxx
-trojan://user@server:port
-===============
-
-</textarea>";
-echo '<p style="text-align:center; font-size:80%;">Read more info at <a href="https://github.com/ryanfauzi1/xderm-mini_GUI" target="_blank">Xderm Mini Github Repo</a></p>';
-echo '<center>
-			<table align="center"><tr><td class="col-butt">
-				
-				<input type="submit" name="button6" class="btn geser" id="rmlogin"
-					value="Remove / Install Login Page"/>
-				
-				<input type="submit" name="button4" class="btn geser"  id="update"
-					value="Current Version 3.0 • Check Update"/>
-	
-				</td></tr>
-			</table>
-		</center></div>
-';
-echo '<div class="footer slide" style="display: flex; height: 110%; flex-shrink: 0; font-weight: bold; font-size: 80%; font-align: center; ! important; padding-bottom: 10px"><p style="text-align:center">
-        Logo & Mods by <a href="https://me.helmiau.my.id" target="_blank">Helmi Amirudin</a> • Theme by <a href="https://www.facebook.com/agussriawan.id" target="_blank">Agus Sriawan</a><br>
-		Main Developer <a href="https://github.com/ryanfauzi1" target="_blank">Ryan Fauzi</a> • Copyright &copy 2021
-    </div>';
-}
-
-
 if($_POST['button6']){
 if (file_exists("login.php") | file_exists("header.php")) {
 	echo '<p style="text-align:center; font-size:80%;">Login page is available, removing now !<br/><br/>';
@@ -522,10 +511,7 @@ if (file_exists("login.php") | file_exists("header.php")) {
 	echo '<p style="text-align:center; font-size:80%;">Login page installed ! Refresh this page';
 }
 }
-
 ?>
-
-</td></tr>
-</table></head>
+</head>
 </div>
 </html>
