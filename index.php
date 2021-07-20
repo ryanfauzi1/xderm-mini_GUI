@@ -331,9 +331,9 @@ echo "<center><p align='center'><textarea name='aboutbox' id='aboutbox' rows='9'
 			font-align: center; ! important;' wrap='hard'>
 Xderm Mini is simple injector tool based on shell script and python commands for OpenWrt by @ryanfauzi1 which help you to inject your OpenWrt connection using VPN injection (SSH/Trojan/Vmess).
 
-===========================================
-|         xdrtool Command Lists           |
-===========================================
+=============================================
+           xdrtool Command Lists           
+=============================================
 Change Username & Password  = 1 / a / A
 Change Username Only        = 2 / u / U
 Change Password Only        = 3 / p / P
@@ -342,11 +342,11 @@ Remove Login Page           = 5 / rlp/ RLP
 Manual Update               = 6 / mu / MU
 Fix index.php downloading   = 7 / fp / FP
 Install Default Theme       = 8 / dt / DT
-===========================================
+=============================================
 
-===========================================
-|        Informasi Configuration          |
-===========================================
+=============================================
+          Informasi Configuration          
+=============================================
 Jika <stunnel> dicentang, maka
 tunneling ssh di-inject oleh stunnel client
 Jika tidak, akan digantikan python-https
@@ -361,11 +361,11 @@ Menggunakan go-tun2socks.
 khusus pengguna selain FW 18,
 silahkan centang <Restart Firewall>
 Guna mencegah terjadinya notif error.
-===========================================
+=============================================
 
-===========================================
-|          Default config.txt             |
-===========================================
+=============================================
+             Default config.txt             
+=============================================
 host=103.157.1xx.xx
 port=443
 pudp=7300
@@ -374,7 +374,7 @@ pass=123xxx
 sni=www.xxx.xx
 vmess://eyJhZGQiOixxxxxxx
 trojan://user@server:port
-===========================================
+=============================================
 </textarea></p></center>";
 echo '<p style="text-align:center; font-size:85%;">Read more info at <a href="https://github.com/ryanfauzi1/xderm-mini_GUI" target="_blank">Xderm Mini Github Repo</a></p></table>';
 echo '<center>
