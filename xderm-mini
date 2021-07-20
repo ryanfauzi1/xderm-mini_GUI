@@ -367,7 +367,7 @@ if [ ! -f $(cat /etc/crontabs/root 2>/dev/null|grep xderm|awk '{print $2}'|awk "
 echo > /etc/crontabs/root
  fi
     if [ $mode == "Multi" ]; then
-flushx;ssa=8;echo -e "{$(date +%M:%S)} Mode yang dipilih: $mode [MultiMode]" >> screenlog.0
+flushx;ssa=8;echo -e "{$(date +%M:%S)} Mode yang dipilih: [$mode]" >> screenlog.0
 host=$(grep host= config.txt|awk -F "=" '{print $2}'|awk '{print $1}')
  if [ -f $host ]; then
 echo -e "{$(date +%M:%S)} Config SSH belom disetting !!" >> screenlog.0;sleep 1;exit 2>/dev/null
@@ -792,7 +792,7 @@ interf=\$(ip r|grep default|sed 's/default via 10.0.0//g'|grep default|awk '{pri
  fi
 done" > /tmp/automode;chmod +x /tmp/automode;screen -d -m /tmp/automode
 elif [ $mode == "Vmess" ]; then
- flushx;ssa=8;echo -e "{$(date +%M:%S)} Mode yang dipilih: $mode [vmess]" >> screenlog.0
+ flushx;ssa=8;echo -e "{$(date +%M:%S)} Mode yang dipilih: [$mode]" >> screenlog.0
  port=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|sed ':a;N;$!ba;s/\n  //g'|awk -F '"port' '{print $2}'|grep :|sed ':a;N;$!ba;s/\n/ /g'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
     if [ -f $port ]; then
  echo "Akun vmess belom disetting!" >> screenlog.0
@@ -1003,7 +1003,7 @@ sleep 1;((n++))
   echo -e "Tak ada jawaban?" >> screenlog.0
    fi
 elif [ $mode == "Trojan" ]; then
-flushx;echo -e "{$(date +%M:%S)} Mode yang dipilih: $mode [trojan]" >> screenlog.0;routing
+flushx;echo -e "{$(date +%M:%S)} Mode yang dipilih: [$mode]" >> screenlog.0;routing
 waitmodem=$(cat /www/xderm/config/modem)
  if [ -f $waitmodem ]; then
 echo no > /www/xderm/config/modem
@@ -1147,7 +1147,7 @@ user=$(grep user= config.txt|awk -F "=" '{print $2}'|awk '{print $1}')
 pass=$(grep pass= config.txt|awk -F "=" '{print $2}'|awk '{print $1}')
 #########################
 flushx;routing
-echo -e "{$(date +%M:%S)} Mode yang dipilih: $mode [ssh]" >> screenlog.0
+echo -e "{$(date +%M:%S)} Mode yang dipilih: [$mode]" >> screenlog.0
 waitmodem=$(cat /www/xderm/config/modem)
  if [ -f $waitmodem ]; then
 echo no > /www/xderm/config/modem
