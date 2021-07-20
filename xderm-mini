@@ -687,10 +687,10 @@ pingvmessx=\"Timeout!\";pingvmess=999999
 else
 pingvmessx=\"\$pingvmess ms\"
   fi
-sed -i \"s|\$(cat /www/xderm/screenlog.0|grep Trojan|awk -F. '{print \$4}')|\$(cat /www/xderm/screenlog.0|grep Trojan|awk -F. '{print \$4}'|awk -F: '{print \$1}'): \$pingtrojanx|g\" /www/xderm/screenlog.0
-sed -i \"s|\$(cat /www/xderm/screenlog.0|grep Vmess|awk -F. '{print \$4}')|\$(cat /www/xderm/screenlog.0|grep Vmess|awk -F. '{print \$4}'|awk -F: '{print \$1}'): \$pingvmessx|g\" /www/xderm/screenlog.0
-sed -i \"s|\$(cat /www/xderm/screenlog.0|grep SSH|awk -F. '{print \$4}')|\$(cat /www/xderm/screenlog.0|grep SSH|awk -F. '{print \$4}'|awk -F: '{print \$1}'): \$pingsshx|g\" /www/xderm/screenlog.0
-cat /www/xderm/screenlog.0 > /www/xderm/screenlog.0
+sed -i \"s|\$(cat /www/xderm/screenlog.0|grep Trojan|awk -F. '{print \$4}')|\$(cat /www/xderm/screenlog.0|grep Trojan|awk -F. '{print \$4}'|awk -F: '{print \$1}'): \$pingtrojanx|g\" /www/xderm/log/logmulti.txt
+sed -i \"s|\$(cat /www/xderm/screenlog.0|grep Vmess|awk -F. '{print \$4}')|\$(cat /www/xderm/screenlog.0|grep Vmess|awk -F. '{print \$4}'|awk -F: '{print \$1}'): \$pingvmessx|g\" /www/xderm/log/logmulti.txt
+sed -i \"s|\$(cat /www/xderm/screenlog.0|grep SSH|awk -F. '{print \$4}')|\$(cat /www/xderm/screenlog.0|grep SSH|awk -F. '{print \$4}'|awk -F: '{print \$1}'): \$pingsshx|g\" /www/xderm/log/logmulti.txt
+cat /www/xderm/log/logmulti.txt > /www/xderm/screenlog.0
    if [ ! -f \$pingvmess ]; then
   if [ \$pingssh -lt \$pingvmess ]; then
 terpilih=\$pingssh;terpilihport=1080;nama=ssh
