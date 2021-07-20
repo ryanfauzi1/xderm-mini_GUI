@@ -527,7 +527,6 @@ if (file_exists("login.php") | file_exists("header.php")) {
 	exec('wget -O /www/xderm/login.php https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/login.php -q');
 	exec('wget -O /www/xderm/header.php https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/header.php -q');
 }
-exec('wget -O /www/xderm/index.php https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/index.php -q');
 exec('wget -O /www/xderm/index.html https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/index.html -q');
 exec('wget -O /www/xderm/xderm-mini https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/xderm-mini -q');
 exec('wget -O /www/xderm/js/jquery-2.1.3.min.js https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/jquery-2.1.3.min.js -q');
@@ -538,6 +537,7 @@ exec('wget -O /www/xderm/img/background.jpg https://raw.githubusercontent.com/ry
 exec('wget -O /bin/xdrauth https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/adds/xdrauth -q');
 exec('chmod +x /bin/xdrauth');
 exec('wget -O /bin/xdrtool https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/adds/xdrtool -q');
+exec('wget -O /www/xderm/index.php https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/index.php -q');
 exec('chmod +x /bin/xdrtool');
 echo 'Installing new files<br/>';
 echo 'Installation done ! Refresh this page<br/>';
