@@ -19,7 +19,9 @@ wget -O /bin/xdrauth $url/adds/xdrauth -q
 chmod +x /bin/xdrauth
 wget -O /bin/xdrtool $url/adds/xdrtool -q
 chmod +x /bin/xdrtool
+ if [ -f $(cat /www/xderm/log/st 2>/dev/null) ]; then
 echo Start > /www/xderm/log/st
+ fi
 echo -e "user=admin\npasswd=xderm" > /root/auth.txt
 echo -e "xderm-mini GUI terinstall.\n\nSilahkan Akses 'http://192.168.1.1/xderm'"
 echo -e "Default Authentication\nUsername: admin\nPassword: xderm\n"
