@@ -438,7 +438,7 @@ echo '<div id="log" class="scroll"></div></pre></div>';
 
 if($_POST['button5']){
 echo "<h3><center>Xderm Mini Informations</b></center></h3>";
-echo "<textarea name='configbox1' id='isi1' rows='3' cols='8' style='display:none;' wrap='hard'>
+echo "<textarea name='aboutbox' id='aboutbox' rows='3' cols='8' style='display:none;' wrap='hard'>
 Xderm Mini is simple injector tool based on shell script and python commands for OpenWrt by @ryanfauzi1 which help you to inject your OpenWrt connection using VPN injection (SSH/Trojan/Vmess).
 
 ===============
