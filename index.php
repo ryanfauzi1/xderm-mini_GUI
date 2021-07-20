@@ -200,6 +200,22 @@ function shipping_calc() {
                 textarea.scrollTop = textarea.scrollHeight;
         }, 1000);
     });
+    $(document).ready(function() {
+        setInterval(function() {
+            $.ajax({
+                url: "loglain.txt",
+                cache: false,
+                success: function(result) {
+                    $("#loglain").html(result);
+                }
+            });
+        $(document).ready(function() {
+                $.ajaxSetup({ cache: false });
+                        });
+                var textarea = document.getElementById("loglain");
+                textarea.scrollTop = textarea.scrollHeight;
+        }, 1000);
+    });
 if ( window.history.replaceState ) {
   window.history.replaceState( null, null, window.location.href );
 }
@@ -235,6 +251,7 @@ if (file_exists($filename)) {
 				</td></tr>
 			</table>
 		</center>
+<table align="center"><tr><td class="script_txt"><div class="inline-block"><pre>
 <?php
   exec('cat /var/update.xderm',$z);
     if ($z[0]) {
@@ -264,29 +281,13 @@ echo '<script>
 </script>';
 }
   }
-  if (isset($_POST['button2'])) {
-  exec('echo > screenlog.0');
-  }
   if (isset($_POST['button4'])) {
   exec('killall -q xderm-mini');
-  exec('echo > screenlog.0');
   exec('chmod +x xderm-mini');
   exec('screen -L -dmS upd ./xderm-mini update');
-  }
-  if (isset($_POST['button3'])) {
-  exec('cp log/log.txt screenlog.0 2>/dev/null');
-  }
-  if (isset($_POST['button5'])) {
-  exec('echo " " > screenlog.0');
-  }
-  if (isset($_POST['button6'])) {
-  exec('echo > screenlog.0');
-  }
-  if (isset($_POST['button7'])) {
-  exec('echo > screenlog.0');
+  echo "<pre><div id='loglain' class='scroll'></div></pre>";
   }
 ?>
-<table align="center"><tr><td class="script_txt"><div class="inline-block"><pre>
 <?php
  if (isset($_POST['simpan'])) {
  $config=$_POST['configbox'];
@@ -313,13 +314,13 @@ echo '<script>
  exec('echo "'.$use_restfw.'" > config/firewall');
  exec('echo "'.$use_waitmodem.'" > config/modem');
  exec('echo "'.$conf.'" > config/default');
- exec('echo "Config telah di update." > screenlog.0');
- exec('echo "\''.$conf.'\' Menjadi default Config. !" >> screenlog.0');
+ exec('echo "Config telah di update." > loglain.txt');
+ exec('echo "\''.$conf.'\' Menjadi default Config. !" >> loglain.txt');
  $use_boot=$_POST['use_boot'];
+echo "<pre><div id='loglain' class='scroll'></div></pre>";
 if ($use_boot <> 'yes' ){ exec('./xderm-mini disable');
 } else { exec('./xderm-mini enable'); }
  exec("cat config/default",$default);
- exec('echo -e "user=$userlogin\npasswd=$passlogin" > /root/auth.txt');
  }
 
 if($_POST['button5']){
@@ -503,24 +504,26 @@ else {
 echo '<input type="checkbox" name="use_boot" value="yes">ON-Boot'; }
 echo '<input type="submit" name="simpan" class="btn geser" width: 98%; height: 30px; margin-right: 20px; flex-shrink: 0; font-weight: bold; ! important;" value="Simpan"/></form></div>';
 } else {
+if($_POST['button3']){
 echo '<div id="log" class="scroll"></div></pre></div></table>';
+}
 }
 if($_POST['button6']){
 if (file_exists("login.php") | file_exists("header.php")) {
-	echo '<p style="text-align:center; font-size:80%;">Login page is available, removing now !</p><br/><br/>';
-    rename("login.php", "login.php.xdrtool");
-    rename("header.php", "header.php.xdrtool");
-	echo '<p style="text-align:center; font-size:80%;">Login page removed ! Refresh this page</p>';
+ echo 'Loginpage Tersedia, Menghapus...<br/>';
+ rename("login.php", "login.php.xdrtool");
+ rename("header.php", "header.php.xdrtool");
+ echo 'Loginpage Terhapus !';
 } elseif (file_exists("login.php.xdrtool") | file_exists("header.php.xdrtool")) {
-	echo '<p style="text-align:center; font-size:80%;">Login page is not available, installing now !<br/><br/>';
-    rename("login.php.xdrtool", "login.php");
-    rename("header.php.xdrtool", "header.php");
-	echo '<p style="text-align:center; font-size:80%;">Login page installed ! Refresh this page</p>';
+ echo 'Loginpage tidak Tersedia, Menginstall...<br/>';
+ rename("login.php.xdrtool", "login.php");
+ rename("header.php.xdrtool", "header.php");
+ echo 'Loginpage Terinstall !';
 } else {
-	echo '<p style="text-align:center; font-size:80%;">Login page is available, now installing online mode !</p><br/><br/>';
-	exec('wget -O /www/xderm/login.php https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/login.php -q');
-	exec('wget -O /www/xderm/header.php https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/header.php -q');
-	echo '<p style="text-align:center; font-size:80%;">Login page installed ! Refresh this page</p>';
+ echo 'Login page is available, now installing online mode !';
+ exec('wget -O /www/xderm/login.php https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/login.php -q');
+ exec('wget -O /www/xderm/header.php https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/header.php -q');
+ echo 'Login page installed ! Refresh this page';
 }
 }
 if($_POST['button7']){

@@ -134,19 +134,23 @@ hostt=$(grep trojan:// config.txt|awk -F "://" '{print $2}'|awk -F "@" '{print $
 hostv=$(grep vmess: config.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|sed ':a;N;$!ba;s/\n  //g'|awk -F '"add' '{print $2}'|grep :|sed ':a;N;$!ba;s/\n/ /g'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
   if [ $mode == "SSH" ]; then
     if [ -f $host ]; then
-     echo "Akun SSH belom disetting!" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
+     echo "Akun SSH belom disetting!" >> screenlog.0
+     exit
     fi
   elif [ $mode == "Vmess" ]; then
     if [ -f $hostv ]; then
-     echo "Akun vmess belom disetting!" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
+     echo "Akun vmess belom disetting!" >> screenlog.0
+     exit
     fi     
 elif [ $mode == "Trojan" ]; then 
     if [ -f $hostt ]; then
-     echo "Akun trojan belom disetting!" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
+     echo "Akun trojan belom disetting!" >> screenlog.0
+     exit
     fi
    elif [ $mode == "Multi" ]; then
     if [ -f $host ]; then
-     echo "Akun SSH belom disetting!" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
+     echo "Akun SSH belom disetting!" >> screenlog.0
+     exit
     fi
    fi
 ifaces=$(ip r|grep default|awk '{print $3}')
@@ -177,7 +181,7 @@ ifaces=$(ip r|grep default|awk '{print $3}')
 if [ -f $(base64 --help 2>/dev/null|awk "NR==2"|awk '{print $1}') ]; then
  echo "Paket base64 belom terinstall. install dulu!" >> screenlog.0
  echo "Ketik: opkg update && opkg install coreutils-base64" >> screenlog.0
- echo >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
+ exit
 fi
 echo -e "{$(date +%M:%S)} Membersihkan sisa sisa, Tunggu...." >> screenlog.0
 killall -q sshpass vpn stunnel openvpn
@@ -235,12 +239,12 @@ fi
   }
  update () {
  url="https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main"
- echo -ne "{$(date +%M:%S)} Checking for update..." >> screenlog.0
+ echo -ne "{$(date +%M:%S)} Checking for update..." > loglain.txt
  sleep 1
  v=$(curl -m12 $url/xderm-mini -s|grep "Copyr"|awk "NR==4"|awk '{print $6}')
  if [ ! -f $v ]; then
   if [ "$v" != "3.0" ]; then
- echo -e " (Memperbarui..)" >> screenlog.0;sleep 1
+ echo -e " (Memperbarui..)" >> loglain.txt;sleep 1
  rm -rf xderm-mini
   while [ -f $cekx ]; do
  curl $url/xderm-mini -s > xderm-mini 
@@ -252,15 +256,15 @@ fi
  ceky=$(cat index.php|awk "NR==4"|sed -e 's/<//g' -e 's/>//g'|awk '{print $1}')  
    done
  rm -rf /var/update.xderm
- echo -e "{$(date +%M:%S)} Script & GUI diUpdate, Silahkan Start Ulang!" >> screenlog.0
+ echo -e "{$(date +%M:%S)} Script & GUI diUpdate, Silahkan Start Ulang!" >> loglain.txt
  else
- echo " (Terbaru!)" >> screenlog.0;sleep 1
+ echo " (Terbaru!)" >> loglain.txt;sleep 1
   fi
  else
- echo " (no koneksi!)" >> screenlog.0
- echo -e "{$(date +%M:%S)} Update Gagal, Terjadi Masalah Pada DNS" >> screenlog.0
+ echo " (no koneksi!)" >> loglain.txt
+ echo -e "{$(date +%M:%S)} Update Gagal, Terjadi Masalah Pada DNS" >> loglain.txt
  fi
-  echo -e "{$(date +%M:%S)} Selesai." >> screenlog.0;exit
+  echo -e "{$(date +%M:%S)} Selesai." >> loglain.txt;exit
   }
  start () {
 #########################
@@ -287,7 +291,7 @@ if [ ! -f $gtun ]; then
    echo "Gunakan Koneksi normal dan" >> screenlog.0
    echo "Khusus Pengguna STB B860h dan HG680p" >> screenlog.0
    echo "Ketik ./gotun di terminal root" >> screenlog.0
-   cp screenlog.0 log/log.txt 2>/dev/null;exit
+   exit
  fi
   fi
 fi
@@ -295,25 +299,25 @@ fi
     echo "Paket badvpn-tun2socks belom terinstall. install dulu!" >> screenlog.0
     echo "Gunakan Koneksi normal dan" >> screenlog.0
     echo "Installer script ain: https://github.com/vitoharhari/xderm-mini" >> screenlog.0
-    cp screenlog.0 log/log.txt 2>/dev/null;exit
+    exit
    fi   
   if [ -f $(ls /usr/bin/stunnel 2>/dev/null|awk -F '/' '{print $4}'|awk "NR==1") ]; then
    echo "Paket stunnel belom terinstall. install dulu!" >> screenlog.0
    echo "Gunakan Koneksi normal dan" >> screenlog.0
    echo "Ketik: opkg update && opkg install stunnel" >> screenlog.0
-   cp screenlog.0 log/log.txt 2>/dev/null;exit
+   exit
   fi
  if [ -f $(v2ray -version 2>/dev/null|awk '{print $1}'|awk "NR==1") ]; then
   echo "Paket V2Ray belom terinstall. install dulu!" >> screenlog.0
   echo "Gunakan Koneksi normal dan" >> screenlog.0
   echo "Installer: https://github.com/vitoharhari/xderm-mini" >> screenlog.0
-  cp screenlog.0 log/log.txt 2>/dev/null;exit
+  exit
  fi
   if [ -f $(base64 --help 2>/dev/null|awk "NR==2"|awk '{print $1}') ]; then
    echo "Paket base64 belom terinstall. install dulu!" >> screenlog.0
    echo "Gunakan Koneksi normal dan" >> screenlog.0
    echo "Ketik: opkg update && opkg install coreutils-base64" >> screenlog.0
-   cp screenlog.0 log/log.txt 2>/dev/null;exit
+   exit
   fi
    if [ -f $(ls /usr/bin/trojan 2>/dev/null|awk -F '/' '{print $4}'|awk "NR==1") ]; then
     echo -e "#!/bin/bash\nwget -O /usr/bin/trojan https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/trojan_aarch64_cortex-a53\nchmod +x /usr/bin/trojan\necho -e 'Silahkan start ulang xdermnya!, terima kasih.'" > /root/itroj;chmod +x /root/itroj
@@ -321,7 +325,7 @@ fi
     echo "Gunakan Koneksi normal dan" >> screenlog.0
     echo "Khusus Pengguna STB B860h dan HG680p" >> screenlog.0
     echo "Ketik ./itroj di terminal root" >> screenlog.0
-    cp screenlog.0 log/log.txt 2>/dev/null;exit
+    exit
    fi
   if [ -f $(ls /usr/bin/corkscrew 2>/dev/null|awk -F '/' '{print $4}'|awk "NR==1") ]; then
    echo "Paket corkscrew belom terinstall. install dulu!" >> screenlog.0
@@ -330,13 +334,13 @@ fi
    echo "Ketik: bash /root/icork" >> screenlog.0
    echo -e "wget https://github.com/ryanfauzi1/xderm-mini_GUI/raw/main/corkscrew_2.0-Rureka.com_aarch64_cortex-a53.ipk\nopkg install corkscrew_2.0-Rureka.com_aarch64_cortex-a53.ipk" > /root/icork
    chmod +x /root/icork
-   cp screenlog.0 log/log.txt 2>/dev/null;exit
+   exit
   fi
    if [ -f $(find /usr -iname "openssh-cl*" -type f|awk "NR==1"|awk -F '/' '{print $2}' 2>/dev/null) ]; then
     echo "Paket openssh-client belom terinstall. install dulu!" >> screenlog.0
     echo "Gunakan Koneksi normal dan ketik:" >> screenlog.0
     echo "opkg update && opkg install openssh-client" >> screenlog.0
-    cp screenlog.0 log/log.txt 2>/dev/null;exit
+    exit
    fi
   if [ -f $(ls /usr/bin/sshpass 2>/dev/null|awk -F '/' '{print $4}'|awk "NR==1") ]; then
    echo "Paket sshpass belom terinstall. install dulu!" >> screenlog.0
@@ -345,22 +349,25 @@ fi
    echo "Ketik: bash /root/isshp" >> screenlog.0
    echo -e "opkg remove sshpass\nwget https://rureka.com/files/sshpass/sshpass_1.06-Rureka.com_aarch64_cortex-a53.ipk\nopkg install sshpass_1.06-Rureka.com_aarch64_cortex-a53.ipk" > /root/isshp
    chmod +x /root/isshp
-   cp screenlog.0 log/log.txt 2>/dev/null;exit
+   exit
   fi
  if [ -f $(echo "exit"|openssl 2>/dev/null) ]; then
   echo -e " tidak ada paket openssl, install dulu!" >> screenlog.0
   echo -e " Gunakan Koneksi normal dan" >> screenlog.0
-  echo -e " opkg update && opkg install openssl-util" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
+  echo -e " opkg update && opkg install openssl-util" >> screenlog.0
+  exit
  fi
  if [ -f $(ls /usr/bin/httping 2>/dev/null|awk -F '/' '{print $4}'|awk "NR==1") ]; then
   echo -e " tidak ada paket httping, install dulu!" >> screenlog.0
   echo -e " Gunakan Koneksi normal dan" >> screenlog.0
-  echo -e " opkg update && opkg install httping" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
+  echo -e " opkg update && opkg install httping" >> screenlog.0
+  exit
  fi
  if [ -f $(ls /usr/bin/timeout 2>/dev/null|awk -F '/' '{print $4}'|awk "NR==1") ]; then
   echo -e " tidak ada paket timeout, install dulu!" >> screenlog.0
   echo -e " Gunakan Koneksi normal dan" >> screenlog.0
-  echo -e " opkg update && opkg install coreutils-timeout" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
+  echo -e " opkg update && opkg install coreutils-timeout" >> screenlog.0
+  exit
  fi
 touch /etc/crontabs/root
 if [ ! -f $(cat /etc/crontabs/root 2>/dev/null|grep xderm|awk '{print $2}'|awk "NR==1") ]; then
@@ -1140,7 +1147,8 @@ sleep 1;((n++))
 elif [ $mode == "SSH" ]; then
 host=$(grep host= config.txt|awk -F "=" '{print $2}'|awk '{print $1}')
  if [ -f $host ]; then
-echo -e "{$(date +%M:%S)} Config SSH belom disetting !!" >> screenlog.0;sleep 1;exit 2>/dev/null
+echo -e "{$(date +%M:%S)} Config SSH belom disetting !!" >> screenlog.0
+sleep 1;exit
  fi
 port=$(grep port= config.txt|awk -F "=" '{print $2}'|awk '{print $1}')
 user=$(grep user= config.txt|awk -F "=" '{print $2}'|awk '{print $1}')
@@ -1179,7 +1187,7 @@ killall -q openssl timeou;screen -dmS cb /tmp/timeou
 echo "OK" >> screenlog.0
  else
 killall -q openssl timeou
-echo "Closed!" >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
+echo "Closed!" >> screenlog.0;exit
    fi 
  fi
 echo -ne "{$(date +%M:%S)} Menjalankan Inject " >> screenlog.0
@@ -1213,7 +1221,7 @@ while [ $n != 7 ]; do
      cd /www/xderm;echo "Not Connect!" >> screenlog.0
      echo -e '<pre><h2 style="color:#006400" "text-overflow:ellipsis">Username/Password Salah/Kadaluarsa.</h2></pre>' >> screenlog.0
      flushx;echo -e "{$(date +%M:%S)} Berhenti." >> screenlog.0
-     cp screenlog.0 log/log.txt 2>/dev/null;rm -rf log/screenlog.0;exit
+     exit
  fi
 r=$(curl -m4 88.198.46.60 -w "%{http_code}" --proxy socks5://127.0.0.1:1080 -s -o /dev/null|head -c2)
   if [ $r -eq 30 ]; then
@@ -1225,7 +1233,7 @@ done
  if [ $konek != "y" ]; then
 cd /www/xderm;echo "Not Connect!" >> screenlog.0
 flushx;echo -e "{$(date +%M:%S)} Berhenti." >> screenlog.0
-cp screenlog.0 log/log.txt 2>/dev/null;rm -rf log/screenlog.0;exit
+exit
  fi
 else
 rm -rf /www/xderm/log/screenlog.0;cd /www/xderm/log 2>/dev/null
@@ -1236,7 +1244,7 @@ while [ $n != 5 ]; do
      cd /www/xderm;echo "Not Connect!" >> screenlog.0
      echo -e '<pre><h2 style="color:#006400" "text-overflow:ellipsis">Username/Password Salah/Kadaluarsa.</h2></pre>' >> screenlog.0
      flushx;echo -e "{$(date +%M:%S)} Berhenti." >> screenlog.0
-     cp screenlog.0 log/log.txt 2>/dev/null;rm -rf log/screenlog.0;exit
+     exit
  fi
 r=$(curl -m4 88.198.46.60 -w "%{http_code}" --proxy socks5://127.0.0.1:1080 -s -o /dev/null|head -c2)
   if [ $r -eq 30 ]; then
@@ -1257,7 +1265,7 @@ if [ $n != 5 ]; then
      cd /www/xderm;echo "Not Connect!" >> screenlog.0
      echo -e '<pre><h2 style="color:#006400" "text-overflow:ellipsis">Username/Password Salah/Kadaluarsa.</h2></pre>' >> screenlog.0
      flushx;echo -e "{$(date +%M:%S)} Berhenti." >> screenlog.0
-     cp screenlog.0 log/log.txt 2>/dev/null;rm -rf log/screenlog.0;exit
+     exit
  fi
 r=$(curl -m4 88.198.46.60 -w "%{http_code}" --proxy socks5://127.0.0.1:1080 -s -o /dev/null|head -c2)
   if [ $r -eq 30 ]; then
@@ -1267,7 +1275,7 @@ r=$(curl -m4 88.198.46.60 -w "%{http_code}" --proxy socks5://127.0.0.1:1080 -s -
 else
 cd /www/xderm;echo "Not Connect!" >> screenlog.0
 flushx;echo -e "{$(date +%M:%S)} Berhenti." >> screenlog.0
-cp screenlog.0 log/log.txt 2>/dev/null;rm -rf log/screenlog.0;exit
+exit
 fi
 done
  fi
@@ -1388,7 +1396,7 @@ fi
 cd /www/xderm/ 2>/dev/null
 sed -i '/binary operator expected/d' screenlog.0
 echo -e "{$(date +%M:%S)} Selesai." >> screenlog.0
-cp screenlog.0 log/log.txt;cp screenlog.0 log/logr.txt;cupdate;exit
+cupdate;exit
 }
  enable () {
  if [ ! -f $(cat /etc/rc.local|grep exit|awk '{print $1}' 2>/dev/null) ]; then
@@ -1421,13 +1429,13 @@ case $1 in
  update
 ;;
  "enable")
- enable;echo -e "\n{$(date +%M:%S)} Auto Start waktu Booting Berjalan." >> screenlog.0;exit
+ enable;echo -e "\n{$(date +%M:%S)} Auto Start waktu Booting Berjalan." >> loglain.txt;exit
 ;;
  "disable")
- disable;echo -e "\n{$(date +%M:%S)} Auto Start waktu Booting tidak berjalan." >> screenlog.0;exit
+ disable;echo -e "\n{$(date +%M:%S)} Auto Start waktu Booting tidak berjalan." >> loglain.txt;exit
 ;;
  "stop")
- flushx;echo -e "{$(date +%M:%S)} Selesai." >> screenlog.0;cp screenlog.0 log/log.txt 2>/dev/null;exit
+ flushx;echo -e "{$(date +%M:%S)} Selesai." >> screenlog.0;exit
 ;;
 esac
 echo -e "           Current versi 3.0 Copyright ®2021" >> screenlog.0
