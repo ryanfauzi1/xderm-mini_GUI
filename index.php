@@ -332,7 +332,7 @@ echo "<center><p align='center'><textarea name='aboutbox' id='aboutbox' rows='9'
 Xderm Mini is simple injector tool based on shell script and python commands for OpenWrt by @ryanfauzi1 which help you to inject your OpenWrt connection using VPN injection (SSH/Trojan/Vmess).
 
 ===========================================
-|          xdrtool Command Lists          |
+|         xdrtool Command Lists           |
 ===========================================
 Change Username & Password  = 1 / a / A
 Change Username Only        = 2 / u / U
@@ -345,16 +345,23 @@ Install Default Theme       = 8 / dt / DT
 ===========================================
 
 ===========================================
-Default auth.txt (WebUI Login Information)
+|        Informasi Configuration          |
 ===========================================
-Username  : admin
-Password  : xderm
-===========================================
-Edit /root/auth.txt file or by run xdrauth command using terminal to change password
+Jika <stunnel> dicentang, maka
+tunneling ssh di-inject oleh stunnel client
+Jika tidak, akan digantikan python-https
+
+Jika <go-tun2socks> dicentang, maka
+semua lalu lintas diatur oleh go-tun2socks
+Jika tidak, akan digantikan badvpn-tun2socks
+
+khusus pengguna selain FW 18,
+silahkan centang <Restart Firewall>
+Guna mencegah terjadinya notif error.
 ===========================================
 
 ===========================================
-Default config.txt
+|          Default config.txt             |
 ===========================================
 host=103.157.1xx.xx
 port=443
@@ -365,7 +372,6 @@ sni=www.xxx.xx
 vmess://eyJhZGQiOixxxxxxx
 trojan://user@server:port
 ===========================================
-
 </textarea></p></center>";
 echo '<p style="text-align:center; font-size:85%;">Read more info at <a href="https://github.com/ryanfauzi1/xderm-mini_GUI" target="_blank">Xderm Mini Github Repo</a></p></table>';
 echo '<center>
