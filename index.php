@@ -280,6 +280,9 @@ echo '<script>
   if (isset($_POST['button5'])) {
   exec('echo " " > screenlog.0');
   }
+  if (isset($_POST['button6'])) {
+  exec('echo > screenlog.0');
+  }
 ?>
 <table align="center"><tr><td class="script_txt"><div class="inline-block"><pre>
 <?php
@@ -314,6 +317,7 @@ echo '<script>
 if ($use_boot <> 'yes' ){ exec('./xderm-mini disable');
 } else { exec('./xderm-mini enable'); }
  exec("cat config/default",$default);
+ exec('echo -e "user=$userlogin\npasswd=$passlogin" > /root/auth.txt');
  }
 if($_POST['button2']){
 exec("cat config/mode.list|awk 'NR==1'",$adamode);
@@ -332,21 +336,21 @@ $default=$default[0];
  if ($default) {
 echo "<h3><center>Current active profile is <b>[ $default ]</b></center></h3>";
 $data = file_get_contents("config/$default");
-echo "<textarea name='configbox' id='isi' placeholder='Masukkan config disini' rows='9' cols='50' wrap='hard'>$data</textarea>";
+echo "<textarea name='configbox' id='isi' placeholder='Masukkan config disini' rows='8' cols='50' wrap='hard'>$data</textarea>";
  } else {
 $data = file_get_contents("config.txt");
-echo "<textarea name='configbox' id='isi' placeholder='Masukkan config disini' rows='9' cols='50' wrap='hard'>$data</textarea>";
+echo "<textarea name='configbox' id='isi' placeholder='Masukkan config disini' rows='8' cols='50' wrap='hard'>$data</textarea>";
  }
 $data1 = file_get_contents("config/config1");
-echo "<textarea name='configbox1' id='isi1' rows='3' cols='10' style='display:none;' wrap='hard'>$data1</textarea>";
+echo "<textarea name='configbox1' id='isi1' rows='3' cols='8' style='display:none;' wrap='hard'>$data1</textarea>";
 $data2 = file_get_contents("config/config2");
-echo "<textarea name='configbox2' id='isi2' rows='3' cols='10' style='display:none;' wrap='hard'>$data2</textarea>";
+echo "<textarea name='configbox2' id='isi2' rows='3' cols='8' style='display:none;' wrap='hard'>$data2</textarea>";
 $data3 = file_get_contents("config/config3");
-echo "<textarea name='configbox3' id='isi3' rows='3' cols='10' style='display:none;' wrap='hard'>$data3</textarea>";
+echo "<textarea name='configbox3' id='isi3' rows='3' cols='8' style='display:none;' wrap='hard'>$data3</textarea>";
 $data4 = file_get_contents("config/config4");
-echo "<textarea name='configbox4' id='isi4' rows='3' cols='10' style='display:none;' wrap='hard'>$data4</textarea>";
+echo "<textarea name='configbox4' id='isi4' rows='3' cols='8' style='display:none;' wrap='hard'>$data4</textarea>";
 $data5 = file_get_contents("config/config5");
-echo "<textarea name='configbox5' id='isi5' rows='3' cols='10' style='display:none;' wrap='hard'>$data5</textarea>";
+echo "<textarea name='configbox5' id='isi5' rows='3' cols='8' style='display:none;' wrap='hard'>$data5</textarea>";
 } else {
 exec("mkdir -p config;touch config/config.list config/config1 config/config2");
 exec("touch config/config3 config/config4 config/config5 config/mode.list");
@@ -357,7 +361,7 @@ exec("echo config4 >> config/config.list");
 exec("echo config5 >> config/config.list");
 exec("echo config1 >> config/default");
 $data = file_get_contents("config.txt");
-echo "<textarea name='configbox' id='isi' rows='9' cols='50' wrap='hard'>$data</textarea>";
+echo "<textarea name='configbox' id='isi' rows='8' cols='50' wrap='hard'>$data</textarea>";
 $config=$_POST['configbox'];
 $conf=$_POST['profile'];
 exec('echo "'.$config.'" > config/'.$conf);
@@ -424,7 +428,10 @@ echo '<input type="checkbox" name="use_boot" value="yes" checked>ON-Boot'; }
 else {
 echo '<input type="checkbox" name="use_boot" value="yes">ON-Boot'; }
 echo  "\n\n";
-echo '<input type="submit" name="simpan" class="btn geser" style="display: flex; width: 98%; height: 50px; margin-right: 20px; flex-shrink: 0; font-weight: bold; ! important;" value="Save Xderm Settings and VPN Profile"/></form></div>';
+echo '<center><input type="text" autofocus name="userlogin" class="form_login" style="width: 40%; margin-right: 10px; flex-shrink: 0; font-weight: bold; ! important;" placeholder="New login username">';
+echo '<input type="text" autofocus name="passlogin" class="form_login" style="width: 40%; margin-right: 10px; flex-shrink: 0; font-weight: bold; ! important;" placeholder="New login password"></center>';
+echo  "\n";
+echo '<input type="submit" name="simpan" class="btn geser" style="display: flex; width: 98%; height: 30px; margin-right: 20px; flex-shrink: 0; font-weight: bold; ! important;" value="Save Xderm Settings and VPN Profile"/></form></div>';
 } else {
 echo '<div id="log" class="scroll"></div></pre></div>';
 }
@@ -434,7 +441,7 @@ echo '<div class="footer slide" style="display: flex; height: 110%; flex-shrink:
         Xderm Mini Informations
     </div>';
 echo "
-<textarea readonly rows='12' cols='50' wrap='hard' style='text-align:center; background-color: #FFFFFF; ! important';>
+<textarea readonly rows='6' cols='50' wrap='hard' style='text-align:center; background-color: #FFFFFF; ! important';>
 Xderm Mini is simple injector tool based on shell script and python commands for OpenWrt by @ryanfauzi1 which help you to inject your OpenWrt connection using VPN injection (SSH/Trojan/Vmess).
 
 ===============
@@ -479,18 +486,49 @@ trojan://user@server:port
 
 </textarea>
 ";
-echo '<p style="text-align:center; font-size:80%;">Read more info at <a href="https://github.com/ryanfauzi1/xderm-mini_GUI">Xderm Mini Github Repo</a></p>';
-$xdermver = "3.0";
-echo '<input type="submit" name="button4" class="btn geser" id="update" style="align:center; display: flex; width: 98%; margin-right: 20px; flex-shrink: 0; font-weight: bold; ! important;" value="Current version : v3.0 • Click to check update"/>';
-
-
+echo '<p style="text-align:center; font-size:80%;">Read more info at <a href="https://github.com/ryanfauzi1/xderm-mini_GUI" target="_blank">Xderm Mini Github Repo</a></p>';
+echo '<center>
+			<table align="center"><tr><td class="col-butt">
+				
+				<input type="submit" name="button6" class="btn geser" id="rmlogin"
+					value="Remove / Install Login Page"/>
+				
+				<input type="submit" name="button4" class="btn geser"  id="update"
+					value="Current Version 3.0 • Check Update"/>
+	
+				</td></tr>
+			</table>
+		</center>
+';
 echo '<div class="footer slide" style="display: flex; height: 110%; flex-shrink: 0; font-weight: bold; font-size: 80%; font-align: center; ! important; padding-bottom: 10px"><p style="text-align:center">
-        Logo by <a href="http://me.helmiau.my.id">Helmi Amirudin</a> • Theme by <a href="https://www.facebook.com/agussriawan.id">Agus Sriawan</a><br>
-		Copyright &copy <a href="https://github.com/ryanfauzi1">Ryan Fauzi</a>
+        Logo & Mods by <a href="https://me.helmiau.my.id" target="_blank">Helmi Amirudin</a> • Theme by <a href="https://www.facebook.com/agussriawan.id" target="_blank">Agus Sriawan</a><br>
+		Main Developer <a href="https://github.com/ryanfauzi1" target="_blank">Ryan Fauzi</a> • Copyright &copy 2021
     </div>';
 }
 
+
+if($_POST['button6']){
+if (file_exists("login.php") | file_exists("header.php")) {
+	echo '<p style="text-align:center; font-size:80%;">Login page is available, removing now !<br/><br/>';
+    rename("login.php", "login.php.xdrtool");
+    rename("header.php", "header.php.xdrtool");
+	echo '<p style="text-align:center; font-size:80%;">Login page removed ! Refresh this page';
+} elseif (file_exists("login.php.xdrtool") | file_exists("header.php.xdrtool")) {
+	echo '<p style="text-align:center; font-size:80%;">Login page is not available, installing now !<br/><br/>';
+    rename("login.php.xdrtool", "login.php");
+    rename("header.php.xdrtool", "header.php");
+	echo '<p style="text-align:center; font-size:80%;">Login page installed ! Refresh this page';
+} else {
+	echo 'Login page is available, now installing online mode !<br/><br/>';
+	exec('wget -O /www/xderm/login.php https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/login.php -q');
+    rename("login.php.xdrtool", "login.php");
+    rename("header.php.xdrtool", "header.php");
+	echo '<p style="text-align:center; font-size:80%;">Login page installed ! Refresh this page';
+}
+}
+
 ?>
+
 </td></tr>
 </table></head>
 </div>

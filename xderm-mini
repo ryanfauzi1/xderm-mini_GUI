@@ -1386,6 +1386,7 @@ done" > /tmp/autorekonek;cd /tmp;chmod +x autorekonek
 screen -dmS auto ./autorekonek;sleep 1;rm -rf autorekonek
 fi
 cd /www/xderm/ 2>/dev/null
+sed -i '/binary operator expected/d' screenlog.0
 echo -e "{$(date +%M:%S)} Selesai." >> screenlog.0
 cp screenlog.0 log/log.txt;cp screenlog.0 log/logr.txt;cupdate;exit
 }
