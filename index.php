@@ -206,8 +206,16 @@ if ( window.history.replaceState ) {
 </script>
 <body class="box_script" style="text-align:center">
 	<center>
-		<a href="login.php" onClick="logout()">
-		<img src="img/image.png" width: 100%></a>
+<?php
+$filename = 'login.php';
+
+if (file_exists($filename)) {
+    echo '<a href="login.php" onClick="logout()">';
+} else {
+    echo '<a href="index.php" onClick="logout()">';
+}
+?>
+		<img src="img/image.png" width: 90%></a>
 	</center>
     <form method="post">
 		<center>
@@ -222,9 +230,6 @@ if ( window.history.replaceState ) {
 				<input type="submit" name="button2" class="btn geser" id="config"
 					value="Config"/>
 				
-				<input type="submit" name="button4" class="btn geser" id="update"
-					value="Update"/>
-					
 				<input type="submit" name="button5" class="btn geser" id="about"
 					value="About"/>
 
@@ -325,7 +330,7 @@ if ($ada) {
 exec("cat config/default",$default);
 $default=$default[0];
  if ($default) {
-echo "<h4><center><b>profile that is active now: $default</b></center></h4>";
+echo "<h3><center>Current active profile is <b>[ $default ]</b></center></h3>";
 $data = file_get_contents("config/$default");
 echo "<textarea name='configbox' id='isi' placeholder='Masukkan config disini' rows='9' cols='50' wrap='hard'>$data</textarea>";
  } else {
@@ -475,9 +480,13 @@ trojan://user@server:port
 </textarea>
 ";
 echo '<p style="text-align:center; font-size:80%;">Read more info at <a href="https://github.com/ryanfauzi1/xderm-mini_GUI">Xderm Mini Github Repo</a></p>';
+$xdermver = "3.0";
+echo '<input type="submit" name="button4" class="btn geser" id="update" style="align:center; display: flex; width: 98%; margin-right: 20px; flex-shrink: 0; font-weight: bold; ! important;" value="Current version : v3.0 • Click to check update"/>';
+
+
 echo '<div class="footer slide" style="display: flex; height: 110%; flex-shrink: 0; font-weight: bold; font-size: 80%; font-align: center; ! important; padding-bottom: 10px"><p style="text-align:center">
-        Logo by Helmi Amirudin • Theme by Agus Sriawan<br>
-		Xderm Version.3.0 • Copyright &copy Ryan Fauzi
+        Logo by <a href="http://me.helmiau.my.id">Helmi Amirudin</a> • Theme by <a href="https://www.facebook.com/agussriawan.id">Agus Sriawan</a><br>
+		Copyright &copy <a href="https://github.com/ryanfauzi1">Ryan Fauzi</a>
     </div>';
 }
 

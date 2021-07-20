@@ -13,8 +13,12 @@ wget -O /www/xderm/config.txt $url/config.txt -q
 wget -O /www/xderm/js/jquery-2.1.3.min.js $url/jquery-2.1.3.min.js -q
 wget -O /www/xderm/img/image.png $url/image.png -q
 wget -O /www/xderm/img/fav.ico $url/fav.ico -q
-wget -O /bin/xdrauth $url/xdrauth -q
+wget -O /www/xderm/img/ico.png $url/ico.png -q
+wget -O /www/xderm/img/background.jpg $url/background.jpg -q
+wget -O /bin/xdrauth $url/adds/xdrauth -q
 chmod +x /bin/xdrauth
+wget -O /bin/xdrtool $url/adds/xdrtool -q
+chmod +x /bin/xdrtool
 echo Start > /www/xderm/log/st
 echo -e "user=admin\npasswd=xderm" > /root/auth.txt
 echo -e "xderm-mini GUI terinstall.\n\nSilahkan Akses 'http://192.168.1.1/xderm'"

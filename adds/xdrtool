@@ -1,0 +1,260 @@
+#!/bin/bash
+#--------------------------------------------------------
+#   This script is used for setting up
+#   Xderm-Mini GUI for OpenWrt by ryanfauzi1
+#   Script by helmiau a.k.a Helmi Amirudin
+#   Run xdrtool using terminal to use this script
+#--------------------------------------------------------
+
+RED='\033[0;31m'
+BLU='\033[1;34m'
+YEL='\033[1;33m'
+GRE='\033[1;32m'
+NOR='\033[0;37m'
+
+USERNOW=$(grep user /root/auth.txt | sed 's/.*user=//')
+PASSNOW=$(grep passwd /root/auth.txt | sed 's/.*passwd=//')
+LOGINOW=$(if [ -e /www/xderm/login.php ]; then echo -e "${GRE}Available"; else echo -e "${RED}Unavailable"; fi)
+LOGINOWBAK=$(if [ -e /www/xderm/login.php.xdrtool ]; then echo -e "${GRE}Available"; else echo -e "${RED}Unavailable"; fi)
+URL="https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main"
+echo "==========================================="
+echo -e "|       ${RED}Xderm ${BLU}Mini ${YEL}Tools ${GRE}by helmiau${NOR}       |"
+echo "==========================================="
+echo -e "  ${BLU}Panel Username    : ${BLU}$USERNOW"
+echo -e "  ${YEL}Panel Password    : ${YEL}$PASSNOW"
+echo -e "  ${BLU}Login Page        : $LOGINOW"
+echo -e "  ${YEL}Login Page Backup : $LOGINOWBAK${NOR}"
+echo "==========================================="
+echo -e "|              ${YEL}Command Lists${NOR}              |"
+echo -e "===========================================${GRE}"
+echo "  Change Username & Password  = 1 / a / A"
+echo "  Change Username Only        = 2 / u / U"
+echo "  Change Password Only        = 3 / p / P"
+echo "  Install Login Page          = 4 / lp / LP"
+echo "  Remove Login Page           = 5 / rlp/ RLP"
+echo "  Manual Update               = 6 / mu / MU"
+echo "  Fix index.php downloading   = 7 / fp / FP"
+echo "  Install Default Theme       = 8 / dt / DT"
+echo -e "${NOR}==========================================="
+echo "  Exit = type anything !"
+echo "==========================================="
+echo ""
+echo -n "  Enter Your Option : " 
+read -r jawab
+echo "==========================================="
+if [[ $jawab == "a" || $jawab == "A"  || $jawab == "1" ]]; then
+echo -n "  Enter New Username : " 
+read -r USERNEW
+echo "==========================================="
+echo -n "  Enter New Password : " 
+read -r PASSNEW
+echo -e "user=$USERNEW\npasswd=$PASSNEW" > /root/auth.txt
+echo "==========================================="
+clear
+./xdrtool
+elif [[ $jawab == "u" || $jawab == "U"  || $jawab == "2" ]]; then
+echo -n "  Enter New Username : " 
+read -r USERNEW
+echo -e "user=$USERNEW\npasswd=$PASSNOW" > /root/auth.txt
+echo "==========================================="
+clear
+./xdrtool
+elif [[ $jawab == "p" || $jawab == "P"  || $jawab == "3" ]]; then
+echo -n "  Enter New Password : "
+read -r PASSNEW
+echo -e "user=$USERNOW\npasswd=$PASSNEW" > /root/auth.txt
+echo "==========================================="
+clear
+./xdrtool
+elif [[ $jawab == "lp" || $jawab == "LP"  || $jawab == "4" ]]; then
+clear
+echo "==========================================="
+echo -e "     Xderm Mini Login Page Installer by helmiau "
+echo "==========================================="
+echo -e " "
+echo -e "Notes : "
+echo -e "- This script will install xderm-mini login page"
+echo -e "- Please clear all web history and cache after removal!"
+echo -e "- If bug occured, Open incognito tab"
+echo -e "- If bug still occured, Use other browser"
+echo -e ""
+echo -e " Process starting after 2 secs....."
+sleep 2
+echo -e " Install process started..."
+sleep 1
+echo -e ""
+
+echo -e " Finding login.php file..."
+nyari=$(find /www/xderm)
+if [[ $nyari == *"login.php.xdrtool"* ]]; then
+mv /www/xderm/login.php.xdrtool /www/xderm/login.php
+echo -e " login.php file installed !"
+sleep 1
+else
+echo -e " Install failed ! because login.php backup file is unavailable"
+echo -e " Try online installation"
+wget -O /www/xderm/login.php $URL/login.php -q
+sleep 1
+fi
+
+echo -e " Finding header.php file..."
+nyari=$(find /www/xderm)
+if [[ $nyari == *"header.php.xdrtool"* ]]; then
+mv /www/xderm/header.php.xdrtool /www/xderm/header.php
+echo -e " header.php file installed !"
+sleep 1
+else
+echo -e " Install failed ! because header.php backup file is unavailable"
+echo -e " Try online installation"
+wget -O /www/xderm/header.php $URL/header.php -q
+sleep 1
+fi
+
+echo "==========================================="
+echo -e " Install login page process finished..."
+echo "==========================================="
+clear
+./xdrtool
+elif [[ $jawab == "rlp" || $jawab == "RLP"  || $jawab == "5" ]]; then
+clear
+clear
+echo "==========================================="
+echo -e "     Xderm Mini Login Page Remover by helmiau "
+echo "==========================================="
+echo -e " "
+echo -e "Notes : "
+echo -e "- This script will remove xderm-mini login page"
+echo -e "- Please clear all web history and cache after removal!"
+echo -e "- If bug occured, Open incognito tab"
+echo -e "- If bug still occured, Use other browser"
+echo -e ""
+echo -e " Process starting after 2 secs....."
+sleep 2
+echo -e " Removal process started..."
+sleep 1
+echo -e ""
+
+echo -e " Finding login.php file..."
+nyari=$(find /www/xderm)
+if [[ $nyari == *"login.php"* ]]; then
+mv /www/xderm/login.php /www/xderm/login.php.xdrtool
+echo -e " login.php file deleted !"
+sleep 1
+else
+echo -e " Removal failed ! because login.php file is unavailable"
+sleep 1
+fi
+
+echo -e " Finding header.php file..."
+nyari=$(find /www/xderm)
+if [[ $nyari == *"header.php"* ]]; then
+mv /www/xderm/header.php /www/xderm/header.php.xdrtool
+echo -e " header.php file deleted !"
+sleep 1
+else
+echo -e " Removal failed ! because login.php file is unavailable"
+sleep 1
+fi
+
+echo "==========================================="
+echo -e " Removal login page process finished..."
+echo "==========================================="
+clear
+./xdrtool
+elif [[ $jawab == "mu" || $jawab == "MU"  || $jawab == "6" ]]; then
+echo "==========================================="
+echo -e " Installing manual update..."
+wget -O /www/xderm/xderm-mini https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/xderm-mini -q
+wget -O /www/xderm/index.php https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/index.php -q
+echo "==========================================="
+echo -e " Manual update installation done..."
+echo "==========================================="
+clear
+./xdrtool
+elif [[ $jawab == "fp" || $jawab == "FP"  || $jawab == "7" ]]; then
+clear
+echo "==========================================="
+echo -e "  Download index.php fixer by helmiau "
+echo "==========================================="
+echo -e " "
+echo -e "Notes : "
+echo -e "- This tool will fix xderm-mini and libernet web ui page"
+echo -e "- If bug fixed words appeared, it's mean bug fixed"
+echo -e "- Reboot your device manually after fixing"
+sleep 2
+echo -e " "
+echo -e "If bug still appear after reboot, do these :"
+echo -e "- Clear all web history and cache"
+echo -e "- Open incognito tab"
+echo -e "- Use other browser"
+echo -e ""
+echo -e " Fixing process started !..."
+sleep 2
+echo -e ""
+echo -e " Fixing bug..."
+sleep 2
+echo -e ""
+
+helmiooo=$(cat /etc/config/uhttpd)
+if [[ $helmiooo == *"uhttpd 'mai"* ]]; then
+echo -e "Step 1 done ! Resuming to step 2..."
+sleep 1
+sed -i "/config uhttpd 'main'/a list interpreter '.php=/usr/bin/php-cgi'" /etc/config/uhttpd
+fi
+
+helmiooo=$(cat /etc/config/uhttpd)
+if [[ $helmiooo == *"uhttpd 'mai"* ]]; then
+echo -e "Step 2 done ! Resuming to step 3..."
+sleep 1
+sed -i "/config uhttpd 'main'/a option ubus_prefix '/ubus'" /etc/config/uhttpd
+fi
+
+helmiooo=$(cat /etc/config/uhttpd)
+if [[ $helmiooo == *"uhttpd mai"* ]]; then
+echo -e "Step 3 done ! Resuming to last step..."
+sleep 1
+sed -i "/config uhttpd main/a list interpreter '.php=/usr/bin/php-cgi'" /etc/config/uhttpd
+fi
+
+helmiooo=$(cat /etc/config/uhttpd)
+if [[ $helmiooo == *"uhttpd mai"* ]]; then
+echo -e "Everything has been done..."
+sleep 1
+sed -i "/config uhttpd main/a option ubus_prefix '/ubus'" /etc/config/uhttpd
+
+fi
+
+
+echo "==========================================="
+echo -e " Removal process finished..!"
+echo -e " Please reboot your device !"
+echo "==========================================="
+clear
+./xdrtool
+elif [[ $jawab == "dt" || $jawab == "DT"  || $jawab == "8" ]]; then
+echo "==========================================="
+echo -e " Installing Default Theme by Agus Sriawan"
+echo "==========================================="
+mkdir -p /www/xderm /www/xderm/js /www/xderm/img /www/xderm/log
+url="https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main"
+wget -O /www/xderm/index.php $url/index.php -q
+wget -O /www/xderm/index.html $url/index.html -q
+wget -O /www/xderm/xderm-mini $url/xderm-mini -q
+wget -O /www/xderm/login.php $url/login.php -q
+wget -O /www/xderm/header.php $url/header.php -q
+wget -O /www/xderm/config.txt $url/config.txt -q
+wget -O /www/xderm/js/jquery-2.1.3.min.js $url/jquery-2.1.3.min.js -q
+wget -O /www/xderm/img/image.png $url/image.png -q
+wget -O /www/xderm/img/fav.ico $url/fav.ico -q
+wget -O /www/xderm/img/ico.png $url/ico.png -q
+wget -O /www/xderm/img/background.jpg $url/background.jpg -q
+echo "==========================================="
+echo -e " Installation finished !"
+echo "==========================================="
+clear
+./xdrtool
+else
+echo " Exiting program !"
+echo "==========================================="
+exit
+fi
