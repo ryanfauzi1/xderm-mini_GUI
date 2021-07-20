@@ -16,7 +16,7 @@ Index page information
 ## Information
 xderm-mini GUI is simple injector tool based on shell script and python commands for OpenWrt by @ryanfauzi1 which help you to inject your OpenWrt connection using VPN injection (SSH/Trojan/Vmess).
 
-**Current version : ```3.0```**
+**Current version : ```3.1```**
 
 <details><summary>Default information (WebUI address, webui login auth and config) (click to show)</summary>
 <p>
