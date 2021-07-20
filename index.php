@@ -267,7 +267,7 @@ if ( $o[0] == 'Start' ) {
  exec('chmod +x xderm-mini');
  exec('screen -L -dmS gua ./xderm-mini start');
  exec('echo Stop > log/st');
-echo "<pre><div id='log' class='scroll'></div></pre>";
+ echo "<div id='log' class='scroll'></div></pre>";
 echo '<script>
   document.getElementById("strp").value="Stop";
 </script>';
@@ -277,7 +277,7 @@ echo '<script>
  exec('chmod +x xderm-mini');
  exec('screen -L -dmS gu ./xderm-mini stop');
  exec('echo Start > log/st');
-echo "<pre><div id='log' class='scroll'></div></pre>";
+ echo "<div id='log' class='scroll'></div></pre>";
 echo '<script>
   document.getElementById("strp").value="Start";
 </script>';
@@ -287,7 +287,7 @@ echo '<script>
   exec('killall -q xderm-mini');
   exec('chmod +x xderm-mini');
   exec('screen -L -dmS upd ./xderm-mini update');
-  echo "<pre><div id='loglain' class='scroll'></div></pre>";
+  echo "<div id='loglain' class='scroll'></div></pre>";
   }
 ?>
 <?php
@@ -319,7 +319,7 @@ echo '<script>
  exec('echo "Config telah di update." > loglain.txt');
  exec('echo "\''.$conf.'\' Menjadi default Config. !" >> loglain.txt');
  $use_boot=$_POST['use_boot'];
-echo "<pre><div id='loglain' class='scroll'></div></pre>";
+echo "<div id='loglain' class='scroll'></div></pre>";
 if ($use_boot <> 'yes' ){ exec('./xderm-mini disable');
 } else { exec('./xderm-mini enable'); }
  exec("cat config/default",$default);
@@ -507,7 +507,7 @@ echo '<input type="checkbox" name="use_boot" value="yes">ON-Boot'; }
 echo '<input type="submit" name="simpan" class="btn geser" width: 98%; height: 30px; margin-right: 20px; flex-shrink: 0; font-weight: bold; ! important;" value="Simpan"/></form></div>';
 } else {
 if($_POST['button3']){
-echo '<div id="log" class="scroll"></div></pre></div></table>';
+echo '<div id="log" class="scroll"></div></pre>';
 }
 }
 if($_POST['button6']){
@@ -558,7 +558,6 @@ echo 'Installation done ! Refresh this page<br/>';
 }
 
 ?>
-
 </head>
 </div>
 </html>
