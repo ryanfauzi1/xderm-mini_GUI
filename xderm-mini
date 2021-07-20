@@ -639,6 +639,10 @@ echo -e "{$(date +%M:%S)} SSH-ssl: $host, P: $pingsshx" >> screenlog.0
 echo "*************************************************" >> screenlog.0
 echo -e "{$(date +%M:%S)} Memilih Mode tercepat saat ini [$nama]" >> screenlog.0
 echo $nama >/tmp/currentmode.txt
+ if [ $(cat /www/xderm/config/firewall|awk "NR==1") == "yes" ]; then
+echo -e "{$(date +%M:%S)} Memuat ulang Firewall...." >> screenlog.0
+xtable=$(/etc/init.d/firewall reload 2>/dev/null)
+ fi
   if [ -f $(iptables -t nat -L|grep MASQ|grep tcp|awk '{print $1}'|awk "NR==1") ]; then
 iptables -A POSTROUTING --proto tcp -t nat -o tun0 -j MASQUERADE 2>/dev/null
   fi
@@ -646,10 +650,6 @@ pudp=$(grep pudp config.txt|awk -F "=" '{print $2}')
   if [ -f $(cat /www/xderm/config/firewall|awk "NR==1") ]; then
    echo no > /www/xderm/config/gotun
   fi
- if [ $(cat /www/xderm/config/firewall|awk "NR==1") == "yes" ]; then
-echo -e "{$(date +%M:%S)} Memuat ulang Firewall...." >> screenlog.0
-xtable=$(/etc/init.d/firewall reload 2>/dev/null)
- fi
   if [ -f $(cat /www/xderm/config/gotun|awk "NR==1") ]; then
    echo no > /www/xderm/config/gotun
   fi
@@ -971,6 +971,10 @@ echo "{
 }" > /usr/local/etc/v2ray/config.json
 screen -dmS pimes v2ray -config /usr/local/etc/v2ray/config.json;routing
 echo -e "{$(date +%M:%S)} Menjalankan VMESS (latarbelakang)...." >> screenlog.0
+ if [ $(cat /www/xderm/config/firewall|awk "NR==1") == "yes" ]; then
+echo -e "{$(date +%M:%S)} Memuat ulang Firewall...." >> screenlog.0
+xtable=$(/etc/init.d/firewall reload 2>/dev/null)
+ fi
  if [ -f $(iptables -t nat -L|grep MASQ|grep tcp|awk '{print $1}'|awk "NR==1") ]; then
 iptables -A POSTROUTING --proto tcp -t nat -o tun0 -j MASQUERADE 2>/dev/null
  fi
@@ -978,10 +982,6 @@ pudp=$(grep pudp config.txt|awk -F "=" '{print $2}')
   if [ -f $(cat /www/xderm/config/firewall|awk "NR==1") ]; then
    echo no > /www/xderm/config/gotun
   fi
- if [ $(cat /www/xderm/config/firewall|awk "NR==1") == "yes" ]; then
-echo -e "{$(date +%M:%S)} Memuat ulang Firewall...." >> screenlog.0
-xtable=$(/etc/init.d/firewall reload 2>/dev/null)
- fi
   if [ -f $(cat /www/xderm/config/gotun|awk "NR==1") ]; then
    echo no > /www/xderm/config/gotun
   fi
@@ -1073,6 +1073,10 @@ echo " Pass: **********" >> screenlog.0
 echo "#############################################" >> screenlog.0
 echo -e "{$(date +%M:%S)} Menjalankan trojan VPN (latarbelakang).." >> screenlog.0
 screen -dmS troj trojan -c /tmp/trojan.conf;sleep 1
+ if [ $(cat /www/xderm/config/firewall|awk "NR==1") == "yes" ]; then
+echo -e "{$(date +%M:%S)} Memuat ulang Firewall...." >> screenlog.0
+xtable=$(/etc/init.d/firewall reload 2>/dev/null)
+ fi
  if [ -f $(iptables -t nat -L|grep MASQ|grep tcp|awk '{print $1}'|awk "NR==1") ]; then
 iptables -A POSTROUTING --proto tcp -t nat -o tun0 -j MASQUERADE 2>/dev/null
  fi
@@ -1099,10 +1103,6 @@ r=$(curl -m4 88.198.46.60 -w "%{http_code}" -s -o /dev/null|head -c2)
   if [ -f $(cat /www/xderm/config/firewall|awk "NR==1") ]; then
    echo no > /www/xderm/config/firewall
   fi
- if [ $(cat /www/xderm/config/firewall|awk "NR==1") == "yes" ]; then
-echo -e "{$(date +%M:%S)} Memuat ulang Firewall...." >> screenlog.0
-xtable=$(/etc/init.d/firewall reload 2>/dev/null)
- fi
 echo -e "{$(date +%M:%S)} Menjalankan Autorc.. (latarbelakang)" >> screenlog.0
 echo "#!/bin/bash
 p=0
@@ -1281,6 +1281,10 @@ done
  fi
 cd /www/xderm 2>/dev/null
 ############################################################
+ if [ $(cat /www/xderm/config/firewall|awk "NR==1") == "yes" ]; then
+echo -e "{$(date +%M:%S)} Memuat ulang Firewall...." >> screenlog.0
+xtable=$(/etc/init.d/firewall reload 2>/dev/null)
+ fi
  if [ -f $(iptables -t nat -L|grep MASQ|grep tcp|awk '{print $1}'|awk "NR==1") ]; then
 iptables -A POSTROUTING --proto tcp -t nat -o tun0 -j MASQUERADE 2>/dev/null
  fi
@@ -1288,10 +1292,6 @@ pudp=$(grep pudp config.txt|awk -F "=" '{print $2}')
   if [ -f $(cat /www/xderm/config/firewall|awk "NR==1") ]; then
    echo no > /www/xderm/config/gotun
   fi
- if [ $(cat /www/xderm/config/firewall|awk "NR==1") == "yes" ]; then
-echo -e "{$(date +%M:%S)} Memuat ulang Firewall...." >> screenlog.0
-xtable=$(/etc/init.d/firewall reload 2>/dev/null)
- fi
   if [ -f $(cat /www/xderm/config/gotun|awk "NR==1") ]; then
    echo no > /www/xderm/config/gotun
   fi
