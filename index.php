@@ -411,7 +411,7 @@ if ($ada) {
 exec("cat config/default",$default);
 $default=$default[0];
  if ($default) {
-echo "<h3><center>Current active profile is <b>[ $default ]</b></center></h3>";
+echo "<h3><center><b>Current active profile is [ $default ]</b></center></h3>";
 $data = file_get_contents("config/$default");
 echo "<textarea name='configbox' id='isi' placeholder='Masukkan config disini' rows='8' cols='50' wrap='hard'>$data</textarea>";
  } else {
@@ -438,7 +438,7 @@ exec("echo config4 >> config/config.list");
 exec("echo config5 >> config/config.list");
 exec("echo config1 >> config/default");
 $data = file_get_contents("config.txt");
-echo "<textarea name='configbox' id='isi' rows='8' cols='50' wrap='hard'>$data</textarea>";
+echo "<textarea name='configbox' id='isi' rows='9' cols='50' wrap='hard'>$data</textarea>";
 $config=$_POST['configbox'];
 $conf=$_POST['profile'];
 exec('echo "'.$config.'" > config/'.$conf);
@@ -505,6 +505,7 @@ echo '<input type="checkbox" name="use_boot" value="yes" checked>ON-Boot'; }
 else {
 echo '<input type="checkbox" name="use_boot" value="yes">ON-Boot'; }
 echo '<input type="submit" name="simpan" class="btn geser" width: 98%; height: 30px; margin-right: 20px; flex-shrink: 0; font-weight: bold; ! important;" value="Simpan"/></form></div>';
+echo '<div id="logx" class="scr"></div></pre>';
 } else {
 if($_POST['button3']){
 echo '<div id="log" class="scroll"></div></pre>';
