@@ -664,7 +664,6 @@ echo -e "{$(date +%M:%S)} Routing Host, IP Gateway dan dns.." >> screenlog.0
 ifconfig tun0 10.0.0.1 netmask 255.255.255.0 2>/dev/null
 route add default gw 10.0.0.2 metric 0 2>/dev/null
 /etc/init.d/dnsmasq restart 2>/dev/null
-date -s "$(curl worldtimeapi.org/api/timezone/asia/Bangkok -s|awk -F 'datetime":"' '{print $2}'|awk -F. '{print $1}'|sed 's/T/ /g')" 2>/dev/null
 ##########################################scripted
 echo "#!/bin/bash
 t=0
@@ -687,6 +686,7 @@ pingvmessx=\"Timeout!\";pingvmess=999999
 else
 pingvmessx=\"\$pingvmess ms\"
   fi
+  cp /www/xderm/screenlog.0 /www/xderm/log/logmulti.txt
 sed -i \"s|\$(cat /www/xderm/screenlog.0|grep Trojan|awk -F. '{print \$4}')|\$(cat /www/xderm/screenlog.0|grep Trojan|awk -F. '{print \$4}'|awk -F: '{print \$1}'): \$pingtrojanx|g\" /www/xderm/log/logmulti.txt
 sed -i \"s|\$(cat /www/xderm/screenlog.0|grep Vmess|awk -F. '{print \$4}')|\$(cat /www/xderm/screenlog.0|grep Vmess|awk -F. '{print \$4}'|awk -F: '{print \$1}'): \$pingvmessx|g\" /www/xderm/log/logmulti.txt
 sed -i \"s|\$(cat /www/xderm/screenlog.0|grep SSH|awk -F. '{print \$4}')|\$(cat /www/xderm/screenlog.0|grep SSH|awk -F. '{print \$4}'|awk -F: '{print \$1}'): \$pingsshx|g\" /www/xderm/log/logmulti.txt
