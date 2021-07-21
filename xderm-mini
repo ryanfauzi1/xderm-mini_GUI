@@ -130,7 +130,7 @@ stunnel /tmp/stunnel.conf
  routing () {
 mode=$(cat /www/xderm/config/mode.default|sed 's/\.//g')
 host=$(grep host= config.txt|awk -F "=" '{print $2}')
-hostt=$(grep trojan:// config.txt|awk -F "://" '{print $2}'|awk -F "@" '{print $2}'|awk -F ":" '{print $1}'|awk "NR==1")
+hostt=$(grep trojan:// /var/trojan2.txt|awk -F "://" '{print $2}'|awk -F "@" '{print $2}'|awk -F ":" '{print $1}'|awk "NR==1")
 hostv=$(grep vmess: /var/vmess2.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|sed ':a;N;$!ba;s/\n  //g'|awk -F '"add' '{print $2}'|grep :|sed ':a;N;$!ba;s/\n/ /g'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
   if [ $mode == "SSH" ]; then
     if [ -f $host ]; then
@@ -199,11 +199,11 @@ kill $(ps w|grep badvpn|grep tun|awk "NR==1"|awk '{print $1}') 2>/dev/null
     fi
    hostv=$(grep vmess: /var/vmess2.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|sed ':a;N;$!ba;s/\n  //g'|awk -F '"add' '{print $2}'|grep :|sed ':a;N;$!ba;s/\n/ /g'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
   elif [ $mode == "Trojan" ]; then
-  hostt=$(grep trojan:// config.txt|awk -F "://" '{print $2}'|awk -F "@" '{print $2}'|awk -F ":" '{print $1}'|awk "NR==1")
+  hostt=$(grep trojan:// /var/trojan2.txt|awk -F "://" '{print $2}'|awk -F "@" '{print $2}'|awk -F ":" '{print $1}'|awk "NR==1")
   elif [ $mode == "Multi" ]; then
   host=$(grep host= config.txt|awk -F "=" '{print $2}')
   hostv=$(grep vmess: /var/vmess2.txt 2>/dev/null|awk -F "//" '{print $2}'|base64 -d 2>/dev/null|sed ':a;N;$!ba;s/\n  //g'|awk -F '"add' '{print $2}'|grep :|sed ':a;N;$!ba;s/\n/ /g'|awk -F ',' '{print $1}'|sed -e 's/://g' -e 's/ //g' -e 's/"//g')
-  hostt=$(grep trojan:// config.txt|awk -F "://" '{print $2}'|awk -F "@" '{print $2}'|awk -F ":" '{print $1}'|awk "NR==1")
+  hostt=$(grep trojan:// /var/trojan2.txt|awk -F "://" '{print $2}'|awk -F "@" '{print $2}'|awk -F ":" '{print $1}'|awk "NR==1")
   fi
 route del $host 2>/dev/null;route del $hostt 2>/dev/null;route del $hostv 2>/dev/null;route del 8.8.8.8 2>/dev/null
 screen -d -m ip link delete tun0 2>/dev/null;screen -d -m ip link delete tun1 2>/dev/null
@@ -543,12 +543,12 @@ echo "{
     ]
   }
 }" > /usr/local/etc/v2ray/config.json
-hostt=$(grep trojan:// config.txt|awk -F "://" '{print $2}'|awk -F "@" '{print $2}'|awk -F ":" '{print $1}'|awk "NR==1")
+hostt=$(grep trojan:// /var/trojan2.txt|awk -F "://" '{print $2}'|awk -F "@" '{print $2}'|awk -F ":" '{print $1}'|awk "NR==1")
  if [ ! -f $hostt ]; then
 hostt=$(ping $hostt -w1 -c1|awk "NR==1"|awk -F '(' '{print $2}'|awk -F ')' '{print $1}')
  fi
-portt=$(grep trojan:// config.txt|awk -F "://" '{print $2}'|awk -F "@" '{print $2}'|awk -F ":" '{print $2}'|awk -F "/" '{print $1}'|awk "NR==1")
-passt=$(grep trojan:// config.txt|awk -F "://" '{print $2}'|awk -F "@" '{print $1}'|awk "NR==1")
+portt=$(grep trojan:// /var/trojan2.txt|awk -F "://" '{print $2}'|awk -F "@" '{print $2}'|awk -F ":" '{print $2}'|awk -F "/" '{print $1}'|awk "NR==1")
+passt=$(grep trojan:// /var/trojan2.txt|awk -F "://" '{print $2}'|awk -F "@" '{print $1}'|awk "NR==1")
 echo "{
     \"run_type\": \"client\",
     \"local_addr\": \"127.0.0.1\",
@@ -1028,11 +1028,11 @@ interf=$(ip r|grep default|sed 's/default via 10.0.0//g'|grep default|awk '{prin
  done
   fi
 ###################
-host=$(grep trojan:// config.txt|awk -F "://" '{print $2}'|awk -F "@" '{print $2}'|awk -F ":" '{print $1}'|awk "NR==1")
+host=$(grep trojan:// /var/trojan2.txt|awk -F "://" '{print $2}'|awk -F "@" '{print $2}'|awk -F ":" '{print $1}'|awk "NR==1")
 host=$(ping $host -w1 -c1|awk "NR==1"|awk -F '(' '{print $2}'|awk -F ')' '{print $1}')
-port=$(grep trojan:// config.txt|awk -F "://" '{print $2}'|awk -F "@" '{print $2}'|awk -F ":" '{print $2}'|awk -F "/" '{print $1}'|awk "NR==1")
+port=$(grep trojan:// /var/trojan2.txt|awk -F "://" '{print $2}'|awk -F "@" '{print $2}'|awk -F ":" '{print $2}'|awk -F "/" '{print $1}'|awk "NR==1")
 sni=$(grep sni= config.txt|awk -F "=" '{print $2}')
-pass=$(grep trojan:// config.txt|awk -F "://" '{print $2}'|awk -F "@" '{print $1}'|awk "NR==1")
+pass=$(grep trojan:// /var/trojan2.txt|awk -F "://" '{print $2}'|awk -F "@" '{print $1}'|awk "NR==1")
 echo "{
     \"run_type\": \"client\",
     \"local_addr\": \"127.0.0.1\",

@@ -309,6 +309,8 @@ echo '<script>
  exec('echo "'.$config.'" > config/'.$conf);
  exec('sed \'/host=\|port=\|pudp=\|user=\|pass=\|sni=\|mode=\|trojan\|\n/d\' config/\''.$conf.'\' > /var/vmess1.txt');
  exec('awk \'{ printf "%s", $0 }\' /var/vmess1.txt > /var/vmess2.txt');
+ exec('sed \'/host=\|port=\|pudp=\|user=\|pass=\|sni=\|mode=\|vmess\|\n/d\' config/\''.$conf.'\' > /var/trojan1.txt');
+ exec('awk \'{ printf "%s", $0 }\' /var/trojan1.txt > /var/trojan2.txt');
  exec('echo "'.$config.'" > config.txt');
  exec('sed -i \'s/\r$//g\' config.txt');
  exec('sed -i \'s/\r$//g\' config/'.$conf);
