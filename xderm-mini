@@ -597,7 +597,7 @@ screen -dmS xderm sshpass -p "$pass" ssh -oTCPKeepAlive=yes -oServerAliveInterva
   fi
  if [ ! -f $hostt ]; then
 screen -dmS troj trojan -c /tmp/trojan.conf;sleep 1
-pingtrojan=$(timeout 5 httping -c3 -x 127.0.0.1:1081 -g http://google.com -5 2>/dev/null|awk "NR==2"|awk -F 'time=' '{print $2}'|awk -F. '{print $1}')
+pingtrojan=$(timeout 5 httping -c3 -x 127.0.0.1:1081 -g http://google.com -5 2>/dev/null|awk "NR==3"|awk -F 'time=' '{print $2}'|awk -F. '{print $1}')
   if [ -f $pingtrojan ]; then
 pingtrojanx="Timeout!";pingtrojan=9999
 else
