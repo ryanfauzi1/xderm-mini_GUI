@@ -511,15 +511,37 @@ function xderm_fixphp() {
 	echo "==========================================="
 }
 
+function xderm_return_installer() {
+	echo "==========================================="
+	clear
+	if [[ -f /root/$INSTALLERNAME ]]; then
+		./"$INSTALLERNAME"
+	elif [[ -f /root/$INSTALLERNAME ]] && [[ -f /bin/$INSTALLERNAME ]]; then
+		"$INSTALLERNAME"
+	elif [[ ! -f /root/$INSTALLERNAME ]] && [[ -f /bin/$INSTALLERNAME ]]; then
+		"$INSTALLERNAME"
+	else
+		echo "==========================================="
+		echo e- "  $INSTALLERNAME not found ! Reinstalling.."
+		echo "==========================================="
+		wget -O /bin/$INSTALLERNAME s.id/xdrtool -q
+		chmod +x /bin/$INSTALLERNAME
+		if [[ -f /bin/$INSTALLERNAME ]] && [[ ! -f /bin/$INSTALLERNAME ]]; then
+			cp /bin/$INSTALLERNAME /root/$INSTALLERNAME
+			chmod +x /root/$INSTALLERNAME
+		fi
+		echo e- "  Script reinstalled.. re run $INSTALLERNAME command for usage"
+		echo "==========================================="
+	fi
+}
+
 #-- Install Xderm Mini
 if [[ $jawab == "up" || $jawab == "UP" || $jawab == "1" ]]; then
 	xderm_checknet \ &&
 	xderm_config_backup \ &&
 	xderm_install \ &&
 	xderm_config_restore \ &&
-	echo "==========================================="
-	clear
-	./"$INSTALLERNAME"
+	xderm_return_installer \ &&
 
 #-- Install Agus theme
 elif [[ $jawab == "2" ]]; then
@@ -527,9 +549,7 @@ elif [[ $jawab == "2" ]]; then
 	xderm_config_backup \ &&
 	xderm_install_theme \ &&
 	xderm_config_restore \ &&
-	echo "==========================================="
-	clear
-	./"$INSTALLERNAME"
+	xderm_return_installer \ &&
 
 #-- Update Xderm
 elif [[ $jawab == "3" ]]; then
@@ -537,51 +557,37 @@ elif [[ $jawab == "3" ]]; then
 	xderm_config_backup \ &&
 	xderm_update \ &&
 	xderm_config_restore \ &&
-	echo "==========================================="
-	clear
-	./"$INSTALLERNAME"
+	xderm_return_installer \ &&
 
 #-- Fix Index
 elif [[ $jawab == "4" ]]; then
 	xderm_install_login \ &&
-	echo "==========================================="
-	clear
-	./"$INSTALLERNAME"
+	xderm_return_installer \ &&
 
 #-- Change auth
 elif [[ $jawab == "5" ]]; then
 	xderm_change_auth \ &&
-	echo "==========================================="
-	clear
-	./"$INSTALLERNAME"
+	xderm_return_installer \ &&
 
 #-- Change user
 elif [[ $jawab == "6" ]]; then
 	xderm_change_user \ &&
-	echo "==========================================="
-	clear
-	./"$INSTALLERNAME"
+	xderm_return_installer \ &&
 
 #-- Change pass
 elif [[ $jawab == "7" ]]; then
 	xderm_change_pass \ &&
-	echo "==========================================="
-	clear
-	./"$INSTALLERNAME"
+	xderm_return_installer \ &&
 
 #-- Install login page
 elif [[ $jawab == "8" ]]; then
 	xderm_install_login \ &&
-	echo "==========================================="
-	clear
-	./"$INSTALLERNAME"
+	xderm_return_installer \ &&
 
 #-- Remove login page
 elif [[ $jawab == "9" ]]; then
 	xderm_remove_login \ &&
-	echo "==========================================="
-	clear
-	./"$INSTALLERNAME"
+	xderm_return_installer \ &&
 
 #-- Old version installer
 elif [[ $jawab == "10" ]]; then
@@ -590,16 +596,12 @@ elif [[ $jawab == "10" ]]; then
 	xderm_uninstall \ &&
 	xderm_old_install \ &&
 	xderm_config_restore \ &&
-	echo "==========================================="
-	clear
-	./"$INSTALLERNAME"
+	xderm_return_installer \ &&
 
 #-- Clean/remove xderm mini
 elif [[ $jawab == "10" ]]; then
 	xderm_uninstall \ &&
-	echo "==========================================="
-	clear
-	./"$INSTALLERNAME"
+	xderm_return_installer \ &&
 
 #-- Exit program
 else
