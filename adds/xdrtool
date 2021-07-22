@@ -11,11 +11,11 @@
 #--------------------------------------------------------
 
 #-- Warna Teks Installer
-RED='\033[0;31m' # Merah
+RED='\033[1;31m' # Merah Muda
 GRE='\033[1;32m' # Hijau Muda
+CYA='\033[0;36m' # Biru Muda
 YEL='\033[1;33m' # Kuning
-NOR='\033[0;37m' # Abu Abu Normal
-BLU='\033[1;34m' # Biru Muda
+NOR='\033[1;37m' # Putih
 
 #-- Xderm Old Version Code
 v10="9385a88730f47ce476e91a94b5f598e1a8b5b112"
@@ -72,7 +72,7 @@ OLDURL="https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/"
 SCRIPTVER="4.2"
 #-- Installer Scripts
 echo -e "${NOR}==========================================="
-echo -e "     ${RED}Xderm ${BLU}Mini ${YEL}Tools ${NOR}v$SCRIPTVER ${GRE}by helmiau${NOR}"
+echo -e "     ${RED}Xderm ${CYA}Mini ${YEL}Tools ${NOR}v$SCRIPTVER ${GRE}by helmiau${NOR}"
 echo "==========================================="
 echo -e "  ${GRE}Xderm Binary    : $INSTALLSTAT$XDERMVER"
 echo -e "  ${GRE}Xderm Path      : $XDERMPATHINFO"
@@ -97,8 +97,8 @@ echo "     Remove Login Page        : 9"
 echo "     Install Older Version    : 10"
 echo "     Remove Xderm Mini Files  : 11"
 echo -e "${NOR}==========================================="
-echo -e "  ${BLU}Available Older Version  : v1.0 ~ v3.0"
-echo -e "    ${BLU}type 10 for v1.0, 20 for v2.0, etc"
+echo -e "  ${CYA}Available Older Version  : v1.0 ~ v3.0"
+echo -e "    ${CYA}type 10 for v1.0, 20 for v2.0, etc"
 echo -e "${NOR}==========================================="
 echo -e "           ${YEL}Exit = type anything !${NOR}"
 echo "==========================================="
