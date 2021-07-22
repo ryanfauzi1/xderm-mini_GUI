@@ -297,7 +297,6 @@ function xderm_config_restore() {
 	else
 		echo "  Login panel auth is not available, skipping..."			
 	fi
-	echo "  Backing up Xderm Mini configurations..."
 	if [[ -d $XDERMCONFIGBAK ]]; then
 		echo "  Backup directory is available, deleting..."
 		rm -rf $XDERMCONFIGBAK
