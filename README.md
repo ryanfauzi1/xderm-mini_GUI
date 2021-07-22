@@ -18,7 +18,7 @@ xderm-mini GUI is simple injector tool based on shell script and python commands
 
 **Current version : ```3.1```**
 
-Note : if you need to downgrade, use ***```xdrtool```*** script by using terminal. Scroll down to read ***```xdrtool```*** documentations.
+Note : if you need to downgrade, use **```xdrtool```** script by using terminal. Scroll down to read **```xdrtool```** documentations.
 
 <details><summary>Default information (WebUI address, webui login auth and config) (click to show)</summary>
 <p>
