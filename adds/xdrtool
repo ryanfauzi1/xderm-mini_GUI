@@ -64,7 +64,7 @@ LOGINOW=$(if [ -e /www/xderm/login.php ]; then echo -e "${GRE}Available"; else e
 LOGINOWBAK=$(if [ -e /www/xderm/login.php.xdrtool ]; then echo -e "${GRE}Available"; else echo -e "${RED}Unavailable"; fi)
 URL="https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main"
 OLDURL="https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/"
-SCRIPTVER="4.1"
+SCRIPTVER="4.2"
 #-- Installer Scripts
 echo -e "${NOR}==========================================="
 echo -e "     ${RED}Xderm ${BLU}Mini ${YEL}Tools ${NOR}v$SCRIPTVER ${GRE}by helmiau${NOR}"
@@ -524,11 +524,15 @@ function xderm_return_installer() {
 		echo "==========================================="
 		echo e- "  $INSTALLERNAME not found ! Reinstalling.."
 		echo "==========================================="
-		wget -O /bin/$INSTALLERNAME s.id/xdrtool -q
-		chmod +x /bin/$INSTALLERNAME
+		wget -O /bin/"$INSTALLERNAME" s.id/xdrtool -q
+		chmod +x /bin/"$INSTALLERNAME"
 		if [[ -f /bin/$INSTALLERNAME ]] && [[ ! -f /bin/$INSTALLERNAME ]]; then
-			cp /bin/$INSTALLERNAME /root/$INSTALLERNAME
-			chmod +x /root/$INSTALLERNAME
+			cp /bin/"$INSTALLERNAME" /root/"$INSTALLERNAME"
+			chmod +x /root/"$INSTALLERNAME"
+		elif [[ -f /bin/$INSTALLERNAME ]] && [[ -f /bin/$INSTALLERNAME ]]; then
+			rm /root/"$INSTALLERNAME"
+			cp /bin/"$INSTALLERNAME" /root/"$INSTALLERNAME"
+			chmod +x /root/"$INSTALLERNAME"
 		fi
 		echo e- "  Script reinstalled.. re run $INSTALLERNAME command for usage"
 		echo "==========================================="
