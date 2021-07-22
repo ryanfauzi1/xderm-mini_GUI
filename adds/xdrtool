@@ -50,9 +50,14 @@ XDERMCONFIGBAK="/www/xderm-config"
 XDERMINFO="/www/xderm/xderm-mini"
 XDERMPATHINFO=$(if [ -d ${XDERMPATH} ]; then echo -e "${GRE}Available"; else echo -e "${RED}Unavailable"; fi)
 XDERMPATHBAKINFO=$(if [ -d ${XDERMCONFIGBAK} ]; then echo -e "${GRE}Available"; else echo -e "${RED}Unavailable"; fi)
-INSTALLSTAT=$(if [ -f "${XDERMINFO}" ]; then echo -e "${GRE}Installed"; else echo -e "${RED}Not Installed"; fi)
 GREPXDERMVER=$(grep "Copyr" "${XDERMINFO}" | awk "NR==4" | awk '{print $6}')
-XDERMVER=$(if [[ $GREPXDERMVER =~ [0-9] ]]; then echo -e " ~ v$GREPXDERMVER"; else echo -e ""; fi)
+if [ -f $XDERMINFO ]; then
+	INSTALLSTAT=$(if [ -f "${XDERMINFO}" ]; then echo -e "${GRE}Installed"; else echo -e "${RED}Not Installed"; fi)
+	XDERMVER=$(if [[ $GREPXDERMVER =~ [0-9] ]]; then echo -e " ~ v$GREPXDERMVER"; else echo -e ""; fi)
+else
+	INSTALLSTAT="${RED}Not Installed"
+	XDERMVER=""
+fi
 if [ -f /root/auth.txt ]; then
 	USERNOW=$(grep user /root/auth.txt | sed 's/.*user=//')
 	PASSNOW=$(grep passwd /root/auth.txt | sed 's/.*passwd=//')
@@ -540,12 +545,12 @@ function xderm_return_installer() {
 }
 
 #-- Install Xderm Mini
-if [[ $jawab == "up" || $jawab == "UP" || $jawab == "1" ]]; then
+if [[ $jawab == "1" ]]; then
 	xderm_checknet \ &&
 	xderm_config_backup \ &&
 	xderm_install \ &&
 	xderm_config_restore \ &&
-	xderm_return_installer \ &&
+	xderm_return_installer
 
 #-- Install Agus theme
 elif [[ $jawab == "2" ]]; then
@@ -553,7 +558,7 @@ elif [[ $jawab == "2" ]]; then
 	xderm_config_backup \ &&
 	xderm_install_theme \ &&
 	xderm_config_restore \ &&
-	xderm_return_installer \ &&
+	xderm_return_installer
 
 #-- Update Xderm
 elif [[ $jawab == "3" ]]; then
@@ -561,37 +566,37 @@ elif [[ $jawab == "3" ]]; then
 	xderm_config_backup \ &&
 	xderm_update \ &&
 	xderm_config_restore \ &&
-	xderm_return_installer \ &&
+	xderm_return_installer
 
 #-- Fix Index
 elif [[ $jawab == "4" ]]; then
 	xderm_install_login \ &&
-	xderm_return_installer \ &&
+	xderm_return_installer
 
 #-- Change auth
 elif [[ $jawab == "5" ]]; then
 	xderm_change_auth \ &&
-	xderm_return_installer \ &&
+	xderm_return_installer
 
 #-- Change user
 elif [[ $jawab == "6" ]]; then
 	xderm_change_user \ &&
-	xderm_return_installer \ &&
+	xderm_return_installer
 
 #-- Change pass
 elif [[ $jawab == "7" ]]; then
 	xderm_change_pass \ &&
-	xderm_return_installer \ &&
+	xderm_return_installer
 
 #-- Install login page
 elif [[ $jawab == "8" ]]; then
 	xderm_install_login \ &&
-	xderm_return_installer \ &&
+	xderm_return_installer
 
 #-- Remove login page
 elif [[ $jawab == "9" ]]; then
 	xderm_remove_login \ &&
-	xderm_return_installer \ &&
+	xderm_return_installer
 
 #-- Old version installer
 elif [[ $jawab == "10" ]]; then
@@ -600,12 +605,12 @@ elif [[ $jawab == "10" ]]; then
 	xderm_uninstall \ &&
 	xderm_old_install \ &&
 	xderm_config_restore \ &&
-	xderm_return_installer \ &&
+	xderm_return_installer
 
 #-- Clean/remove xderm mini
 elif [[ $jawab == "10" ]]; then
 	xderm_uninstall \ &&
-	xderm_return_installer \ &&
+	xderm_return_installer
 
 #-- Exit program
 else
