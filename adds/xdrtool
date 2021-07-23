@@ -966,8 +966,8 @@ function xderm_return_installer() {
 
 function xderm_check_myip() {
 	clear
-	echo "===========================================" >> ipinfo.txt
-	echo "           IP Detail Information" > ipinfo.txt
+	echo "===========================================" > ipinfo.txt
+	echo "           IP Detail Information" >> ipinfo.txt
 	echo "===========================================" >> ipinfo.txt
 	curl -s ip-api.com/json >> ipinfo.txt
 	sed -i 's/{"//g' ipinfo.txt
