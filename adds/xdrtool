@@ -107,7 +107,8 @@ echo -e "     ${RED}Configure Xderm Config   : 8"
 echo -e "     ${GRE}Install Login Page       : 9"
 echo -e "     ${YEL}Remove Login Page        : 10"
 echo -e "     ${GRE}Install Older Version    : 11"
-echo -e "     ${YEL}Remove Xderm Mini Files  : 12"
+echo -e "     ${RED}Check My IP Info         : 12"
+echo -e "     ${YEL}Remove Xderm Mini Files  : 13"
 echo -e "${NOR}==========================================="
 echo -e "  ${CYA}Available Older Version  : v1.0 ~ v3.0"
 echo -e "    ${CYA}type 10 for v1.0, 20 for v2.0, etc"
@@ -452,6 +453,7 @@ function xderm_config_setup() {
 	echo "         Input Trojan Config   : 8"
 	echo "         Change Inject Methode : 9"
 	echo "         Change Active Profile : 10"
+	echo -e "         ${RED}Check My IP Info      : 11"
 	echo -e "${NOR}==========================================="
 	echo -e "       ${YEL}Back to first menu type number"
 	echo -e "            ${YEL}99 or 88 or 55 !${NOR}"
@@ -465,7 +467,7 @@ function xderm_config_setup() {
 		echo -e "==========================================="
 		echo -e "  Current : ${GRE}$CFGHOST${NOR}" 
 		echo -e "==========================================="
-		echo -e "  Example : www.host.com / 234.53.322.12 etc." 
+		echo -e "  Example : www.host.com / 23.53.2.12 etc." 
 		echo -e "==========================================="
 		echo -e "  Enter New SSH Hostname or IP : " 
 		echo -e "==========================================="
@@ -705,6 +707,11 @@ function xderm_config_setup() {
 		read -r CFGACTIVE
 		echo -e "config$CFGACTIVE" > $XDERMPATH/config/default
 		cat "$XDERMPATH/config/config$CFGACTIVE" > $XDERMCONFIGFILE
+		xderm_config_setup
+
+	#-- Cek My Public IP
+	elif [[ $jawab == "11" ]]; then
+		xderm_check_myip \ &&
 		xderm_config_setup
 
 	#-- Back to first menu
@@ -957,6 +964,44 @@ function xderm_return_installer() {
 	fi
 }
 
+function xderm_check_myip() {
+	clear
+	echo "===========================================" >> ipinfo.txt
+	echo "           IP Detail Information" > ipinfo.txt
+	echo "===========================================" >> ipinfo.txt
+	curl -s ip-api.com/json >> ipinfo.txt
+	sed -i 's/{"//g' ipinfo.txt
+	sed -i 's/","/\n/g' ipinfo.txt
+	sed -i 's/":"/ : /g' ipinfo.txt
+	sed -i 's/"}//g' ipinfo.txt
+	sed -i 's/":/ : /g' ipinfo.txt
+	sed -i 's/,"/\n/g' ipinfo.txt
+	sed -i 's/status :/Status		:/g' ipinfo.txt
+	sed -i 's/country :/Country Name	:/g' ipinfo.txt
+	sed -i 's/countryCode :/Country Code	:/g' ipinfo.txt
+	sed -i 's/region :/Region		:/g' ipinfo.txt
+	sed -i 's/regionName :/Region Name	:/g' ipinfo.txt
+	sed -i 's/city :/City		:/g' ipinfo.txt
+	sed -i 's/zip :/ZIP Code	:/g' ipinfo.txt
+	sed -i 's/lat :/Latitude	:/g' ipinfo.txt
+	sed -i 's/lon :/Longitude	:/g' ipinfo.txt
+	sed -i 's/timezone :/Timezone	:/g' ipinfo.txt
+	sed -i 's/isp :/ISP		:/g' ipinfo.txt
+	sed -i 's/org :/Organization	:/g' ipinfo.txt
+	sed -i 's/as :/AS		:/g' ipinfo.txt
+	sed -i 's/query :/IP Address	:/g' ipinfo.txt
+	echo " " >> ipinfo.txt
+	echo "===========================================" >> ipinfo.txt
+	echo "             Created by helmiau" >> ipinfo.txt
+	echo "===========================================" >> ipinfo.txt
+	cat ipinfo.txt
+	rm ipinfo.txt
+	echo -e " "
+	echo -e " Returning in 5 secs"
+	sleep 5
+	echo -e " Return to main menu"
+}
+
 #-- Install Xderm Mini
 if [[ $jawab == "1" ]]; then
 	xderm_checknet \ &&
@@ -1025,8 +1070,13 @@ elif [[ $jawab == "11" ]]; then
 	xderm_config_restore \ &&
 	xderm_return_installer
 
-#-- Clean/remove xderm mini
+#-- Cek My Public IP
 elif [[ $jawab == "12" ]]; then
+	xderm_check_myip \ &&
+	xderm_return_installer
+
+#-- Clean/remove xderm mini
+elif [[ $jawab == "13" ]]; then
 	xderm_stop \ &&
 	xderm_uninstall \ &&
 	xderm_return_installer
