@@ -50,10 +50,14 @@ XDERMCONFIGBAK="/www/xderm-config"
 XDERMINFO="/www/xderm/xderm-mini"
 XDERMPATHAUTH="/root/auth.txt"
 XDERMCONFIGFILE="/www/xderm/config.txt"
-INJECTSTAT=$(if grep -q 200 $XDERMPATH/screenlog.0; then echo -e "${GRE}Connected"; else echo -e "${RED}Disconnected"; fi)
 XDERMPATHINFO=$(if [ -d ${XDERMPATH} ]; then echo -e "${GRE}Available"; else echo -e "${RED}Unavailable"; fi)
 XDERMPATHBAKINFO=$(if [ -d ${XDERMCONFIGBAK} ]; then echo -e "${GRE}Available"; else echo -e "${RED}Unavailable"; fi)
 GREPXDERMVER=$(grep "Copyr" "${XDERMINFO}" | awk "NR==4" | awk '{print $6}')
+if [ -f $XDERMPATH/screenlog.0 ]; then
+		INJECTSTAT=$(if grep -q 200 $XDERMPATH/screenlog.0; then echo -e "${GRE}Connected"; else echo -e "${RED}Disconnected"; fi)
+	else
+		INJECTSTAT="${RED}Log file unavailable"
+	fi
 if [ -f $XDERMINFO ]; then
 	INSTALLSTAT=$(if [ -f "${XDERMINFO}" ]; then echo -e "${GRE}Installed"; else echo -e "${RED}Not Installed"; fi)
 	XDERMVER=$(if [[ $GREPXDERMVER =~ [0-9] ]]; then echo -e " ~ v$GREPXDERMVER"; else echo -e ""; fi)
@@ -72,7 +76,7 @@ LOGINOW=$(if [ -e /www/xderm/login.php ]; then echo -e "${GRE}Available"; else e
 LOGINOWBAK=$(if [ -e /www/xderm/login.php.xdrtool ]; then echo -e "${GRE}Available"; else echo -e "${RED}Unavailable"; fi)
 URL="https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main"
 OLDURL="https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/"
-SCRIPTVER="4.3"
+SCRIPTVER="4.5"
 
 
 
@@ -321,7 +325,11 @@ function xderm_config_restore() {
 
 function xderm_config_setup() {
 	clear
-	INJECTSTAT=$(if grep -q 200 $XDERMPATH/screenlog.0; then echo -e "${GRE}Connected"; else echo -e "${RED}Disconnected"; fi)
+	if [ -f $XDERMPATH/screenlog.0 ]; then
+		INJECTSTAT=$(if grep -q 200 $XDERMPATH/screenlog.0; then echo -e "${GRE}Connected"; else echo -e "${RED}Disconnected"; fi)
+	else
+		INJECTSTAT="${RED}Log file unavailable"
+	fi
 	#-- Xderm config info
 	CFGDEFAULT="$XDERMPATH/config/default"
 	if [ -f $CFGDEFAULT ]; then
@@ -337,17 +345,17 @@ function xderm_config_setup() {
 		CFGUSER=$(grep user $XDERMCONFIGFILE | sed 's/.*user=//')
 		CFGPASS=$(grep pass $XDERMCONFIGFILE | sed 's/.*pass=//')
 		CFGSNI=$(grep sni $XDERMCONFIGFILE | sed 's/.*sni=//')
-		CFGVMESS=$(grep -i vmess $XDERMCONFIGFILE)
-		CFGTROJAN=$(grep -i trojan $XDERMCONFIGFILE)
+		CFGVMESS=$(grep -i vmess:// $XDERMCONFIGFILE)
+		CFGTROJAN=$(grep -i trojan:// $XDERMCONFIGFILE)
 	else
 		CFGHOST="${RED}Config file not exist !"
-		CFGPORT="$CFGPORT"
-		CFGPUDP="$CFGPORT"
-		CFGUSER="$CFGPORT"
-		CFGPASS="$CFGPORT"
-		CFGSNI="$CFGPORT"
-		CFGVMESS="$CFGPORT"
-		CFGTROJAN="$CFGPORT"
+		CFGPORT="$CFGHOST"
+		CFGPUDP="$CFGHOST"
+		CFGUSER="$CFGHOST"
+		CFGPASS="$CFGHOST"
+		CFGSNI="$CFGHOST"
+		CFGVMESS="$CFGHOST"
+		CFGTROJAN="$CFGHOST"
 	fi
 
 	if [[ $(grep "mode=0" $XDERMCONFIGFILE) || $(grep SSH $XDERMPATH/config/mode.default) ]]; then
@@ -375,19 +383,60 @@ function xderm_config_setup() {
 		CFGMODE="${RED}Unset"
 	fi
 	
+	if [[ $(echo -e "$CFGHOST" | sed -r 's+[.:/=]+0+g' | awk '{print length}') -gt 20 ]]; then
+		CFGHOSTVIEW=$(echo -e "$CFGHOST" | head -c 20)"..."
+	else
+		CFGHOSTVIEW="$CFGHOST"
+	fi
+	if [[ $(echo -e "$CFGPORT" | sed -r 's+[.:/=]+0+g' | awk '{print length}') -gt 20 ]]; then
+		CFGPORTVIEW=$(echo -e "$CFGPORT" | head -c 20)"..."
+	else
+		CFGPORTVIEW="$CFGPORT"
+	fi
+	if [[ $(echo -e "$CFGPUDP" | sed -r 's+[.:/=]+0+g' | awk '{print length}') -gt 20 ]]; then
+		CFGPUDPVIEW=$(echo -e "$CFGPUDP" | head -c 20)"..."
+	else
+		CFGPUDPVIEW="$CFGPUDP"
+	fi
+	if [[ $(echo -e "$CFGUSER" | sed -r 's+[.:/=]+0+g' | awk '{print length}') -gt 20 ]]; then
+		CFGUSERVIEW=$(echo -e "$CFGUSER" | head -c 20)"..."
+	else
+		CFGUSERVIEW="$CFGUSER"
+	fi
+	if [[ $(echo -e "$CFGPASS" | sed -r 's+[.:/=]+0+g' | awk '{print length}') -gt 20 ]]; then
+		CFGPASSVIEW=$(echo -e "$CFGPASS" | head -c 20)"..."
+	else
+		CFGPASSVIEW="$CFGPASS"
+	fi
+	if [[ $(echo -e "$CFGSNI" | sed -r 's+[.:/=]+0+g' | awk '{print length}') -gt 20 ]]; then
+		CFGSNIVIEW=$(echo -e "$CFGSNI" | head -c 20)"..."
+	else
+		CFGSNIVIEW="$CFGSNI"
+	fi
+	if [[ $(echo -e "$CFGVMESS" | sed -r 's+[.:/=]+0+g' | awk '{print length}') -gt 20 ]]; then
+		CFGVMESSVIEW=$(echo -e "$CFGVMESS" | head -c 20)"..."
+	else
+		CFGVMESSVIEW="$CFGVMESS"
+	fi
+	if [[ $(echo -e "$CFGTROJAN" | sed -r 's+[.:/=]+0+g' | awk '{print length}') -gt 20 ]]; then
+		CFGTROJANVIEW=$(echo -e "$CFGTROJAN" | head -c 20)"..."
+	else
+		CFGTROJANVIEW="$CFGTROJAN"
+	fi
+	
 	#-- Uneditable Info for script checking purpose
 
 	echo "==========================================="
 	echo -e "          ${YEL}Used Config : ${GRE}$CFGUSED${NOR}"
 	echo "==========================================="
-	echo -e "  ${GRE}SSH Host        : $CFGHOST"
-	echo -e "  ${YEL}SSH SSL Port    : $CFGPORT"
-	echo -e "  ${GRE}UDP Port        : $CFGPUDP"
-	echo -e "  ${YEL}SSH Username    : $CFGUSER"
-	echo -e "  ${GRE}SSH Password    : $CFGPASS"
-	echo -e "  ${YEL}SNI Bug         : $CFGSNI"
-	echo -e "  ${GRE}Vmess Config    : $CFGVMESS"
-	echo -e "  ${YEL}Trojan Config   : $CFGTROJAN"
+	echo -e "  ${GRE}SSH Host        : $CFGHOSTVIEW"
+	echo -e "  ${YEL}SSH SSL Port    : $CFGPORTVIEW"
+	echo -e "  ${GRE}UDP Port        : $CFGPUDPVIEW"
+	echo -e "  ${YEL}SSH Username    : $CFGUSERVIEW"
+	echo -e "  ${GRE}SSH Password    : $CFGPASSVIEW"
+	echo -e "  ${YEL}SNI Bug         : $CFGSNIVIEW"
+	echo -e "  ${GRE}Vmess Config    : $CFGVMESSVIEW"
+	echo -e "  ${YEL}Trojan Config   : $CFGTROJANVIEW"
 	echo -e "  ${GRE}Inject Metode   : $CFGMODEINFO"
 	echo -e "  ${YEL}Inject Status   : $INJECTSTAT${NOR}"
 	echo "==========================================="
@@ -404,8 +453,8 @@ function xderm_config_setup() {
 	echo "         Change Inject Methode : 9"
 	echo "         Change Active Profile : 10"
 	echo -e "${NOR}==========================================="
-	echo -e "     ${YEL}Back to first menu type number"
-	echo -e "          ${YEL}99 or 88 or 55 !${NOR}"
+	echo -e "       ${YEL}Back to first menu type number"
+	echo -e "            ${YEL}99 or 88 or 55 !${NOR}"
 	echo "==========================================="
 	echo ""
 	echo -n "   Enter Your Option : " 
@@ -414,9 +463,13 @@ function xderm_config_setup() {
 	#-- Change host
 	if [[ $configset == "1" ]]; then
 		echo -e "==========================================="
+		echo -e "  Current : ${GRE}$CFGHOST${NOR}" 
+		echo -e "==========================================="
 		echo -e "  Example : www.host.com / 234.53.322.12 etc." 
 		echo -e "==========================================="
-		echo -n "  Enter New SSH Hostname or IP : " 
+		echo -e "  Enter New SSH Hostname or IP : " 
+		echo -e "==========================================="
+		echo -n "  " 
 		read -r NEWHOST
 		echo -e "host=$NEWHOST" > $XDERMCONFIGFILE
 		echo -e "port=$CFGPORT" >> $XDERMCONFIGFILE
@@ -434,9 +487,13 @@ function xderm_config_setup() {
 	#-- Change ssl port
 	elif [[ $configset == "2" ]]; then
 		echo -e "==========================================="
+		echo -e "  Current : ${GRE}$CFGPORT${NOR}" 
+		echo -e "==========================================="
 		echo -e "  Example : 443 / 442 etc." 
 		echo -e "==========================================="
-		echo -n "  Enter New SSH SSL Port Number : " 
+		echo -e "  Enter New SSH SSL Port Number : " 
+		echo -e "==========================================="
+		echo -n "  " 
 		read -r NEWPORT
 		echo -e "host=$CFGHOST" > $XDERMCONFIGFILE
 		echo -e "port=$NEWPORT" >> $XDERMCONFIGFILE
@@ -454,9 +511,13 @@ function xderm_config_setup() {
 	#-- change udp port
 	elif [[ $configset == "3" ]]; then
 		echo -e "==========================================="
+		echo -e "  Current : ${GRE}$CFGPUDP${NOR}" 
+		echo -e "==========================================="
 		echo -e "  Example : 7100/7200/7300 etc." 
 		echo -e "==========================================="
-		echo -n "  Enter UDP Port Number : " 
+		echo -e "  Enter UDP Port Number : " 
+		echo -e "==========================================="
+		echo -n "  " 
 		read -r NEWPUDP
 		echo -e "host=$CFGHOST" > $XDERMCONFIGFILE
 		echo -e "port=$CFGPORT" >> $XDERMCONFIGFILE
@@ -474,9 +535,13 @@ function xderm_config_setup() {
 	#-- change ssh username
 	elif [[ $configset == "4" ]]; then
 		echo -e "==========================================="
+		echo -e "  Current : ${GRE}$CFGUSER${NOR}" 
+		echo -e "==========================================="
 		echo -e "  Example : namauser" 
 		echo -e "==========================================="
-		echo -n "  Enter New SSH Username : "
+		echo -e "  Enter New SSH Username : "
+		echo -e "==========================================="
+		echo -n "  " 
 		read -r NEWUSERSSH
 		echo -e "host=$CFGHOST" > $XDERMCONFIGFILE
 		echo -e "port=$CFGPORT" >> $XDERMCONFIGFILE
@@ -494,9 +559,13 @@ function xderm_config_setup() {
 	#-- change ssh password
 	elif [[ $configset == "5" ]]; then
 		echo -e "==========================================="
+		echo -e "  Current : ${GRE}$CFGPASS${NOR}" 
+		echo -e "==========================================="
 		echo -e "  Example : puaswot3223" 
 		echo -e "==========================================="
-		echo -n "  Enter New SSH Password : " 
+		echo -e "  Enter New SSH Password : " 
+		echo -e "==========================================="
+		echo -n "  " 
 		read -r NEWPASSSSH
 		echo -e "host=$CFGHOST" > $XDERMCONFIGFILE
 		echo -e "port=$CFGPORT" >> $XDERMCONFIGFILE
@@ -514,9 +583,13 @@ function xderm_config_setup() {
 	#-- Change sni bug
 	elif [[ $configset == "6" ]]; then 
 		echo -e "==========================================="
+		echo -e "  Current : ${GRE}$CFSNI${NOR}" 
+		echo -e "==========================================="
 		echo -e "  Example : m.line.id" 
 		echo -e "==========================================="
-		echo -n "  Enter New SNI Bug (Server Name Indication) : "
+		echo -e "  Enter New SNI Bug (Server Name Indication) : "
+		echo -e "==========================================="
+		echo -n "  " 
 		read -r NEWSNI
 		echo -e "host=$CFGHOST" > $XDERMCONFIGFILE
 		echo -e "port=$CFGPORT" >> $XDERMCONFIGFILE
@@ -534,9 +607,13 @@ function xderm_config_setup() {
 	#-- Change vmess
 	elif [[ $configset == "7" ]]; then
 		echo -e "==========================================="
+		echo -e "  Current : ${GRE}$CFGVMESS${NOR}" 
+		echo -e "==========================================="
 		echo -e "  Example : vmess://2938nyc38cy..." 
 		echo -e "==========================================="
-		echo -n "  Enter New Vmess URL : " 
+		echo -e "  Enter New Vmess URL : " 
+		echo -e "==========================================="
+		echo -n "  " 
 		read -r NEWVMESS
 		echo -e "host=$CFGHOST" > $XDERMCONFIGFILE
 		echo -e "port=$CFGPORT" >> $XDERMCONFIGFILE
@@ -554,9 +631,13 @@ function xderm_config_setup() {
 	#-- Change trojan
 	elif [[ $configset == "8" ]]; then
 		echo -e "==========================================="
+		echo -e "  Current : ${GRE}$CFGTROJAN${NOR}" 
+		echo -e "==========================================="
 		echo -e "  Example : trojan://namauser@host.trojan.me:2281" 
 		echo -e "==========================================="
-		echo -n "  Enter New Trojan VPN URL : " 
+		echo -e "  Enter New Trojan VPN URL : " 
+		echo -e "==========================================="
+		echo -n "  " 
 		read -r NEWTROJAN
 		echo -e "host=$CFGHOST" > $XDERMCONFIGFILE
 		echo -e "port=$CFGPORT" >> $XDERMCONFIGFILE
@@ -574,12 +655,16 @@ function xderm_config_setup() {
 	#-- Change mode
 	elif [[ $configset == "9" ]]; then
 		echo -e "==========================================="
+		echo -e "  Current : ${GRE}$CFGMODEINFO${NOR}"
+		echo -e "==========================================="
 		echo -e "    0 for SSH SSL" 
 		echo -e "    1 for Vmess" 
 		echo -e "    2 for Trojan" 
 		echo -e "    3 for Multi Inject (SSH, Vmess & Trojan)" 
 		echo -e "==========================================="
-		echo -n "  Enter Inject Mode Number (0~3) : " 
+		echo -e "  Enter Inject Mode Number (0~3) : " 
+		echo -e "==========================================="
+		echo -n "  " 
 		read -r NEWMODE
 		echo -e "host=$CFGHOST" > $XDERMCONFIGFILE
 		echo -e "port=$CFGPORT" >> $XDERMCONFIGFILE
@@ -614,7 +699,9 @@ function xderm_config_setup() {
 		echo -e "    config4 = 4"
 		echo -e "    config5 = 5"
 		echo -e "==========================================="
-		echo -n "  Select profile to use it (1~5) : " 
+		echo -e "  Select profile to use it (1~5) : " 
+		echo -e "==========================================="
+		echo -n "  " 
 		read -r CFGACTIVE
 		echo -e "config$CFGACTIVE" > $XDERMPATH/config/default
 		cat "$XDERMPATH/config/config$CFGACTIVE" > $XDERMCONFIGFILE
@@ -945,7 +1032,7 @@ elif [[ $jawab == "12" ]]; then
 	xderm_return_installer
 
 #-- Exit program
-elif [[ $configset == "99" ]]; then
+elif [[ $jawab == "99" || $jawab == "88" || $jawab == "55" ]]; then
 	echo "    Exiting program !"
 	echo "==========================================="
 	exit
