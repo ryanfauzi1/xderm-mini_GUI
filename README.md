@@ -18,6 +18,8 @@ xderm-mini GUI is simple injector tool based on shell script and python commands
 
 **Current version : ```3.1```**
 
+Note : if you need to downgrade, use **```xdrtool```** script by using terminal. Scroll down to read **```xdrtool```** documentations.
+
 <details><summary>Default information (WebUI address, webui login auth and config) (click to show)</summary>
 <p>
   
@@ -91,16 +93,22 @@ wget -O installer https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/ma
 This xdrtool contains : below command lists
 ```
 ===========================================
-|              Command Lists              |
+               Command Lists
 ===========================================
-  Change Username & Password  = 1 / a / A
-  Change Username Only        = 2 / u / U
-  Change Password Only        = 3 / p / P
-  Install Login Page          = 4 / lp / LP
-  Remove Login Page           = 5 / rlp/ RLP
-  Manual Update               = 6 / mu / MU
-  Fix index.php downloading   = 7 / fp / FP
-  Install Default Theme       = 8 / dt / DT
+     Install Xderm Mini       : 1
+     Install Theme by Agus S  : 2
+     Update Xderm Mini        : 3
+     Fix index.php            : 4
+     Change User & Pass Login : 5
+     Change Username Only     : 6
+     Change Password Only     : 7
+     Install Login Page       : 8
+     Remove Login Page        : 9
+     Install Older Version    : 10
+     Remove Xderm Mini Files  : 11
+===========================================
+  Available Older Version  : v1.0 ~ v3.0
+    type 10 for v1.0, 20 for v2.0, etc
 ===========================================
 ```
 
