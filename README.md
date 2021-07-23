@@ -90,42 +90,17 @@ wget -O installer https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/ma
 
 **Run ```xdrtool``` command using terminal to Setup Xderm Mini after initial installation**
 
-This xdrtool contains : below command lists
-```
-===========================================
-               Command Lists
-===========================================
-     Install Xderm Mini       : 1
-     Install Theme by Agus S  : 2
-     Update Xderm Mini        : 3
-     Fix index.php            : 4
-     Change User & Pass Login : 5
-     Change Username Only     : 6
-     Change Password Only     : 7
-     Install Login Page       : 8
-     Remove Login Page        : 9
-     Install Older Version    : 10
-     Remove Xderm Mini Files  : 11
-===========================================
-  Available Older Version  : v1.0 ~ v3.0
-    type 10 for v1.0, 20 for v2.0, etc
-===========================================
-```
+<details><summary>This xdrtool contains : below command lists (click me to view)</summary>
+<p>
+  
+  ![sddsfvdfcvds](https://user-images.githubusercontent.com/20932301/126850100-8f68b564-63fa-4e72-b4c5-390946fd2ad4.png)
 
-Login Page Installation
-```
-wget -O installer-login https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/installer-login && bash installer-login
-```
+</p>
+</details>
 
-Login Page Removal
-```
-wget -O /bin/xderm-rmlogin "https://raw.githubusercontent.com/helmiau/openwrt-config/main/rmlogin-xderm" && chmod +x /bin/xderm-rmlogin && bash xderm-rmlogin
-```
-
-for Manual Update
-```
-wget -O update-manual https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/update-manual && chmod +x update-manual && ./update-manual
-```
+- Login Page Installation (you can install it through **./xdrtool**)
+- Login Page Removal (you can remove it through **./xdrtool**)
+- for Manual Update (you can update through **./xdrtool**)
 
 ## Additional Installation
 #### [Xderm-Mini Installer for STB by Vito Harhari](https://github.com/vitoharhari/xderm-mini)
