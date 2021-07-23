@@ -72,7 +72,7 @@ LOGINOW=$(if [ -e /www/xderm/login.php ]; then echo -e "${GRE}Available"; else e
 LOGINOWBAK=$(if [ -e /www/xderm/login.php.xdrtool ]; then echo -e "${GRE}Available"; else echo -e "${RED}Unavailable"; fi)
 URL="https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main"
 OLDURL="https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/"
-SCRIPTVER="4.4"
+SCRIPTVER="4.3"
 
 
 
@@ -896,7 +896,7 @@ elif [[ $jawab == "3" ]]; then
 
 #-- Fix Index
 elif [[ $jawab == "4" ]]; then
-	xderm_install_login \ &&
+	xderm_fixphp \ &&
 	xderm_return_installer
 
 #-- Change auth
