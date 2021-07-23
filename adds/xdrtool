@@ -1078,6 +1078,7 @@ elif [[ $jawab == "12" ]]; then
 #-- Clean/remove xderm mini
 elif [[ $jawab == "13" ]]; then
 	xderm_stop \ &&
+	xderm_config_backup \ &&
 	xderm_uninstall \ &&
 	xderm_return_installer
 
