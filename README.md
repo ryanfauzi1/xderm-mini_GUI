@@ -93,7 +93,7 @@ wget -O installer https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/ma
 <details><summary>This xdrtool contains : below command lists (click me to view)</summary>
 <p>
   
-  ![sddsfvdfcvds](https://user-images.githubusercontent.com/20932301/126850100-8f68b564-63fa-4e72-b4c5-390946fd2ad4.png)
+  ![image](https://user-images.githubusercontent.com/20932301/126860531-b69081fe-3a5d-4015-aa0f-f97ccd34591c.png)
 
 </p>
 </details>
