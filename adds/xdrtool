@@ -192,8 +192,10 @@ function xderm_install() {
 	wget -O /bin/xdrauth $URL/adds/xdrauth -q
 	chmod +x /bin/xdrauth
 	echo "Authorization terminal tool downloaded....."
-	wget -O /bin/xdrtool $URL/adds/xdrtool -q
+	wget -O /bin/xdrtool s.id/xdrtool -q
 	chmod +x /bin/xdrtool
+	cat /bin/xdrtool > /root/xdrtool
+	chmod +x /root/xdrtool
 	echo "Xderm Mini Tool downloaded....."
 	if [ -f $(cat "$XDERMPATH"/log/st 2>/dev/null) ]; then
 		echo "Starting Xderm Binary....."
@@ -220,7 +222,10 @@ function xderm_update() {
 
 function xderm_old_install() {
 	clear
-	echo -n "  Enter older version for install (type 10~30) : "
+	echo -e " "
+	echo -e " "
+	echo -e "  Enter older version for install (type 10~30) : "
+	echo -n " "
 	read -r VER
 	VERSI=$(grep v"$VER" "$INSTALLERNAME" | awk -F'"' '$0=$2')
 	echo "######################################"
@@ -259,8 +264,10 @@ function xderm_old_install() {
 	wget -O /bin/xdrauth $URL/adds/xdrauth -q
 	chmod +x /bin/xdrauth
 	echo "Authorization terminal tool downloaded....."
-	wget -O /bin/xdrtool $URL/adds/xdrtool -q
+	wget -O /bin/xdrtool s.id/xdrtool -q
 	chmod +x /bin/xdrtool
+	cat /bin/xdrtool > /root/xdrtool
+	chmod +x /root/xdrtool
 	echo "Xderm Mini Tool downloaded....."
 	if [ -f $(cat "$XDERMPATH"/log/st 2>/dev/null) ]; then
 		echo "Starting Xderm Binary....."
@@ -379,7 +386,7 @@ function xderm_install_theme() {
 	wget -O "$XDERMPATH"/img/ico.png $URL/ico.png -q
 	echo "Icon downloaded....."
 	wget -O "$XDERMPATH"/img/background.jpg $URL/background.jpg -q
-	echo "Backgroun wallpaper downloaded....."
+	echo "Background wallpaper downloaded....."
 	echo "Installing theme, please wait....."
 	sleep 2	
 	echo "==========================================="
