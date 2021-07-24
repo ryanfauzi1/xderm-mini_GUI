@@ -52,13 +52,13 @@ XDERMPATHAUTH="/root/auth.txt"
 XDERMCONFIGFILE="/www/xderm/config.txt"
 XDERMPATHINFO=$(if [ -d ${XDERMPATH} ]; then echo -e "${GRE}Available"; else echo -e "${RED}Unavailable"; fi)
 XDERMPATHBAKINFO=$(if [ -d ${XDERMCONFIGBAK} ]; then echo -e "${GRE}Available"; else echo -e "${RED}Unavailable"; fi)
-GREPXDERMVER=$(grep "Copyr" "${XDERMINFO}" | awk "NR==4" | awk '{print $6}')
 if [ -f $XDERMPATH/screenlog.0 ]; then
-		INJECTSTAT=$(if grep -q 200 $XDERMPATH/screenlog.0; then echo -e "${GRE}Connected"; else echo -e "${RED}Disconnected"; fi)
-	else
-		INJECTSTAT="${RED}Log file unavailable"
+	INJECTSTAT=$(if grep -q 200 $XDERMPATH/screenlog.0; then echo -e "${GRE}Connected"; else echo -e "${RED}Disconnected"; fi)
+else
+	INJECTSTAT="${RED}Log file unavailable"
 fi
 if [ -f $XDERMINFO ]; then
+	GREPXDERMVER=$(grep "Copyr" "${XDERMINFO}" | awk "NR==4" | awk '{print $6}')
 	INSTALLSTAT=$(if [ -f "${XDERMINFO}" ]; then echo -e "${GRE}Installed"; else echo -e "${RED}Not Installed"; fi)
 	XDERMVER=$(if [[ $GREPXDERMVER =~ [0-9] ]]; then echo -e " ~ v$GREPXDERMVER"; else echo -e ""; fi)
 else
@@ -104,7 +104,7 @@ echo -e "     ${GRE}Change Password Only     :  7"
 echo -e "     ${RED}Configure Xderm Config   :  8"
 echo -e "     ${GRE}Install Login Page       :  9"
 echo -e "     ${YEL}Remove Login Page        : 10"
-echo -e "     ${GRE}Install Older Version    : 11"
+echo -e "     ${RED}Install Older Version    : 11"
 echo -e "     ${YEL}Read Xderm Log Process   : 12"
 echo -e "     ${GRE}Check My IP Info         : 13"
 echo -e "     ${YEL}Check Other Host/IP Info : 14"
@@ -227,7 +227,26 @@ function xderm_old_install() {
 	echo -e "  Enter older version for install (type 10~30) : "
 	echo -n " "
 	read -r VER
-	VERSI=$(grep v"$VER" "$INSTALLERNAME" | awk -F'"' '$0=$2')
+	if [[ $VER -gt 30 ]]; then
+		echo -e " "
+		echo -e "  Version v$VER greater then v3.0 "
+		echo -e "  Returning to input version menu..."
+		sleep 2
+		xderm_old_install
+	elif [[ $VER -lt 10 ]]; then
+		echo -e " "
+		echo -e "  Version v$VER less then v1.0 "
+		echo -e "  Returning to input version menu..."
+		sleep 2
+		xderm_old_install
+	fi
+	if [[ -f /bin/$INSTALLERNAME ]]; then
+		VERSI=$(grep v"$VER" "/bin/$INSTALLERNAME" | awk -F'"' '$0=$2')
+	elif [[ -f /root/$INSTALLERNAME ]] && [[ ! -f /bin/$INSTALLERNAME ]]; then
+		VERSI=$(grep v"$VER" "/root/$INSTALLERNAME" | awk -F'"' '$0=$2')
+	elif [[ -f /root/$INSTALLERNAME ]] && [[ -f /bin/$INSTALLERNAME ]]; then
+		VERSI=$(grep v"$VER" "/bin/$INSTALLERNAME" | awk -F'"' '$0=$2')
+	fi
 	echo "######################################"
 	echo -e "   Older Xderm Mini GUI Installer $VER"
 	echo "######################################"
