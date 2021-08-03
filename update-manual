@@ -1,3 +1,28 @@
 #!/bin/bash
-wget -O /www/xderm/xderm-mini https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/xderm-mini -q
-wget -O /www/xderm/index.php https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main/index.php -q
+clear
+echo "######################################"
+echo " Installer Xderm Mini GUI Latest Version"
+echo "######################################"
+echo "  Checking connections..."
+if wget -S --spider github.com/ryanfauzi1/xderm-mini_GUI 2>&1 | grep -q 'HTTP/1.1 200 OK'; then
+	echo "Installing latest version of Xderm Mini GUI, please wait....."
+	echo "Creating required directories....."
+	mkdir -p /www/xderm /www/xderm/js /www/xderm/img /www/xderm/log
+	url="raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main"
+	echo "Downloading files....................10%"
+	wget -O /www/xderm/xderm-mini $url/xderm-mini -q
+	echo "Downloading files....................50%"
+	wget -O /www/xderm/index.php $url/index.php -q
+	echo "Files downloaded................... 100%"
+	echo "Update Success. Exiting in 3 secs."
+	echo "######################################"
+	sleep 3
+	clear
+	exit
+else
+	echo "  No internet connection or repository url unavailable..."
+	echo "  Exiting in 3 secs."
+	sleep 3
+	clear
+	exit
+fi

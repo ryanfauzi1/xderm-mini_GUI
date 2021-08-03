@@ -22,19 +22,19 @@ Note : if you need to downgrade, use **```xdrtool```** script by using terminal.
 
 <details><summary>Default information (WebUI address, webui login auth and config) (click to show)</summary>
 <p>
-  
+
 Default **WebUI Page** : http://192.168.1.1/xderm
 
-Default **auth.txt** (WebUI Login Information) 
+Default **auth.txt** (WebUI Login Information)
 
 ```
 Username  : admin
 Password  : xderm
 ```
 
-you can change authentication by editing ```/root/auth.txt``` file or by running ```xdrauth``` command using terminal then follow the instructions.
+you can change authentication by editing ```/root/auth.txt``` file or by running ```xdrtool``` command using terminal then follow the instructions.
 
-Default **config.txt** 
+Default **config.txt**
 ```
 host=103.157.1xx.xx
 port=443
@@ -45,18 +45,18 @@ sni=www.xxx.xx
 vmess://eyJhZGQiOixxxxxxx
 trojan://user@server:port
 ```
-  
+
 </p>
 </details>
 
 **Screenshots**
 <details><summary>Click here to show some screenshots</summary>
 <p>
-  
+
 ![image](https://user-images.githubusercontent.com/20932301/126107228-9c227a82-b4f0-43c6-82f9-f744e5aabf54.png)
 
 ![image](https://user-images.githubusercontent.com/20932301/125009423-bb764400-e08e-11eb-8645-46c9bf7fa74b.png)
-  
+
 </p>
 </details>
 
@@ -94,7 +94,7 @@ wget -O installer https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/ma
 <p>
 
   ![sddsfvdfcvds](https://user-images.githubusercontent.com/20932301/126867087-34a9fb43-5fe3-4107-90f3-d9e1c22c81dd.png)
-  
+
 </p>
 </details>
 
@@ -129,9 +129,9 @@ Run **```fixphp```** for installation/usage.
 
 <details><summary>Click here to show screenshots</summary>
 <p>
-  
+
   ![image](https://user-images.githubusercontent.com/20932301/126102219-f2dbcbb0-3ee3-4952-8076-a144b0e5e7f8.png)
-  
+
 </p>
 </details>
 
@@ -147,9 +147,9 @@ Run **```installtheme```** for installation/usage.
 
 <details><summary>Click here to show screenshots</summary>
 <p>
-  
+
 ![image](https://user-images.githubusercontent.com/20932301/126102454-445d1172-6571-4bc5-93ea-37d7d06416ff.png)
-  
+
 </p>
 </details>
 

@@ -1,32 +1,65 @@
 #!/bin/bash
-clear;echo "######################################"
-echo -e "   Auto installer Xderm-mini GUI\n######################################\n"
-echo "Installing, Tunggu....."
-mkdir -p /www/xderm /www/xderm/js /www/xderm/img /www/xderm/log
-url="https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main"
-wget -O /www/xderm/index.php $url/index.php -q
-wget -O /www/xderm/index.html $url/index.html -q
-wget -O /www/xderm/xderm-mini $url/xderm-mini -q
-wget -O /www/xderm/login.php $url/login.php -q
-wget -O /www/xderm/header.php $url/header.php -q
-wget -O /www/xderm/config.txt $url/config.txt -q
-wget -O /www/xderm/js/jquery-2.1.3.min.js $url/jquery-2.1.3.min.js -q
-wget -O /www/xderm/img/image.png $url/image.png -q
-wget -O /www/xderm/img/fav.ico $url/fav.ico -q
-wget -O /www/xderm/img/ico.png $url/ico.png -q
-wget -O /www/xderm/img/background.jpg $url/background.jpg -q
-wget -O /www/xderm/xdrtheme-blue-agus $url/adds/xdrtheme-blue-agus -q
-wget -O /bin/xdrauth $url/adds/xdrauth -q
-chmod +x /bin/xdrauth
-wget -O /bin/xdrtool $url/adds/xdrtool -q
-chmod +x /bin/xdrtool
- if [ -f $(cat /www/xderm/log/st 2>/dev/null) ]; then
-echo Start > /www/xderm/log/st
- fi
-echo -e "user=admin\npasswd=xderm" > /root/auth.txt
-echo -e "xderm-mini GUI terinstall.\n\nSilahkan Akses 'http://192.168.1.1/xderm'"
-echo -e "Default Authentication\nUsername: admin\nPassword: xderm\n"
-echo -e "Untuk mengganti User dan Password, silahkan edit /root/auth.txt"
-echo -e "Atau jalankan command terminal xdrauth untuk mengubahnya"
-echo "Jangan lupa setting config dulu di webui nya."
-echo "Terima kasih -salam ryan fauzi."
+clear
+echo "######################################"
+echo " Installer Xderm Mini GUI Latest Version"
+echo "######################################"
+echo "  Checking connections..."
+if wget -S --spider github.com/ryanfauzi1/xderm-mini_GUI 2>&1 | grep -q 'HTTP/1.1 200 OK'; then
+	echo "Installing latest version of Xderm Mini GUI, please wait....."
+	echo "Creating required directories....."
+	mkdir -p /www/xderm /www/xderm/js /www/xderm/img /www/xderm/log
+	url="https://raw.githubusercontent.com/ryanfauzi1/xderm-mini_GUI/main"
+	wget -O /www/xderm/index.php $url/index.php -q
+	echo "Downloading files....................1%"
+	wget -O /www/xderm/index.html $url/index.html -q
+	echo "Downloading files....................5%"
+	wget -O /www/xderm/xderm-mini $url/xderm-mini -q
+	echo "Downloading files...................10%"
+	wget -O /www/xderm/login.php $url/login.php -q
+	echo "Downloading files...................20%"
+	wget -O /www/xderm/header.php $url/header.php -q
+	echo "Downloading files...................30%"
+	wget -O /www/xderm/config.txt $url/config.txt -q
+	echo "Downloading files...................40%"
+	wget -O /www/xderm/js/jquery-2.1.3.min.js $url/jquery-2.1.3.min.js -q
+	echo "Downloading files...................50%"
+	wget -O /www/xderm/img/image.png $url/image.png -q
+	echo "Downloading files...................60%"
+	wget -O /www/xderm/img/fav.ico $url/fav.ico -q
+	echo "Downloading files...................70%"
+	wget -O /www/xderm/img/ico.png $url/ico.png -q
+	echo "Downloading files...................80%"
+	wget -O /www/xderm/img/background.jpg $url/background.jpg -q
+	echo "Downloading files...................90%"
+	wget -O /www/xderm/xdrtheme-blue-agus $url/adds/xdrtheme-blue-agus -q
+	echo "Downloading files...................95%"
+	wget -O /bin/xdrtool bit.ly/xdrtool -q
+	cat /bin/xdrtool > /root/xdrtool
+	chmod +x /bin/xdrtool
+	chmod +x /root/xdrtool
+	echo "Files downloaded...................100%"
+	if [ -f $(cat /www/xderm/log/st 2>/dev/null) ]; then
+		echo Start > /www/xderm/log/st
+	fi
+	echo "######################################"
+	echo " Installation Success."
+	echo "######################################"
+	echo " "
+	echo -e "user=admin\npasswd=xderm" > /root/auth.txt
+	echo -e "xderm-mini GUI terinstall.\n\nSilahkan Akses 'http://192.168.1.1/xderm'"
+	echo -e "Default Authentication\nUsername: admin\nPassword: xderm\n"
+	echo -e "Untuk mengganti User dan Password, silahkan edit /root/auth.txt"
+	echo -e "Atau jalankan command terminal xdrtool untuk mengubahnya"
+	echo "Jangan lupa setting config, lalu simpan di WebUI nya."
+	echo " "
+	echo "Terima kasih - salam Ryan Fauzi."
+	echo " "
+	echo "######################################"
+	exit
+else
+	echo "  No internet connection or repository url unavailable..."
+	echo "  Closing in 3 secs."
+	sleep 3
+	clear
+	exit
+fi
