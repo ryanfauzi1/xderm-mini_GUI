@@ -25,27 +25,32 @@ if wget -S --spider raw.githubusercontent.com/helmiau/xderm-mini_GUI/main/adds/x
 	echo -e "==========================================="
 	echo -e " Update Success. Exiting in 3 secs."
 	echo -e "==========================================="
+	echo -e " Now returning to XDRTOOL main menu..."
+	echo -e " If XDRTOOL main menu not showing after 3 secs."
 	echo -e " please run command : xdrtool or ./xdrtool"
 	echo -e " to use main script, thank you."
 	echo -e "==========================================="
 	echo -e " Script by helmiau a.k.a Helmi Amirudin"
 	echo -e "==========================================="
-	sleep 3
+	sleep 3	
+	if [[ -f /root/xdrtool ]]; then
+		trap /root/xdrtool EXIT
+	elif [[ -f /bin/xdrtool ]]; then
+		trap xdrtool EXIT
+	fi
 	clear
 	exit
 else
 	echo "  No internet connection or repository url unavailable..."
-	echo "  Exiting in 3 secs."
+	echo "  Returning to XDRTOOL main menu in 3 secs."
 	sleep 3
+	if [[ -f /root/xdrtool ]]; then
+		trap /root/xdrtool EXIT
+	elif [[ -f /bin/xdrtool ]]; then
+		trap xdrtool EXIT
+	fi
 	clear
 	exit
-fi
-	
-if [[ ! -f /bin/xdrtool ]]; then
-	wget -O /bin/xdrtool https://raw.githubusercontent.com/helmiau/xderm-mini_GUI/main/adds/xdrtool -q
-	cat /bin/xdrtool > /root/xdrtool
-	chmod +x /bin/xdrtool
-	chmod +x /root/xdrtool
 fi
 
 #

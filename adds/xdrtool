@@ -1163,16 +1163,37 @@ function xderm_xdrtool_update() {
 	xderm_checknet
 	echo -e "==========================================="
 	wget -O /bin/xdrtoolup raw.githubusercontent.com/helmiau/xderm-mini_GUI/main/adds/xdrtoolup -q
+	echo -e " Downloading needed files."
+	sleep 1
+	echo -e " Downloading needed files...."
+	sleep 1
+	echo -e " Downloading needed files......"
+	sleep 1
+	echo -e " Downloading needed files........"
+	sleep 1
+	echo -e " Downloading needed files........."
+	sleep 1
+	echo -e " Downloading needed files..........."
+	sleep 1
+	echo -e " Downloading needed files.............."
+	sleep 1
+	echo -e " Downloading needed files................."
+	sleep 1
 	cat /bin/xdrtoolup > /root/xdrtoolup
+	echo -e " Downloading needed files.................."
 	chmod +x /bin/xdrtoolup
 	chmod +x /root/xdrtoolup
+	echo -e " Files and patches downloaded.............."
 	echo -e "==========================================="
-	echo -e " After this script closed, please run command"
-	echo -e " ./xdrtoolup or xdrtoolup for resuming update"
+	echo -e " Now screen will show update screen installation"
+	echo -e " If update screen menu not showing after 3 secs,"
+	echo -e " please run command ./xdrtoolup or xdrtoolup"
+	echo -e " manually for resuming update"
 	echo -e "==========================================="
 	echo -e " Exiting in 3 secs."
 	echo -e "==========================================="
 	sleep 3
+	trap /root/xdrtoolup EXIT
 	exit
 }
 
