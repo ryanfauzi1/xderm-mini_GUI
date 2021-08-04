@@ -623,7 +623,7 @@ function xderm_check_myip() {
 	echo "===========================================" > ipinfo.txt
 	echo "           IP Detail Information" >> ipinfo.txt
 	echo "===========================================" >> ipinfo.txt
-	curl -s ip-api.com/json >> ipinfo.txt
+	curl -s http://ip-api.com/json/\?fields=country,countryCode,region,regionName,city,timezone,isp,org,as,asname,query >> ipinfo.txt
 	sed -i 's/{"//g' ipinfo.txt
 	sed -i 's/","/\n/g' ipinfo.txt
 	sed -i 's/":"/ : /g' ipinfo.txt
@@ -631,6 +631,8 @@ function xderm_check_myip() {
 	sed -i 's/":/ : /g' ipinfo.txt
 	sed -i 's/,"/\n/g' ipinfo.txt
 	sed -i 's/status :/Status		:/g' ipinfo.txt
+	sed -i 's/continent :/Continent	:/g' ipinfo.txt
+	sed -i 's/continentCode :/Continent Code	:/g' ipinfo.txt
 	sed -i 's/country :/Country Name	:/g' ipinfo.txt
 	sed -i 's/countryCode :/Country Code	:/g' ipinfo.txt
 	sed -i 's/region :/Region		:/g' ipinfo.txt
@@ -643,6 +645,7 @@ function xderm_check_myip() {
 	sed -i 's/isp :/ISP		:/g' ipinfo.txt
 	sed -i 's/org :/Organization	:/g' ipinfo.txt
 	sed -i 's/as :/AS		:/g' ipinfo.txt
+	sed -i 's/asname :/AS Name		:/g' ipinfo.txt
 	sed -i 's/query :/IP Address	:/g' ipinfo.txt
 	sed -i 's/message :/Message		:/g' ipinfo.txt
 	echo " " >> ipinfo.txt
@@ -669,7 +672,7 @@ function xderm_check_otherip() {
 	echo -e "===========================================" > ipinfo.txt
 	echo -e "             IP / Host Information" >> ipinfo.txt
 	echo -e "===========================================" >> ipinfo.txt
-	curl -s ip-api.com/json/"$OTHERIP" >> ipinfo.txt
+	curl -s ip-api.com/json/"$OTHERIP"\?fields=country,countryCode,region,regionName,city,timezone,isp,org,as,asname,query >> ipinfo.txt
 	sed -i 's/{"//g' ipinfo.txt
 	sed -i 's/","/\n/g' ipinfo.txt
 	sed -i 's/":"/ : /g' ipinfo.txt
@@ -677,6 +680,8 @@ function xderm_check_otherip() {
 	sed -i 's/":/ : /g' ipinfo.txt
 	sed -i 's/,"/\n/g' ipinfo.txt
 	sed -i 's/status :/Status		:/g' ipinfo.txt
+	sed -i 's/continent :/Continent	:/g' ipinfo.txt
+	sed -i 's/continentCode :/Continent Code	:/g' ipinfo.txt
 	sed -i 's/country :/Country Name	:/g' ipinfo.txt
 	sed -i 's/countryCode :/Country Code	:/g' ipinfo.txt
 	sed -i 's/region :/Region		:/g' ipinfo.txt
@@ -689,6 +694,7 @@ function xderm_check_otherip() {
 	sed -i 's/isp :/ISP		:/g' ipinfo.txt
 	sed -i 's/org :/Organization	:/g' ipinfo.txt
 	sed -i 's/as :/AS		:/g' ipinfo.txt
+	sed -i 's/asname :/AS Name		:/g' ipinfo.txt
 	sed -i 's/query :/IP Address	:/g' ipinfo.txt
 	sed -i 's/message :/Message		:/g' ipinfo.txt
 	echo " " >> ipinfo.txt
