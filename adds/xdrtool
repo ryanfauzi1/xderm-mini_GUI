@@ -82,7 +82,7 @@ fi
 if [[ -f /bin/xdrtoolup ]]; then
 	rm /bin/xdrtoolup
 fi
-SCRIPTVER="4.7"
+SCRIPTVER="4.8"
 
 #-- Installer Scripts
 echo -e "${NOR}==========================================="
@@ -115,6 +115,7 @@ echo -e "     ${YEL}Read Xderm Log Process   : 12"
 echo -e "     ${GRE}Check My IP Info         : 13"
 echo -e "     ${YEL}Check Other Host/IP Info : 14"
 echo -e "     ${GRE}Convert Host to IP       : 15"
+echo -e "     ${YEL}Fix On-Boot Config Unset : 16"
 echo -e "     ${RED}Remove Xderm Mini Files  : 31"
 echo -e "     ${YEL}Update XDRTOOL Script    : 33"
 echo -e "${NOR}==========================================="
@@ -1203,6 +1204,40 @@ function xderm_xdrtool_update() {
 	exit
 }
 
+function xderm_fix_onboot() {
+	echo -e "==========================================="
+	echo -e "     Fix Config unloaded after On-Boot."
+	echo -e "==========================================="
+	if [[ ! -d /www/xderm/var ]]; then
+		echo -e " /www/xderm/var directory is unavailable, creating."
+		mkdir "/www/xderm/var"
+		echo -e " Directory created."
+	else
+		echo -e " /www/xderm/var directory is available, skipping."
+	fi
+	if [[ -f $XDERMINFO ]] && [[ $(grep -c "www/xderm/var/" $XDERMINFO) = "0" ]]; then
+		echo -e " Binary file unpatched, patching."
+		sed -i 's#/var/#/www/xderm/var/#g' $XDERMINFO
+		echo -e " Patching done."
+	else
+		echo -e " Binary file already patched, skipping."
+	fi
+	if [[ -f $XDERMPATH/index.php ]] && [[ $(grep -c "www/xderm/var/" $XDERMPATH/index.php) = "0" ]]; then
+		echo -e " WebUI file unpatched, patching."
+		sed -i 's#/var/#/www/xderm/var/#g' $XDERMPATH/index.php
+		echo -e " Patching done."
+	else
+		echo -e " WebUI file already patched, skipping."
+	fi
+	echo -e "==========================================="
+	echo -e "   Already fixed, try to check On-Boot"
+	echo -e "   then reboot your device"
+	echo -e "==========================================="
+	echo -e "   Returning to main menu in 3 secs"
+	echo -e "==========================================="
+	sleep 3
+}
+
 #-- Install Xderm Mini
 if [[ $jawab == "1" ]]; then
 	xderm_checknet \ &&
@@ -1289,6 +1324,11 @@ elif [[ $jawab == "14" ]]; then
 #-- Convert host to ip
 elif [[ $jawab == "15" ]]; then
 	xderm_hosttoip \ &&
+	xderm_return_installer
+
+#-- Convert host to ip
+elif [[ $jawab == "16" ]]; then
+	xderm_fix_onboot \ &&
 	xderm_return_installer
 
 #-- Clean/remove xderm mini
