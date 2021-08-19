@@ -82,7 +82,7 @@ fi
 if [[ -f /bin/xdrtoolup ]]; then
 	rm /bin/xdrtoolup
 fi
-SCRIPTVER="4.8"
+SCRIPTVER="4.9"
 
 #-- Installer Scripts
 echo -e "${NOR}==========================================="
@@ -322,6 +322,23 @@ function xderm_uninstall() {
 	fi
 }
 
+function xderm_dir_backup() {
+	echo "  Backing up current Xderm Mini version..."
+	if [[ ! -d $XDERMCONFIGBAK ]]; then
+		echo "  Backup directory is not available, creating..."
+		mkdir $XDERMCONFIGBAK
+		echo "  Backup directory created..."
+	else
+		echo "  Backup directory available, skipping..."
+	fi
+	if [[ -d $XDERMPATH ]]; then
+		mv $XDERMPATH $XDERMCONFIGBAK
+		echo "  current Xderm Mini backed up..."
+	else
+		echo "  current Xderm Mini available, skipping..."
+	fi
+}
+
 function xderm_config_backup() {
 	echo "  Backing up Xderm Mini configurations..."
 	if [[ ! -d $XDERMCONFIGBAK ]]; then
@@ -482,6 +499,10 @@ function xderm_remove_login() {
 		sleep 1
 	fi
 
+	if [[ -f $XDERMPATH/index.php ]] && [[ grep -c '="login.php"\|="index.php"' $XDERMPATH/index.php = "1" ]];then
+		sed -i 's+href="index.php" onClick+href="login.php" onClick+' $XDERMPATH/index.php
+	fi
+
 	echo "==========================================="
 	echo -e " Removal login page process finished..."
 }
@@ -529,6 +550,10 @@ function xderm_install_login() {
 		sleep 1
 	fi
 
+	if [[ -f $XDERMPATH/index.php ]] && [[ grep -c '="login.php"\|="index.php"' $XDERMPATH/index.php = "1" ]];then
+		sed -i 's+href="index.php" onClick+href="login.php" onClick+' $XDERMPATH/index.php
+	fi
+
 	echo "==========================================="
 	echo -e " Install login page process finished..."
 }
@@ -542,7 +567,7 @@ function xderm_fixphp() {
 	echo -e "- This tool will fix xderm-mini and libernet web ui page"
 	echo -e "- If bug fixed words appeared, it's mean bug fixed"
 	echo -e "- Reboot your device manually after fixing"
-	sleep 2
+	sleep 1
 	echo -e " "
 	echo -e "If bug still appear after reboot, do these :"
 	echo -e "- Clear all web history and cache"
@@ -550,44 +575,37 @@ function xderm_fixphp() {
 	echo -e "- Use other browser"
 	echo -e ""
 	echo -e " Fixing process started !..."
-	sleep 2
+	sleep 1
 	echo -e ""
 	echo -e " Fixing bug..."
-	sleep 2
+	sleep 1
 	echo -e ""
 
 	helmiooo=$(cat /etc/config/uhttpd)
 	if [[ $helmiooo == *"uhttpd 'mai"* ]]; then
 	echo -e "Step 1 done ! Resuming to step 2..."
-	sleep 1
 	sed -i "/config uhttpd 'main'/a list interpreter '.php=/usr/bin/php-cgi'" /etc/config/uhttpd
 	fi
-
-	helmiooo=$(cat /etc/config/uhttpd)
 	if [[ $helmiooo == *"uhttpd 'mai"* ]]; then
 	echo -e "Step 2 done ! Resuming to step 3..."
-	sleep 1
 	sed -i "/config uhttpd 'main'/a option ubus_prefix '/ubus'" /etc/config/uhttpd
 	fi
-
-	helmiooo=$(cat /etc/config/uhttpd)
 	if [[ $helmiooo == *"uhttpd mai"* ]]; then
 	echo -e "Step 3 done ! Resuming to last step..."
-	sleep 1
 	sed -i "/config uhttpd main/a list interpreter '.php=/usr/bin/php-cgi'" /etc/config/uhttpd
 	fi
-
-	helmiooo=$(cat /etc/config/uhttpd)
 	if [[ $helmiooo == *"uhttpd mai"* ]]; then
 	echo -e "Everything has been done..."
-	sleep 1
 	sed -i "/config uhttpd main/a option ubus_prefix '/ubus'" /etc/config/uhttpd
 	fi
+	/etc/init.d/uhttpd restart
+	/etc/init.d/rpcd restart
 
 
 	echo "==========================================="
 	echo -e " Removal process finished..!"
-	echo -e " Please reboot your device !"
+	echo -e " Try to open xderm gui or"
+	echo -e " reboot your device !"
 	echo "==========================================="
 }
 
@@ -1205,37 +1223,47 @@ function xderm_xdrtool_update() {
 }
 
 function xderm_fix_onboot() {
-	echo -e "==========================================="
-	echo -e "     Fix Config unloaded after On-Boot."
-	echo -e "==========================================="
-	if [[ ! -d /www/xderm/var ]]; then
-		echo -e " /www/xderm/var directory is unavailable, creating."
-		mkdir "/www/xderm/var"
-		echo -e " Directory created."
+	if [[ -f $XDERMINFO ]] && [[ $(grep -c "www/xderm/var/" $XDERMINFO) = "0" ]] && [[ -f $XDERMPATH/index.php ]] && [[ $(grep -c "www/xderm/var/" $XDERMPATH/index.php) = "0" ]]; then
+		echo -e "==========================================="
+		echo -e "     Fix Config unloaded after On-Boot."
+		echo -e "==========================================="
+		if [[ ! -d /www/xderm/var ]]; then
+			echo -e " /www/xderm/var directory is unavailable, creating."
+			mkdir "/www/xderm/var"
+			echo -e " Directory created."
+		else
+			echo -e " /www/xderm/var directory is available, skipping."
+		fi
+		if [[ -f $XDERMINFO ]] && [[ $(grep -c "www/xderm/var/" $XDERMINFO) = "0" ]]; then
+			echo -e " Binary file unpatched, patching."
+			sed -i 's#/var/#/www/xderm/var/#g' $XDERMINFO
+			echo -e " Patching done."
+		else
+			echo -e " Binary file already patched, skipping."
+		fi
+		if [[ -f $XDERMPATH/index.php ]] && [[ $(grep -c "www/xderm/var/" $XDERMPATH/index.php) = "0" ]]; then
+			echo -e " WebUI file unpatched, patching."
+			sed -i 's#/var/#/www/xderm/var/#g' $XDERMPATH/index.php
+			echo -e " Patching done."
+		else
+			echo -e " WebUI file already patched, skipping."
+		fi
+		echo -e "==========================================="
+		echo -e "   Already fixed, try to check On-Boot"
+		echo -e "   try to reboot your device"
+		echo -e "==========================================="
+		echo -e "   Returning to main menu in 3 secs"
+		echo -e "==========================================="
+		sleep 3
 	else
-		echo -e " /www/xderm/var directory is available, skipping."
+		echo -e " Fix On-Boot skipped."
 	fi
-	if [[ -f $XDERMINFO ]] && [[ $(grep -c "www/xderm/var/" $XDERMINFO) = "0" ]]; then
-		echo -e " Binary file unpatched, patching."
-		sed -i 's#/var/#/www/xderm/var/#g' $XDERMINFO
-		echo -e " Patching done."
-	else
-		echo -e " Binary file already patched, skipping."
+}
+
+function xderm_auto_remove_login() {
+	if [[ $LOGINOW = "Unavailable" ]]; then
+		xderm_remove_login
 	fi
-	if [[ -f $XDERMPATH/index.php ]] && [[ $(grep -c "www/xderm/var/" $XDERMPATH/index.php) = "0" ]]; then
-		echo -e " WebUI file unpatched, patching."
-		sed -i 's#/var/#/www/xderm/var/#g' $XDERMPATH/index.php
-		echo -e " Patching done."
-	else
-		echo -e " WebUI file already patched, skipping."
-	fi
-	echo -e "==========================================="
-	echo -e "   Already fixed, try to check On-Boot"
-	echo -e "   then reboot your device"
-	echo -e "==========================================="
-	echo -e "   Returning to main menu in 3 secs"
-	echo -e "==========================================="
-	sleep 3
 }
 
 #-- Install Xderm Mini
@@ -1244,6 +1272,8 @@ if [[ $jawab == "1" ]]; then
 	xderm_config_backup \ &&
 	xderm_install \ &&
 	xderm_config_restore \ &&
+	xderm_fix_onboot \ &&
+	xderm_auto_remove_login \ &&
 	xderm_return_installer
 
 #-- Install Agus theme
@@ -1252,6 +1282,8 @@ elif [[ $jawab == "2" ]]; then
 	xderm_config_backup \ &&
 	xderm_install_theme \ &&
 	xderm_config_restore \ &&
+	xderm_fix_onboot \ &&
+	xderm_auto_remove_login \ &&
 	xderm_return_installer
 
 #-- Update Xderm
@@ -1260,6 +1292,8 @@ elif [[ $jawab == "3" ]]; then
 	xderm_config_backup \ &&
 	xderm_update \ &&
 	xderm_config_restore \ &&
+	xderm_fix_onboot \ &&
+	xderm_auto_remove_login \ &&
 	xderm_return_installer
 
 #-- Fix Index
@@ -1304,6 +1338,8 @@ elif [[ $jawab == "11" ]]; then
 	xderm_uninstall \ &&
 	xderm_old_install \ &&
 	xderm_config_restore \ &&
+	xderm_fix_onboot \ &&
+	xderm_auto_remove_login \ &&
 	xderm_return_installer
 
 #-- Read log
