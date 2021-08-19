@@ -499,7 +499,7 @@ function xderm_remove_login() {
 		sleep 1
 	fi
 
-	if [[ -f $XDERMPATH/index.php ]] && [[ grep -c '="login.php"\|="index.php"' $XDERMPATH/index.php = "1" ]];then
+	if [[ -f $XDERMPATH/index.php ]] && [[ $(grep -c '="login.php"\|="index.php"' $XDERMPATH/index.php) = "1" ]];then
 		sed -i 's+href="index.php" onClick+href="login.php" onClick+' $XDERMPATH/index.php
 	fi
 
@@ -550,7 +550,7 @@ function xderm_install_login() {
 		sleep 1
 	fi
 
-	if [[ -f $XDERMPATH/index.php ]] && [[ grep -c '="login.php"\|="index.php"' $XDERMPATH/index.php = "1" ]];then
+	if [[ -f $XDERMPATH/index.php ]] && [[ $(grep -c '="login.php"\|="index.php"' $XDERMPATH/index.php) = "1" ]];then
 		sed -i 's+href="index.php" onClick+href="login.php" onClick+' $XDERMPATH/index.php
 	fi
 
