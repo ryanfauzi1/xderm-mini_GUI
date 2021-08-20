@@ -1,0 +1,61 @@
+#!/bin/bash
+#--------------------------------------------------------
+#   Don't remove this section for credits
+#   Don't rename this file
+#--------------------------------------------------------
+#   This script is used for setting up
+#   Xderm-Mini GUI for OpenWrt by ryanfauzi1
+#   Installation script by helmiau a.k.a Helmi Amirudin
+#   my profile page https://me.helmiau.my.id
+#   my github https://github.com/helmiau
+#--------------------------------------------------------
+
+clear
+echo -e "==========================================="
+echo -e " Starting update for XDRTOOL Script"
+echo -e "==========================================="
+echo -e " Script by helmiau a.k.a Helmi Amirudin"
+echo -e "==========================================="
+echo "  Checking connections..."
+if wget -S --spider raw.githubusercontent.com/helmiau/xderm-mini_GUI/main/adds/xdrtool 2>&1 | grep -q 'HTTP/1.1 200 OK'; then
+	wget -O /bin/xdrtool raw.githubusercontent.com/helmiau/xderm-mini_GUI/main/adds/xdrtool -q
+	cat /bin/xdrtool > /root/xdrtool
+	chmod +x /bin/xdrtool
+	chmod +x /root/xdrtool
+	echo -e "==========================================="
+	echo -e " Update Success. Exiting in 3 secs."
+	echo -e "==========================================="
+	echo -e " Now returning to XDRTOOL main menu..."
+	echo -e " If XDRTOOL main menu not showing after 3 secs."
+	echo -e " please run command : xdrtool or ./xdrtool"
+	echo -e " to use main script, thank you."
+	echo -e "==========================================="
+	echo -e " Script by helmiau a.k.a Helmi Amirudin"
+	echo -e "==========================================="
+	sleep 3	
+	if [[ -f /root/xdrtool ]]; then
+		trap /root/xdrtool EXIT
+	elif [[ -f /bin/xdrtool ]]; then
+		trap xdrtool EXIT
+	fi
+	clear
+	exit
+else
+	echo "  No internet connection or repository url unavailable..."
+	echo "  Returning to XDRTOOL main menu in 3 secs."
+	sleep 3
+	if [[ -f /root/xdrtool ]]; then
+		trap /root/xdrtool EXIT
+	elif [[ -f /bin/xdrtool ]]; then
+		trap xdrtool EXIT
+	fi
+	clear
+	exit
+fi
+
+#
+#   This script is used to install Xderm Mini GUI custom theme
+#   Installation script by helmiau a.k.a Helmi Amirudin
+#   my profile page https://me.helmiau.my.id
+#   my github https://github.com/helmiau
+#
